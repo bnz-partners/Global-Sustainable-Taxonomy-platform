@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Global Sustainable Taxonomies</title>
+<script>
+  (function () {
+    var saved = localStorage.getItem("gst-theme");
+    if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-text">Global Sustainable Taxonomies</span>
+    </a>
+    <nav class="topnav-links">
+      <a href="index.html" class="active" data-i18n="nav.map">Interactive Global Map</a>
+      <a href="advisor.html" data-i18n="nav.advisor">AI Advisor</a>
+      <a href="media.html" data-i18n="nav.media">Media Hub</a>
+      <a href="subscribe.html" data-i18n="nav.subscribe">Subscribe</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+    </nav>
+    <div class="topnav-actions">
+      <button class="icon-btn" id="globalSearchBtn" title="Search" aria-label="Search" data-i18n-title="nav.search" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <select class="lang-select" id="globalLangSelect" aria-label="Language"></select>
+      <button class="icon-btn" id="themeToggleBtn" title="Toggle theme" aria-label="Toggle theme" data-i18n-title="nav.toggleTheme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="global-search-overlay" id="globalSearchOverlay">
+  <div class="global-search-panel">
+    <div class="global-search-input-row">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="globalSearchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+      <button class="icon-btn" id="globalSearchCloseBtn" title="Close" aria-label="Close" data-i18n-title="search.close" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="global-search-results" id="globalSearchResults"></div>
+  </div>
+</div>
+
+<section class="hero-dark">
+  <div class="hero-dark-inner">
+    <h1 data-i18n="home.heroTitle">Explore Sustainable Finance Taxonomies Worldwide</h1>
+    <p class="hero-dark-sub" data-i18n="home.heroSub">Select a country on the map, or use the search bar below.</p>
+
+    <div class="search-bar-dark">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+    </div>
+    <div id="searchResults" class="search-results"></div>
+
+    <div class="chip-row" id="regionChips">
+      <button class="chip active" data-region="All" data-i18n="home.chipAllRegions">All Regions</button>
+      <button class="chip" data-region="Europe" data-i18n="home.chipEurope">Europe</button>
+      <button class="chip" data-region="Asia-Pacific" data-i18n="home.chipAsiaPacific">Asia-Pacific</button>
+      <button class="chip" data-region="Americas" data-i18n="home.chipAmericas">Americas</button>
+      <button class="chip" data-region="Africa" data-i18n="home.chipAfrica">Africa</button>
+      <button class="chip" data-region="Middle East" data-i18n="home.chipMiddleEast">Middle East</button>
+    </div>
+    <div class="chip-row" id="statusChips">
+      <button class="chip active" data-status="All" data-i18n="home.chipAllStatuses">All Statuses</button>
+      <button class="chip" data-status="established" data-i18n="home.chipDeveloped">Developed</button>
+      <button class="chip" data-status="developing" data-i18n="home.chipUnderDevelopment">Under Development</button>
+      <button class="chip" data-status="none" data-i18n="home.chipNoTaxonomy">No Taxonomy</button>
+    </div>
+
+    <div class="legend legend-dark">
+      <span class="legend-item"><i class="dot established"></i><span data-i18n="home.chipDeveloped">Developed</span></span>
+      <span class="legend-item"><i class="dot developing"></i><span data-i18n="home.chipUnderDevelopment">Under Development</span></span>
+      <span class="legend-item"><i class="dot none"></i><span data-i18n="home.chipNoTaxonomy">No Taxonomy</span></span>
+    </div>
+  </div>
+</section>
+
+<main class="page">
+  <div class="map-layout">
+    <div class="map-frame map-frame-main">
+      <div id="map"></div>
+    </div>
+    <aside class="stats-sidebar">
+      <h2 data-i18n="home.globalStats">Global Stats</h2>
+      <div class="stat-row"><span class="stat-row-num" id="statTotal">–</span><span class="stat-row-label" data-i18n="home.totalCountriesTracked">Total Countries Tracked</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-established" id="statEstablished">–</span><span class="stat-row-label" data-i18n="home.chipDeveloped">Developed</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-developing" id="statDeveloping">–</span><span class="stat-row-label" data-i18n="home.chipUnderDevelopment">Under Development</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-none" id="statNone">–</span><span class="stat-row-label" data-i18n="home.chipNoTaxonomy">No Taxonomy</span></div>
+
+      <div id="filteredSection" class="filtered-section">
+        <div class="stat-row"><span class="stat-row-num" id="filteredCount">–</span><span class="stat-row-label" data-i18n="home.matchingCountriesHeading">Matching Countries</span></div>
+        <ul class="recent-list filtered-list" id="filteredList"></ul>
+        <p class="filtered-note" data-i18n="home.partialDataNote">Objective and sector filters currently match against the countries we've compiled this detail for so far — others may not appear here yet even if their taxonomy could cover it.</p>
+      </div>
+
+      <h2 data-i18n="home.recentlyUpdated">Recently Updated</h2>
+      <ul class="recent-list" id="recentList"></ul>
+    </aside>
+  </div>
+
+  <section class="advanced-filter-section">
+    <button type="button" class="advanced-filter-toggle" id="advancedFilterToggle">
+      <span data-i18n="home.advancedFiltersToggle">Advanced Search &amp; Filtering</span>
+      <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="advanced-filter-panel" id="advancedFilterPanel">
+      <div class="advanced-filter-field">
+        <label for="homeObjectiveSelect" data-i18n="home.objectiveFilterHeading">Filter by Environmental Objective</label>
+        <select id="homeObjectiveSelect">
+          <option value="All" data-i18n="home.objAll">All Objectives</option>
+          <option value="climate" data-i18n="home.objClimateMitigation">Climate Change Mitigation</option>
+          <option value="climate-adapt" data-i18n="home.objClimateAdaptation">Climate Change Adaptation</option>
+          <option value="biodiversity" data-i18n="home.objBiodiversity">Biodiversity &amp; Ecosystems</option>
+          <option value="water" data-i18n="home.objWater">Water &amp; Marine Resources</option>
+          <option value="circular" data-i18n="home.objCircular">Circular Economy</option>
+          <option value="pollution" data-i18n="home.objPollution">Pollution Prevention</option>
+          <option value="energy" data-i18n="home.objEnergy">Energy</option>
+          <option value="industry" data-i18n="home.objIndustry">Industry &amp; Transition</option>
+        </select>
+      </div>
+      <div class="advanced-filter-field">
+        <label for="homeSectorSelect" data-i18n="home.sectorFilterHeading">Filter by Sector</label>
+        <select id="homeSectorSelect">
+          <option value="All" data-i18n="home.secAll">All Sectors</option>
+          <option value="Agriculture" data-i18n="home.secAgriculture">Agriculture</option>
+          <option value="Buildings" data-i18n="home.secBuildings">Buildings</option>
+          <option value="Ecological Restoration" data-i18n="home.secEcologicalRestoration">Ecological Restoration</option>
+          <option value="Energy" data-i18n="home.secEnergy">Energy</option>
+          <option value="Energy Transition" data-i18n="home.secEnergyTransition">Energy Transition</option>
+          <option value="Environmental Protection" data-i18n="home.secEnvironmentalProtection">Environmental Protection</option>
+          <option value="Green Services &amp; Trade" data-i18n="home.secGreenServicesTrade">Green Services &amp; Trade</option>
+          <option value="ICT &amp; Digital" data-i18n="home.secICTDigital">ICT &amp; Digital</option>
+          <option value="Infrastructure" data-i18n="home.secInfrastructure">Infrastructure</option>
+          <option value="Manufacturing" data-i18n="home.secManufacturing">Manufacturing</option>
+          <option value="Nuclear &amp; Transition Industries" data-i18n="home.secNuclearTransition">Nuclear &amp; Transition Industries</option>
+          <option value="Resource Recycling" data-i18n="home.secResourceRecycling">Resource Recycling</option>
+          <option value="Transport" data-i18n="home.secTransport">Transport</option>
+          <option value="Waste Management" data-i18n="home.secWasteManagement">Waste Management</option>
+          <option value="Water" data-i18n="home.secWater">Water</option>
+        </select>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 BNZ PARTNERS</span>
+  <span><span data-i18n="footer.developedBy">Developed by</span> BNZ PARTNERS — <span data-i18n="about.coreDeveloper">Core Developer</span>: Tyra Usher, <span data-i18n="footer.supervisorLabel">Supervisor</span>: Yoo, So Young</span>
+  <span class="footer-contact">
+    <a href="http://bnzpartners.co.kr/en/" target="_blank" rel="noopener">bnzpartners.co.kr</a> ·
+    <a href="mailto:bnz@bnzpartners.co.kr">bnz@bnzpartners.co.kr</a> ·
+    <a href="tel:+82227841822">+82 2-784-1822</a>
+  </span>
+  <span class="footer-references"><a href="about.html#key-resources" data-i18n="footer.references">References</a></span>
+</footer>
+
+<a class="ask-ai-fab" href="advisor.html?mode=ask" title="Ask the AI Advisor a question">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  <span data-i18n="home.askAi">Ask AI</span>
+</a>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="theme.js"></script>
+<script src="data.js"></script>
+<script src="global.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

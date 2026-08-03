@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subscriber Preferences — Global Sustainable Taxonomies</title>
+<script>
+  (function () {
+    var saved = localStorage.getItem("gst-theme");
+    if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-text">Global Sustainable Taxonomies</span>
+    </a>
+    <nav class="topnav-links">
+      <a href="index.html" data-i18n="nav.map">Interactive Global Map</a>
+      <a href="advisor.html" data-i18n="nav.advisor">AI Advisor</a>
+      <a href="media.html" data-i18n="nav.media">Media Hub</a>
+      <a href="subscribe.html" data-i18n="nav.subscribe">Subscribe</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+    </nav>
+    <div class="topnav-actions">
+      <button class="icon-btn" id="globalSearchBtn" title="Search" aria-label="Search" data-i18n-title="nav.search" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <select class="lang-select" id="globalLangSelect" aria-label="Language"></select>
+      <button class="icon-btn" id="themeToggleBtn" title="Toggle theme" aria-label="Toggle theme" data-i18n-title="nav.toggleTheme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="global-search-overlay" id="globalSearchOverlay">
+  <div class="global-search-panel">
+    <div class="global-search-input-row">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="globalSearchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+      <button class="icon-btn" id="globalSearchCloseBtn" title="Close" aria-label="Close" data-i18n-title="search.close" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="global-search-results" id="globalSearchResults"></div>
+  </div>
+</div>
+
+<main class="page subscribe-page">
+  <a class="back-link" href="subscribe.html">&larr; <span data-i18n="prefs.backToSubscribe">Back to Subscribe</span></a>
+  <h1 style="margin-top:20px;" data-i18n="prefs.heading">Subscriber Preferences</h1>
+  <p class="lede" data-i18n="prefs.lede">Manage your digest topics, language and communication settings.</p>
+
+  <div class="sample-banner" data-i18n="prefs.sampleBanner">Demo preference centre — for illustration only. There is no real subscriber account behind this page, so nothing here is saved, and the fields are shown pre-filled with sample data. In the live product, existing subscribers would land here after clicking a link in their digest email.</div>
+
+  <section class="advisor-panel subscribe-form-panel" style="max-width:520px;">
+    <label class="field-label" for="prefEmail" data-i18n="subscribe.emailLabel">Email Address</label>
+    <input type="email" id="prefEmail" value="you@example.com" disabled />
+
+    <label class="field-label" for="prefName" data-i18n="subscribe.nameLabel">Name</label>
+    <input type="text" id="prefName" value="Sample Subscriber" disabled />
+
+    <label class="field-label" data-i18n="subscribe.interestLabel">Area of Interest</label>
+    <div class="interest-list">
+      <label class="interest-check checked"><input type="checkbox" checked disabled /> <span data-i18n="subscribe.interestEu">EU Taxonomy Updates</span></label>
+      <label class="interest-check"><input type="checkbox" disabled /> <span data-i18n="subscribe.interestApac">Asia-Pacific Taxonomies</span></label>
+      <label class="interest-check checked"><input type="checkbox" checked disabled /> <span data-i18n="subscribe.interestGreenBonds">Green Bonds &amp; Finance</span></label>
+      <label class="interest-check"><input type="checkbox" disabled /> <span data-i18n="subscribe.interestCompliance">Compliance &amp; Assurance</span></label>
+    </div>
+
+    <label class="field-label" for="prefLang" data-i18n="subscribe.langLabel">Language Preference</label>
+    <select id="prefLang" disabled>
+      <option selected>English</option>
+    </select>
+
+    <button class="btn-subscribe-large" id="prefSaveBtn" type="button" disabled data-i18n="prefs.saveBtn">Save Preferences (demo — disabled)</button>
+
+    <p class="privacy-note" data-i18n="prefs.privacyNote">This screen is a non-functional placeholder. To actually change your interests or language in the future, you'd use a page like this one, but it isn't wired up to a real subscriber database yet.</p>
+
+    <a class="manage-prefs-link" id="prefUnsubscribeLink" href="#" data-i18n="prefs.unsubscribeLink">Unsubscribe (demo — disabled)</a>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 BNZ PARTNERS</span>
+  <span><span data-i18n="footer.developedBy">Developed by</span> BNZ PARTNERS — <span data-i18n="about.coreDeveloper">Core Developer</span>: Tyra Usher, <span data-i18n="footer.supervisorLabel">Supervisor</span>: Yoo, So Young</span>
+  <span class="footer-contact">
+    <a href="http://bnzpartners.co.kr/en/" target="_blank" rel="noopener">bnzpartners.co.kr</a> ·
+    <a href="mailto:bnz@bnzpartners.co.kr">bnz@bnzpartners.co.kr</a> ·
+    <a href="tel:+82227841822">+82 2-784-1822</a>
+  </span>
+  <span class="footer-references"><a href="about.html#key-resources" data-i18n="footer.references">References</a></span>
+</footer>
+
+<script src="theme.js"></script>
+<script src="data.js"></script>
+<script src="global.js"></script>
+<script src="preferences.js"></script>
+</body>
+</html>
