@@ -29,7 +29,6 @@
       <a href="advisor.html" data-i18n="nav.advisor">AI Advisor</a>
       <a href="media.html" data-i18n="nav.media">Media Hub</a>
       <a href="subscribe.html" data-i18n="nav.subscribe">Subscribe</a>
-      <a href="#" class="disabled" title="Coming soon" data-i18n="nav.resources" data-i18n-title="nav.comingSoon">Resources</a>
       <a href="about.html" data-i18n="nav.about">About</a>
     </nav>
     <div class="topnav-actions">
@@ -102,16 +101,71 @@
       <div class="stat-row"><span class="stat-row-num accent-developing" id="statDeveloping">–</span><span class="stat-row-label" data-i18n="home.chipUnderDevelopment">Under Development</span></div>
       <div class="stat-row"><span class="stat-row-num accent-none" id="statNone">–</span><span class="stat-row-label" data-i18n="home.chipNoTaxonomy">No Taxonomy</span></div>
 
+      <div id="filteredSection" class="filtered-section">
+        <div class="stat-row"><span class="stat-row-num" id="filteredCount">–</span><span class="stat-row-label" data-i18n="home.matchingCountriesHeading">Matching Countries</span></div>
+        <ul class="recent-list filtered-list" id="filteredList"></ul>
+        <p class="filtered-note" data-i18n="home.partialDataNote">Objective and sector filters currently match against the countries we've compiled this detail for so far — others may not appear here yet even if their taxonomy could cover it.</p>
+      </div>
+
       <h2 data-i18n="home.recentlyUpdated">Recently Updated</h2>
       <ul class="recent-list" id="recentList"></ul>
     </aside>
   </div>
+
+  <section class="advanced-filter-section">
+    <button type="button" class="advanced-filter-toggle" id="advancedFilterToggle">
+      <span data-i18n="home.advancedFiltersToggle">Advanced Search &amp; Filtering</span>
+      <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="advanced-filter-panel" id="advancedFilterPanel">
+      <div class="advanced-filter-field">
+        <label for="homeObjectiveSelect" data-i18n="home.objectiveFilterHeading">Filter by Environmental Objective</label>
+        <select id="homeObjectiveSelect">
+          <option value="All" data-i18n="home.objAll">All Objectives</option>
+          <option value="climate" data-i18n="home.objClimateMitigation">Climate Change Mitigation</option>
+          <option value="climate-adapt" data-i18n="home.objClimateAdaptation">Climate Change Adaptation</option>
+          <option value="biodiversity" data-i18n="home.objBiodiversity">Biodiversity &amp; Ecosystems</option>
+          <option value="water" data-i18n="home.objWater">Water &amp; Marine Resources</option>
+          <option value="circular" data-i18n="home.objCircular">Circular Economy</option>
+          <option value="pollution" data-i18n="home.objPollution">Pollution Prevention</option>
+          <option value="energy" data-i18n="home.objEnergy">Energy</option>
+          <option value="industry" data-i18n="home.objIndustry">Industry &amp; Transition</option>
+        </select>
+      </div>
+      <div class="advanced-filter-field">
+        <label for="homeSectorSelect" data-i18n="home.sectorFilterHeading">Filter by Sector</label>
+        <select id="homeSectorSelect">
+          <option value="All" data-i18n="home.secAll">All Sectors</option>
+          <option value="Agriculture" data-i18n="home.secAgriculture">Agriculture</option>
+          <option value="Buildings" data-i18n="home.secBuildings">Buildings</option>
+          <option value="Ecological Restoration" data-i18n="home.secEcologicalRestoration">Ecological Restoration</option>
+          <option value="Energy" data-i18n="home.secEnergy">Energy</option>
+          <option value="Energy Transition" data-i18n="home.secEnergyTransition">Energy Transition</option>
+          <option value="Environmental Protection" data-i18n="home.secEnvironmentalProtection">Environmental Protection</option>
+          <option value="Green Services &amp; Trade" data-i18n="home.secGreenServicesTrade">Green Services &amp; Trade</option>
+          <option value="ICT &amp; Digital" data-i18n="home.secICTDigital">ICT &amp; Digital</option>
+          <option value="Infrastructure" data-i18n="home.secInfrastructure">Infrastructure</option>
+          <option value="Manufacturing" data-i18n="home.secManufacturing">Manufacturing</option>
+          <option value="Nuclear &amp; Transition Industries" data-i18n="home.secNuclearTransition">Nuclear &amp; Transition Industries</option>
+          <option value="Resource Recycling" data-i18n="home.secResourceRecycling">Resource Recycling</option>
+          <option value="Transport" data-i18n="home.secTransport">Transport</option>
+          <option value="Waste Management" data-i18n="home.secWasteManagement">Waste Management</option>
+          <option value="Water" data-i18n="home.secWater">Water</option>
+        </select>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
   <span>© 2026 BNZ PARTNERS</span>
-  <span><span data-i18n="footer.developedBy">Developed by</span> Tyra Usher | <span data-i18n="footer.supervisedBy">Supervised by</span> Yoo, So Young, <span data-i18n="footer.headOfAI">Head of AI Centre</span></span>
-  <a href="http://bnzpartners.co.kr/en/" target="_blank" rel="noopener">bnzpartners.co.kr</a>
+  <span><span data-i18n="footer.developedBy">Developed by</span> BNZ PARTNERS — <span data-i18n="about.coreDeveloper">Core Developer</span>: Tyra Usher, <span data-i18n="footer.supervisorLabel">Supervisor</span>: Yoo, So Young</span>
+  <span class="footer-contact">
+    <a href="http://bnzpartners.co.kr/en/" target="_blank" rel="noopener">bnzpartners.co.kr</a> ·
+    <a href="mailto:bnz@bnzpartners.co.kr">bnz@bnzpartners.co.kr</a> ·
+    <a href="tel:+82227841822">+82 2-784-1822</a>
+  </span>
+  <span class="footer-references"><a href="about.html#key-resources" data-i18n="footer.references">References</a></span>
 </footer>
 
 <a class="ask-ai-fab" href="advisor.html?mode=ask" title="Ask the AI Advisor a question">
