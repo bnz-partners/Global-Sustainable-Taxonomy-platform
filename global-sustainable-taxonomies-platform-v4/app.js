@@ -206,6 +206,43 @@ function onFiltersChanged() {
   renderFilteredList();
 }
 
+/* Spells out which filters produced the "Matching Countries" number. Without
+   this the figure sits directly under the Global Stats block and reads like
+   another global statistic — which is exactly what reviewers found confusing.
+   The labels come from the select options, so they follow the site language. */
+function renderActiveFilters() {
+  const el = document.getElementById("activeFilters");
+  if (!el) return;
+  const t = (typeof gstT === "function") ? gstT : (k => k);
+
+  const selectedLabel = (selectId, value) => {
+    const sel = document.getElementById(selectId);
+    if (!sel) return value;
+    const opt = Array.prototype.find.call(sel.options, o => o.value === value);
+    return opt ? opt.textContent : value;
+  };
+
+  const statusKey = {
+    established: "home.chipDeveloped",
+    developing: "home.chipUnderDevelopment",
+    none: "home.chipNoTaxonomy"
+  };
+  const regionKey = {
+    "Europe": "home.chipEurope", "Asia-Pacific": "home.chipAsiaPacific",
+    "Americas": "home.chipAmericas", "Africa": "home.chipAfrica",
+    "Middle East": "home.chipMiddleEast"
+  };
+
+  const parts = [];
+  if (currentRegion !== "All") parts.push(regionKey[currentRegion] ? t(regionKey[currentRegion]) : currentRegion);
+  if (currentStatus !== "All") parts.push(statusKey[currentStatus] ? t(statusKey[currentStatus]) : (STATUS_LABEL[currentStatus] || currentStatus));
+  if (currentObjective !== "All") parts.push(selectedLabel("homeObjectiveSelect", currentObjective));
+  if (currentSector !== "All") parts.push(selectedLabel("homeSectorSelect", currentSector));
+
+  if (!parts.length) { el.textContent = ""; return; }
+  el.textContent = t("home.activeFiltersLabel") + ": " + parts.join(" + ");
+}
+
 function renderFilteredList() {
   const listEl = document.getElementById("filteredList");
   const countEl = document.getElementById("filteredCount");
@@ -226,6 +263,7 @@ function renderFilteredList() {
     .sort((a, b) => a.entry.name.localeCompare(b.entry.name));
 
   countEl.textContent = matches.length;
+  renderActiveFilters();
 
   if (!matches.length) {
     listEl.innerHTML = `<li class="search-empty">${(typeof gstT === "function" && gstT("home.noMatchingCountries")) || "No countries match these filters yet."}</li>`;
@@ -400,3 +438,10 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+/* gstApplyI18n only refreshes elements carrying data-i18n. The filter result
+   list and the active-filter summary are written by JS, so they have to be
+   re-rendered when the language changes or they stay in the previous one. */
+document.addEventListener("gst-lang-changed", () => {
+  renderFilteredList();
+});

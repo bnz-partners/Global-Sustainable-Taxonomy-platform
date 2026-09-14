@@ -745,7 +745,11 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .citation-mark a:hover { text-decoration: underline; }
 .citations-block { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
 .citations-block h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 8px; }
-.citations-list { margin: 0; padding-left: 18px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+/* The reference numbers are written into each <li> ("1. Kim & Chang, …") so
+   that they line up with the [1] markers in the body text, which are not
+   necessarily sequential. The list must therefore not add its own counter —
+   otherwise every entry renders as "1. 1. …". */
+.citations-list { margin: 0; padding-left: 0; list-style: none; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
 .citations-list li { margin-bottom: 4px; }
 .citations-list a { color: var(--green); }
 
@@ -1563,3 +1567,203 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   .gst-chat-panel { right: 16px; bottom: 84px; width: calc(100vw - 32px); }
   .gst-chat-toggle { right: 16px; bottom: 16px; }
 }
+
+/* ---------------------------------------------------------------------------
+   K-Taxonomy activity drill-down (country page, South Korea)
+   Six objective cards → sector groups → activity → full determining criteria.
+   --------------------------------------------------------------------------- */
+
+.kr-drill-intro { font-size: 0.86rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.kr-drill-loading, .kr-drill-empty { font-size: 0.86rem; color: var(--text-muted); margin: 12px 0; }
+.kr-drill-count { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 10px; font-weight: 600; }
+
+.kr-drill-searchwrap { margin-bottom: 14px; }
+.kr-drill-search {
+  width: 100%; box-sizing: border-box; padding: 10px 13px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-soft); color: var(--text); font-size: 0.86rem; font-family: inherit;
+}
+.kr-drill-search:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+
+.kr-obj-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.kr-obj-grid-alt { margin-top: 8px; grid-template-columns: repeat(1, minmax(0, 1fr)); }
+
+.kr-obj-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  text-align: left; width: 100%; cursor: pointer;
+  padding: 12px 13px; border: 1px solid var(--border); border-radius: var(--radius-md);
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.kr-obj-card:hover { border-color: var(--green); background: var(--bg-soft); }
+.kr-obj-card.is-open { border-color: var(--green); background: var(--bg-soft); box-shadow: inset 3px 0 0 var(--green); }
+.kr-obj-card .kr-obj-icon { color: var(--green); display: inline-flex; }
+.kr-obj-card .kr-obj-name { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
+.kr-obj-card .kr-obj-count { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
+.kr-obj-card .kr-obj-note { font-size: 0.74rem; color: var(--text-muted); line-height: 1.5; }
+.kr-obj-card-transition { border-style: dashed; }
+.kr-obj-card-transition.is-open { box-shadow: inset 3px 0 0 var(--amber); border-color: var(--amber); }
+.kr-obj-card-transition .kr-obj-name { color: var(--amber); }
+
+.kr-drill-panel { margin-top: 14px; }
+
+.kr-field { margin-bottom: 16px; }
+.kr-field-title {
+  font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-muted); margin: 0 0 6px; display: flex; align-items: center; gap: 7px;
+}
+.kr-field-count {
+  font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 999px; padding: 1px 7px; letter-spacing: 0;
+}
+
+.kr-act { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 6px; background: var(--card-bg); }
+.kr-act.is-open { border-color: var(--green); }
+.kr-act-head {
+  display: flex; align-items: flex-start; gap: 9px; width: 100%; cursor: pointer;
+  padding: 10px 12px; background: none; border: 0; color: var(--text);
+  font-family: inherit; font-size: 0.85rem; text-align: left; line-height: 1.45;
+}
+.kr-act-head:hover { background: var(--bg-soft); }
+.kr-act-code {
+  flex-shrink: 0; font-size: 0.7rem; font-weight: 700; color: var(--green);
+  background: var(--bg-soft); border-radius: 4px; padding: 2px 6px; margin-top: 1px;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.kr-act-name { flex: 1; font-weight: 600; }
+.kr-act-chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.15s ease; }
+.kr-act.is-open .kr-act-chevron { transform: rotate(180deg); }
+
+.kr-act-body { padding: 2px 12px 14px; border-top: 1px solid var(--border); }
+.kr-crit { margin-top: 12px; }
+.kr-crit h5 {
+  font-size: 0.76rem; font-weight: 700; color: var(--text-muted);
+  margin: 0 0 5px; text-transform: none; letter-spacing: 0.02em;
+}
+.kr-crit-text { font-size: 0.82rem; line-height: 1.65; margin: 0; color: var(--text); }
+.kr-crit-list { margin: 0; padding-left: 0; list-style: none; }
+.kr-crit-list li { font-size: 0.82rem; line-height: 1.65; margin-bottom: 6px; padding-left: 2px; }
+.kr-crit-list li.kr-crit-note { color: var(--text-muted); font-size: 0.78rem; padding-left: 12px; }
+
+.kr-crit-table { width: 100%; border-collapse: collapse; }
+.kr-crit-table th, .kr-crit-table td {
+  text-align: left; vertical-align: top; padding: 6px 8px 6px 0;
+  border-bottom: 1px solid var(--border); font-size: 0.79rem; line-height: 1.6;
+}
+.kr-crit-table th { width: 34%; color: var(--text-muted); font-weight: 600; white-space: normal; }
+
+.kr-drill-source { font-size: 0.74rem; color: var(--text-muted); line-height: 1.6; margin: 16px 0 0; }
+
+@media (max-width: 560px) {
+  .kr-obj-grid { grid-template-columns: 1fr; }
+  .kr-crit-table th { width: 40%; }
+}
+
+/* ---------------------------------------------------------------------------
+   Feedback fixes (SB본부, Sep 2026)
+   --------------------------------------------------------------------------- */
+
+/* 1. Playfair Display renders "&" as an ornamental Et-ligature form, which
+      reviewers found hard to read in headings ("Media & Trend Hub", "Advanced
+      Search & Filtering"). Map just the ampersand (U+0026) onto a plain
+      grotesque already present on the device; everything else stays Playfair.
+      If none of the local faces exist, the browser falls back to Playfair and
+      the heading still renders correctly — just with the ornamental glyph. */
+@font-face {
+  font-family: "Plain Ampersand";
+  src: local("Inter"), local("Helvetica Neue"), local("Helvetica"),
+       local("Arial"), local("Segoe UI"), local("Roboto"), local("Noto Sans");
+  unicode-range: U+0026;
+}
+h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif; }
+.stat-row-num, .taxo-popup h3 { font-family: "Plain Ampersand", "Playfair Display", serif; }
+
+/* 2. "Matching Countries" sat directly under Global Stats in the same navy
+      numerals, so it read as another global figure rather than a filter
+      result. Separate it visually and name the filters in force. */
+.filtered-section.show {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.stat-row-filtered .stat-row-num { color: var(--green); }
+.stat-row-filtered .stat-row-label { color: var(--green); font-weight: 700; }
+.active-filters {
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 2px 0 8px;
+}
+[data-theme="dark"] .stat-row-filtered .stat-row-num,
+[data-theme="dark"] .stat-row-filtered .stat-row-label { color: #4ADE80; }
+
+/* 3. Whether an objective plus a sector means "either" or "both" was unclear.
+      The panel is a flex row, so the note claims a full-width line of its own
+      above the two select fields. */
+.filter-logic-note {
+  flex: 0 0 100%;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 4. The Advisor's "View full profile" links open a new tab, where the
+      browser's Back button is dead — this is the explicit way back. */
+.back-link-row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+.back-link-advisor { color: var(--green); }
+.back-link-advisor:hover { color: var(--green); text-decoration: underline; }
+/* .back-link sets display:inline-block, which as an author rule outranks the
+   browser's [hidden]{display:none} — without this the link would show on every
+   country page, not only the ones reached from the Advisor. */
+.back-link[hidden] { display: none; }
+
+/* 5. The header magnifier now searches countries, K-Taxonomy activities and
+      site pages, so results are grouped under headings. */
+.search-group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 10px 14px 4px;
+}
+.search-group-label:first-child { padding-top: 4px; }
+
+/* Overlay results now stack name / context / matched snippet vertically.
+   The bare .search-result-item rules elsewhere lay the map's own result rows out
+   as a single flex line; this more specific selector overrides that for the
+   header search only, leaving the map search untouched. */
+.global-search-results .search-result-item {
+  display: block;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+.global-search-results .search-result-item:last-child { border-bottom: none; }
+.global-search-results .sr-sub {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: left;
+  margin-top: 1px;
+}
+
+/* Each hit shows the phrase that matched, with the term marked, so it is clear
+   why the result is there. */
+.sr-snippet {
+  display: block;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.sr-snippet mark {
+  background: rgba(21, 128, 61, 0.16);
+  color: inherit;
+  font-weight: 700;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+[data-theme="dark"] .sr-snippet mark { background: rgba(74, 222, 128, 0.22); }

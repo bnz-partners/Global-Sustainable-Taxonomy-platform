@@ -762,7 +762,11 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .citation-mark a:hover { text-decoration: underline; }
 .citations-block { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
 .citations-block h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 8px; }
-.citations-list { margin: 0; padding-left: 18px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+/* The reference numbers are written into each <li> ("1. Kim & Chang, …") so
+   that they line up with the [1] markers in the body text, which are not
+   necessarily sequential. The list must therefore not add its own counter —
+   otherwise every entry renders as "1. 1. …". */
+.citations-list { margin: 0; padding-left: 0; list-style: none; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
 .citations-list li { margin-bottom: 4px; }
 .citations-list a { color: var(--green); }
 
@@ -1581,6 +1585,206 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   .gst-chat-toggle { right: 16px; bottom: 16px; }
 }
 
+/* ---------------------------------------------------------------------------
+   K-Taxonomy activity drill-down (country page, South Korea)
+   Six objective cards → sector groups → activity → full determining criteria.
+   --------------------------------------------------------------------------- */
+
+.kr-drill-intro { font-size: 0.86rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.6; }
+.kr-drill-loading, .kr-drill-empty { font-size: 0.86rem; color: var(--text-muted); margin: 12px 0; }
+.kr-drill-count { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 10px; font-weight: 600; }
+
+.kr-drill-searchwrap { margin-bottom: 14px; }
+.kr-drill-search {
+  width: 100%; box-sizing: border-box; padding: 10px 13px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-soft); color: var(--text); font-size: 0.86rem; font-family: inherit;
+}
+.kr-drill-search:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+
+.kr-obj-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.kr-obj-grid-alt { margin-top: 8px; grid-template-columns: repeat(1, minmax(0, 1fr)); }
+
+.kr-obj-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  text-align: left; width: 100%; cursor: pointer;
+  padding: 12px 13px; border: 1px solid var(--border); border-radius: var(--radius-md);
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.kr-obj-card:hover { border-color: var(--green); background: var(--bg-soft); }
+.kr-obj-card.is-open { border-color: var(--green); background: var(--bg-soft); box-shadow: inset 3px 0 0 var(--green); }
+.kr-obj-card .kr-obj-icon { color: var(--green); display: inline-flex; }
+.kr-obj-card .kr-obj-name { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
+.kr-obj-card .kr-obj-count { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
+.kr-obj-card .kr-obj-note { font-size: 0.74rem; color: var(--text-muted); line-height: 1.5; }
+.kr-obj-card-transition { border-style: dashed; }
+.kr-obj-card-transition.is-open { box-shadow: inset 3px 0 0 var(--amber); border-color: var(--amber); }
+.kr-obj-card-transition .kr-obj-name { color: var(--amber); }
+
+.kr-drill-panel { margin-top: 14px; }
+
+.kr-field { margin-bottom: 16px; }
+.kr-field-title {
+  font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-muted); margin: 0 0 6px; display: flex; align-items: center; gap: 7px;
+}
+.kr-field-count {
+  font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 999px; padding: 1px 7px; letter-spacing: 0;
+}
+
+.kr-act { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 6px; background: var(--card-bg); }
+.kr-act.is-open { border-color: var(--green); }
+.kr-act-head {
+  display: flex; align-items: flex-start; gap: 9px; width: 100%; cursor: pointer;
+  padding: 10px 12px; background: none; border: 0; color: var(--text);
+  font-family: inherit; font-size: 0.85rem; text-align: left; line-height: 1.45;
+}
+.kr-act-head:hover { background: var(--bg-soft); }
+.kr-act-code {
+  flex-shrink: 0; font-size: 0.7rem; font-weight: 700; color: var(--green);
+  background: var(--bg-soft); border-radius: 4px; padding: 2px 6px; margin-top: 1px;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.kr-act-name { flex: 1; font-weight: 600; }
+.kr-act-chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.15s ease; }
+.kr-act.is-open .kr-act-chevron { transform: rotate(180deg); }
+
+.kr-act-body { padding: 2px 12px 14px; border-top: 1px solid var(--border); }
+.kr-crit { margin-top: 12px; }
+.kr-crit h5 {
+  font-size: 0.76rem; font-weight: 700; color: var(--text-muted);
+  margin: 0 0 5px; text-transform: none; letter-spacing: 0.02em;
+}
+.kr-crit-text { font-size: 0.82rem; line-height: 1.65; margin: 0; color: var(--text); }
+.kr-crit-list { margin: 0; padding-left: 0; list-style: none; }
+.kr-crit-list li { font-size: 0.82rem; line-height: 1.65; margin-bottom: 6px; padding-left: 2px; }
+.kr-crit-list li.kr-crit-note { color: var(--text-muted); font-size: 0.78rem; padding-left: 12px; }
+
+.kr-crit-table { width: 100%; border-collapse: collapse; }
+.kr-crit-table th, .kr-crit-table td {
+  text-align: left; vertical-align: top; padding: 6px 8px 6px 0;
+  border-bottom: 1px solid var(--border); font-size: 0.79rem; line-height: 1.6;
+}
+.kr-crit-table th { width: 34%; color: var(--text-muted); font-weight: 600; white-space: normal; }
+
+.kr-drill-source { font-size: 0.74rem; color: var(--text-muted); line-height: 1.6; margin: 16px 0 0; }
+
+@media (max-width: 560px) {
+  .kr-obj-grid { grid-template-columns: 1fr; }
+  .kr-crit-table th { width: 40%; }
+}
+
+/* ---------------------------------------------------------------------------
+   Feedback fixes (SB본부, Sep 2026)
+   --------------------------------------------------------------------------- */
+
+/* 1. Playfair Display renders "&" as an ornamental Et-ligature form, which
+      reviewers found hard to read in headings ("Media & Trend Hub", "Advanced
+      Search & Filtering"). Map just the ampersand (U+0026) onto a plain
+      grotesque already present on the device; everything else stays Playfair.
+      If none of the local faces exist, the browser falls back to Playfair and
+      the heading still renders correctly — just with the ornamental glyph. */
+@font-face {
+  font-family: "Plain Ampersand";
+  src: local("Inter"), local("Helvetica Neue"), local("Helvetica"),
+       local("Arial"), local("Segoe UI"), local("Roboto"), local("Noto Sans");
+  unicode-range: U+0026;
+}
+h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif; }
+.stat-row-num, .taxo-popup h3 { font-family: "Plain Ampersand", "Playfair Display", serif; }
+
+/* 2. "Matching Countries" sat directly under Global Stats in the same navy
+      numerals, so it read as another global figure rather than a filter
+      result. Separate it visually and name the filters in force. */
+.filtered-section.show {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.stat-row-filtered .stat-row-num { color: var(--green); }
+.stat-row-filtered .stat-row-label { color: var(--green); font-weight: 700; }
+.active-filters {
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 2px 0 8px;
+}
+[data-theme="dark"] .stat-row-filtered .stat-row-num,
+[data-theme="dark"] .stat-row-filtered .stat-row-label { color: #4ADE80; }
+
+/* 3. Whether an objective plus a sector means "either" or "both" was unclear.
+      The panel is a flex row, so the note claims a full-width line of its own
+      above the two select fields. */
+.filter-logic-note {
+  flex: 0 0 100%;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 4. The Advisor's "View full profile" links open a new tab, where the
+      browser's Back button is dead — this is the explicit way back. */
+.back-link-row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+.back-link-advisor { color: var(--green); }
+.back-link-advisor:hover { color: var(--green); text-decoration: underline; }
+/* .back-link sets display:inline-block, which as an author rule outranks the
+   browser's [hidden]{display:none} — without this the link would show on every
+   country page, not only the ones reached from the Advisor. */
+.back-link[hidden] { display: none; }
+
+/* 5. The header magnifier now searches countries, K-Taxonomy activities and
+      site pages, so results are grouped under headings. */
+.search-group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 10px 14px 4px;
+}
+.search-group-label:first-child { padding-top: 4px; }
+
+/* Overlay results now stack name / context / matched snippet vertically.
+   The bare .search-result-item rules elsewhere lay the map's own result rows out
+   as a single flex line; this more specific selector overrides that for the
+   header search only, leaving the map search untouched. */
+.global-search-results .search-result-item {
+  display: block;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+.global-search-results .search-result-item:last-child { border-bottom: none; }
+.global-search-results .sr-sub {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: left;
+  margin-top: 1px;
+}
+
+/* Each hit shows the phrase that matched, with the term marked, so it is clear
+   why the result is there. */
+.sr-snippet {
+  display: block;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.sr-snippet mark {
+  background: rgba(21, 128, 61, 0.16);
+  color: inherit;
+  font-weight: 700;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+[data-theme="dark"] .sr-snippet mark { background: rgba(74, 222, 128, 0.22); }
+
 </style>
 </head>
 <body>
@@ -1613,7 +1817,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   <div class="global-search-panel">
     <div class="global-search-input-row">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="globalSearchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+      <input id="globalSearchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search the whole site — countries, criteria, activities, pages…" autocomplete="off" />
       <button class="icon-btn" id="globalSearchCloseBtn" title="Close" aria-label="Close" data-i18n-title="search.close" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -1629,7 +1833,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 
     <div class="search-bar-dark">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+      <input id="searchInput" type="text" data-i18n-placeholder="search.mapPlaceholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
     </div>
     <div id="searchResults" class="search-results"></div>
 
@@ -1669,7 +1873,10 @@ button.chip.active { background: var(--green); border-color: var(--green); color
       <div class="stat-row"><span class="stat-row-num accent-none" id="statNone">–</span><span class="stat-row-label" data-i18n="home.chipNoTaxonomy">No Taxonomy</span></div>
 
       <div id="filteredSection" class="filtered-section">
-        <div class="stat-row"><span class="stat-row-num" id="filteredCount">–</span><span class="stat-row-label" data-i18n="home.matchingCountriesHeading">Matching Countries</span></div>
+        <div class="stat-row stat-row-filtered"><span class="stat-row-num" id="filteredCount">–</span><span class="stat-row-label" data-i18n="home.matchingCountriesHeading">Matching Countries</span></div>
+        <!-- Filled by app.js with the filters actually in force, so this number
+             is visibly a filter result rather than another global statistic. -->
+        <p class="active-filters" id="activeFilters"></p>
         <ul class="recent-list filtered-list" id="filteredList"></ul>
         <p class="filtered-note" data-i18n="home.partialDataNote">Objective and sector filters currently match against the countries we've compiled this detail for so far — others may not appear here yet even if their taxonomy could cover it.</p>
       </div>
@@ -1685,6 +1892,10 @@ button.chip.active { background: var(--green); border-color: var(--green); color
       <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div class="advanced-filter-panel" id="advancedFilterPanel">
+      <!-- Feedback: it wasn't clear whether picking both an objective and a
+           sector shows countries matching either one or both. matchesFilters()
+           requires all of them, so say so on screen. -->
+      <p class="filter-logic-note" data-i18n="home.filterLogicNote">All filters apply together — a country must match every selection.</p>
       <div class="advanced-filter-field">
         <label for="homeObjectiveSelect" data-i18n="home.objectiveFilterHeading">Filter by Environmental Objective</label>
         <select id="homeObjectiveSelect">
@@ -6390,27 +6601,49 @@ window.TAXONOMY_DATA = {
     "name": "South Korea",
     "status": "established",
     "region": "Asia-Pacific",
-    "taxonomy": "K-Taxonomy (Korean Green Taxonomy)",
+    "taxonomy": "K-Taxonomy (Korean Green Taxonomy, 한국형 녹색분류체계)",
     "year": 2021,
-    "note": "Established by the Ministry of Environment (now Ministry of Climate, Energy and Environment) in December 2021. Based on Substantial Contribution, DNSH and Minimum Safeguards; originally 69 activities (64 Green, 5 Transitional), expanded by a December 2024 amendment.",
-    "source": "https://www.me.go.kr/eng/web/main.do",
+    "note": "Established by the Ministry of Environment in December 2021 and revised most recently on 31 December 2025. Built on Substantial Contribution to one of six environmental objectives, Do No Significant Harm (exclusion criteria) and Minimum Safeguards (protection criteria). The current guideline covers 100 economic activities — 93 in the Green Area and 7 in the Transitional Area.",
+    "source": "https://www.gmi.go.kr/gc/gcGuideLine.do",
     "officialDocuments": [
       {
-        "title": "Ministry of Environment — K-Taxonomy Guideline (한국형 녹색분류체계 가이드라인), original guideline (official PDF)",
-        "date": "30 Dec 2021",
-        "url": "https://www.korea.kr/common/download.do?tblKey=EDN&fileId=196851182"
+        "title": "한국형 녹색분류체계 가이드라인 — current guideline, Korean (PDF)",
+        "date": "31 Dec 2025",
+        "url": "docs/kr/K-Taxonomy-Guidelines-KO-2025-12-31.pdf"
+      },
+      {
+        "title": "K-Taxonomy Guidelines — official English edition of the 31 Dec 2025 guideline (PDF)",
+        "date": "31 Dec 2025 edition",
+        "url": "docs/kr/K-Taxonomy-Guidelines-EN-2025-12-31.pdf"
+      },
+      {
+        "title": "한국형 녹색분류체계 경제활동 해설서 — activity-by-activity commentary, Korean (PDF)",
+        "date": "2026",
+        "url": "docs/kr/K-Taxonomy-Activity-Commentary-KO.pdf"
+      },
+      {
+        "title": "한국형 녹색분류체계 적합성판단 참고서 — alignment-assessment handbook incl. calculation methods, Korean (PDF)",
+        "date": "Jun 2026",
+        "url": "docs/kr/K-Taxonomy-Alignment-Assessment-Reference-KO.pdf"
+      },
+      {
+        "title": "환경책임투자 종합플랫폼 (GMI) — official K-Taxonomy portal, always carries the latest edition",
+        "date": "Updated periodically",
+        "url": "https://www.gmi.go.kr/gc/gcGuideLine.do"
       }
     ],
     "overlays": [],
     "features": [
-      "Established by the Ministry of Environment (renamed Ministry of Climate, Energy and Environment in October 2025) in December 2021 to support South Korea's 2050 carbon-neutrality goal. [1][5]",
-      "Based on three principles: Substantial Contribution to at least one of six environmental objectives, Do No Significant Harm (DNSH), and Minimum Safeguards (MS).",
-      "Six environmental objectives: greenhouse gas reduction, climate change adaptation, sustainable water management, circular economy, pollution prevention and control, and biodiversity conservation.",
-      "Two categories, originally covering 69 activities in the 2021 guideline: a Green area (64 activities that directly contribute to carbon neutrality) and a Transitional area (5 activities, e.g. nuclear power and LNG-related activities, considered necessary bridges toward a low-carbon economy); a December 2024 amendment added 10 further green activities. [1][2]",
-      "Alignment requires passing a four-step Alignment Assessment Process: Activity Criteria → Recognition Criteria (technical thresholds) → Exclusion Criteria (DNSH) → Protection Criteria (Minimum Safeguards).",
-      "Widely used for green bonds, green loans, green asset-backed securities, sustainable investment funds, and ESG disclosures."
+      "Established by the Ministry of Environment in December 2021 to support Korea's 2050 carbon-neutrality goal; the ministry was reorganised as the Ministry of Climate, Energy and Environment (MCEE) in October 2025. [1][4]",
+      "An activity qualifies only by passing all four steps in order: Activity Criteria (활동기준) → Recognition Criteria (인정기준, the technical thresholds) → Exclusion Criteria (배제기준, Korea's DNSH test) → Protection Criteria (보호기준, minimum safeguards on human rights, labour, safety, anti-corruption and cultural heritage). Failing any one step means the activity is not aligned. [1]",
+      "Six environmental objectives: greenhouse gas reduction, climate change adaptation, sustainable water preservation, transition to circular economy, pollution prevention and control, and biodiversity preservation. [1]",
+      "The 31 December 2025 guideline sets out 100 economic activities: 93 in the Green Area (4 common activities plus 48 GHG reduction, 11 climate adaptation, 8 water, 13 circular economy, 5 pollution and 4 biodiversity) and 7 in the Transitional Area. [1]",
+      "The Transitional Area is time-limited and conditional: LNG and blended-gas power for facilities whose construction plans are approved by 2030–2035, new-build and continued-operation nuclear for facilities licensed by 2045, and SME emission reduction, blue hydrogen and environment-friendly vessels recognised only until 2030. [1]",
+      "Recognition criteria are largely quantitative and benchmarked to Korean data — for example, steel, cement, basic chemicals, semiconductor and display manufacturing must fall within the top-20% emission-intensity benchmark of the 4th planning period of the Korea Emissions Trading Scheme (K-ETS). [1]",
+      "Used mainly for green bonds, green loans and green asset-backed securitisation. K-Green Bonds have made up roughly 70–80% of Korea's won-denominated green bond market, with about KRW 4.7tn issued in 2023 and KRW 5.2tn in each of 2024 and 2025; Green ABS for SMEs added about KRW 320bn in 2025. [1]",
+      "Since 2024 the MCEE has published an environmental-benefit calculation methodology tied to the taxonomy; as of end-2025 about 70 GHG calculation methodologies covering 37 economic activities were available on the GMI platform. [1]"
     ],
-    "regulator": "Ministry of Climate, Energy and Environment (MCEE)",
+    "regulator": "Ministry of Climate, Energy and Environment (MCEE, 기후에너지환경부)",
     "objectives": [
       {
         "label": "Greenhouse Gas Reduction",
@@ -6421,29 +6654,29 @@ window.TAXONOMY_DATA = {
         "icon": "climate-adapt"
       },
       {
-        "label": "Sustainable Water Management",
+        "label": "Sustainable Water Preservation",
         "icon": "water"
       },
       {
-        "label": "Circular Economy",
+        "label": "Transition to Circular Economy",
         "icon": "circular"
       },
       {
-        "label": "Pollution Prevention & Control",
+        "label": "Pollution Prevention and Control",
         "icon": "pollution"
       },
       {
-        "label": "Biodiversity Conservation",
+        "label": "Biodiversity Preservation",
         "icon": "biodiversity"
       }
     ],
     "facts": {
-      "activities": "69 activities originally (64 Green + 5 Transitional) under the 2021 guideline; +10 new green activities added Dec 2024",
+      "activities": "100 activities under the 31 Dec 2025 guideline — 93 Green Area + 7 Transitional Area",
       "objectives": 6,
       "dnsh": true,
       "minimumSafeguards": true,
-      "euAlignment": "Closely modelled on the EU Taxonomy, with added transition activities",
-      "mandatory": "Used for green bond/loan verification; not a general mandatory disclosure regime"
+      "euAlignment": "Modelled on the EU Taxonomy's structure (substantial contribution / DNSH / safeguards) but with Korea-specific benchmarks and a separate Transitional Area",
+      "mandatory": "Not a general mandatory disclosure regime; used for green bond, green loan and green ABS verification and for green-credit management by banks"
     },
     "timeline": [
       {
@@ -6452,104 +6685,143 @@ window.TAXONOMY_DATA = {
         "citationId": 3
       },
       {
-        "label": "K-Taxonomy established (69 activities: 64 Green, 5 Transitional)",
+        "label": "K-Taxonomy established by the Ministry of Environment",
         "date": "Dec 2021",
+        "citationId": 2
+      },
+      {
+        "label": "First revision — nuclear power and LNG added to the Transitional Area",
+        "date": "Dec 2022",
+        "citationId": 5
+      },
+      {
+        "label": "Full-scale implementation; first K-Green Bonds and Green ABS",
+        "date": "2023",
         "citationId": 1
       },
       {
-        "label": "Nuclear power and LNG added to Transitional area",
-        "date": "Dec 2022",
+        "label": "Revision adding water, circular-economy, pollution and biodiversity criteria; Green Credit Management Guidelines",
+        "date": "Dec 2024",
+        "citationId": 6
+      },
+      {
+        "label": "Ministry of Environment reorganised as Ministry of Climate, Energy and Environment",
+        "date": "Oct 2025",
         "citationId": 4
       },
       {
-        "label": "Amendment adds 10 new green activities, revises 21; Green Credit Management Guidelines enacted",
-        "date": "Dec 2024",
-        "citationId": 2
+        "label": "2035 NDC finalised at 53–61% below 2018 net emissions",
+        "date": "Nov 2025",
+        "citationId": 1
+      },
+      {
+        "label": "Current guideline issued — 100 activities (93 Green + 7 Transitional)",
+        "date": "31 Dec 2025",
+        "citationId": 1
       }
     ],
     "sectors": [
-      "Energy",
+      "Industry",
+      "R&D",
+      "ICT",
+      "Power Generation and Energy",
       "Transport",
-      "Manufacturing",
+      "Cities and Buildings",
+      "Agriculture and Livestock",
+      "CCUS",
+      "Forestry",
       "Water",
-      "Buildings",
-      "Nuclear & Transition Industries"
+      "Circular Economy",
+      "Pollution Control",
+      "Biodiversity",
+      "Nuclear and LNG (Transitional)"
     ],
     "fullDescription": [
-      "South Korea's K-Taxonomy (Korean Green Taxonomy) was established by the (then) Ministry of Environment in December 2021, as part of the country's push toward its 2050 carbon-neutrality goal. [1] It is built on the same three core principles used by most major taxonomies: an activity must make a Substantial Contribution to at least one of six environmental objectives, satisfy Do No Significant Harm (DNSH) toward the others, and meet Minimum Safeguards on social and governance conduct.",
-      "The six environmental objectives are greenhouse gas reduction, climate change adaptation, sustainable water management, transition to a circular economy, pollution prevention and control, and biodiversity conservation. Activities were originally organised into two areas under the 2021 guideline: a Green area (64 activities that directly and substantially contribute to carbon neutrality, spanning energy, transport, manufacturing, water and buildings) and a smaller Transitional area (5 activities, including specific nuclear power and LNG-related activities, treated as bridge technologies toward a low-carbon economy rather than end-state green activities). [1][4]",
-      "Alignment is assessed through a four-step process: Activity Criteria (is the activity on the list at all), Recognition Criteria (does it meet the technical/quantitative thresholds), Exclusion Criteria (does it avoid significant harm to the other objectives), and Protection Criteria (does it meet minimum safeguards). In December 2024, the guidelines were updated to add 10 new eligible activities and revise 21 existing ones — particularly around water conservation, the circular economy, pollution control and biodiversity — introducing 25 new and 6 updated technical criteria. [2] The K-Taxonomy is used mainly for green bond and green loan verification, and since December 2024 also underpins Green Credit Management Guidelines applied to bank lending. [2]"
+      "The Korean Green Taxonomy (K-Taxonomy, 한국형 녹색분류체계) is the classification system that defines which economic activities count as green in Korea. It was established by the Ministry of Environment in December 2021 under the Framework Act on Carbon Neutrality and Green Growth, and has been revised repeatedly since — most recently on 31 December 2025. [1][2][3]",
+      "Alignment is assessed in four sequential steps, and an activity must pass every one of them. The Activity Criteria (활동기준) place the project inside one of the listed economic activities. The Recognition Criteria (인정기준) are the technical thresholds for contributing to at least one of the six environmental objectives — for heavy industry these are quantitative benchmarks drawn from the Korea Emissions Trading Scheme, such as 0.15709 tCO2eq per tonne for crude steel semi-finished products made in a basic oxygen furnace. The Exclusion Criteria (배제기준) are Korea's do-no-significant-harm test, applied objective by objective. The Protection Criteria (보호기준) require that the activity involve no breach of law on human rights, labour, safety, anti-corruption or cultural heritage. [1]",
+      "The current guideline covers 100 economic activities. The Green Area holds 93 of them — four common activities (innovative-item manufacturing, materials and components for those items, RD&D, and ICT solutions) plus 48 under greenhouse gas reduction, 11 under climate change adaptation, 8 under sustainable water preservation, 13 under transition to circular economy, 5 under pollution prevention and control, and 4 under biodiversity preservation. The Transitional Area holds the remaining 7, covering LNG and blended-gas power, new-build and continued-operation nuclear power, blue hydrogen, SME emission reduction and environment-friendly vessels; each carries an explicit sunset condition rather than open-ended recognition. [1]",
+      "In practice the K-Taxonomy underpins Korea's green bond and green loan market. K-Green Bonds have accounted for roughly 70–80% of the domestic won-denominated green bond market, with about KRW 4.7 trillion issued in 2023 and KRW 5.2 trillion in each of 2024 and 2025, alongside Green ABS aimed at smaller companies. Since December 2024 the taxonomy also underpins the Green Credit Management Guidelines applied to bank lending. [1][6]"
     ],
     "citations": [
-      { "id": 1, "label": "Kim & Chang, \"Introduction of K-Taxonomy Guideline\"", "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=24748" },
-      { "id": 2, "label": "Kim & Chang, \"Amendment to K-Taxonomy and Establishment of Green Credit Management Guidelines\" (2024)", "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=31914" },
-      { "id": 3, "label": "IEA, \"Carbon Neutrality and Green Growth Act for the Climate Change\"", "url": "https://www.iea.org/policies/14212-carbon-neutrality-and-green-growth-act-for-the-climate-change" },
-      { "id": 4, "label": "Lexology, \"The Korean Green Taxonomy (K-Taxonomy) Guideline and Its Implications\"", "url": "https://www.lexology.com/library/detail.aspx?g=861eba8d-0fdd-44d8-af20-2dc26ce55fbc" },
-      { "id": 5, "label": "Lexology, \"The new Ministry of Climate, Energy and Environment of Korea\"", "url": "https://www.lexology.com/library/detail.aspx?g=83c7592e-f02b-4276-bd3e-223a537eeb15" }
+      {
+        "id": 1,
+        "label": "Ministry of Climate, Energy and Environment, 「한국형 녹색분류체계 가이드라인」 (31 Dec 2025) / K-Taxonomy Guidelines, official English edition",
+        "url": "docs/kr/K-Taxonomy-Guidelines-EN-2025-12-31.pdf"
+      },
+      {
+        "id": 2,
+        "label": "Kim & Chang, \"Introduction of K-Taxonomy Guideline\"",
+        "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=24748"
+      },
+      {
+        "id": 3,
+        "label": "IEA, \"Carbon Neutrality and Green Growth Act for the Climate Change\"",
+        "url": "https://www.iea.org/policies/14212-carbon-neutrality-and-green-growth-act-for-the-climate-change"
+      },
+      {
+        "id": 4,
+        "label": "Lexology, \"The new Ministry of Climate, Energy and Environment of Korea\"",
+        "url": "https://www.lexology.com/library/detail.aspx?g=83c7592e-f02b-4276-bd3e-223a537eeb15"
+      },
+      {
+        "id": 5,
+        "label": "Lexology, \"The Korean Green Taxonomy (K-Taxonomy) Guideline and Its Implications\"",
+        "url": "https://www.lexology.com/library/detail.aspx?g=861eba8d-0fdd-44d8-af20-2dc26ce55fbc"
+      },
+      {
+        "id": 6,
+        "label": "Kim & Chang, \"Amendment to K-Taxonomy and Establishment of Green Credit Management Guidelines\" (2024)",
+        "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=31914"
+      }
     ],
     "activityList": [
       {
-        "activity": "Energy",
-        "criteria": "Renewable power generation (solar, wind, hydro, geothermal) and energy-efficiency/storage infrastructure that substantially reduces greenhouse gas emissions.",
-        "threshold": "Technical criteria set by the K-Taxonomy Guideline (Ministry of Environment / Ministry of Climate, Energy and Environment)",
-        "dnsh": "Applies"
+        "activity": "Common (4 activities)",
+        "criteria": "Manufacture of innovative items and of their materials/components/equipment; research, development and demonstration; ICT solutions and systems supporting a Green Area activity.",
+        "threshold": "Must match Attachment 7 (innovative items) or Attachment 8 (core GHG reduction technologies), and select at least one of the six objectives.",
+        "dnsh": "Common exclusion criteria (Attachments 1–6) for every objective not selected"
       },
       {
-        "activity": "Transport",
-        "criteria": "Low- and zero-emission vehicles, railways, and supporting infrastructure such as EV charging networks.",
-        "threshold": "Sector-specific recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Greenhouse Gas Reduction (48 activities)",
+        "criteria": "Low-emission steel, cement, basic chemicals, semiconductors and displays; bioenergy, clean methanol, hydrogen and ammonia; solar, wind, hydro, ocean, geothermal, hydrothermal and waste-based power; storage, grid and heat-pump infrastructure; zero-emission vehicles, vessels, aircraft and charging networks; zero-energy buildings and low-carbon data centres; low-carbon agriculture and livestock; CCUS; forest carbon sinks.",
+        "threshold": "Mostly quantitative — e.g. K-ETS top-20% product benchmarks for industry (0.15709 tCO2eq/t for BOF crude steel semi-finished products), Clean Hydrogen Certification grade 1–2 for hydrogen, zero-energy building certification for buildings.",
+        "dnsh": "Attachments 2–6 apply, plus activity-specific conditions"
       },
       {
-        "activity": "Manufacturing",
-        "criteria": "Manufacture of low-carbon and energy-efficient products, and process improvements that measurably cut emissions intensity.",
-        "threshold": "Sector-specific recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Climate Change Adaptation (11 activities)",
+        "criteria": "Climate monitoring and forecasting; climate impact, vulnerability and risk assessment; protection of vulnerable groups and regions; adaptation education; climate insurance and reinsurance; prevention, preparedness, response and recovery infrastructure for water, forest/ecosystem, land/coastal and agriculture/fisheries.",
+        "threshold": "Qualitative — the activity must be demonstrably directed at climate adaptation; activities also covered by another objective are assessed under that objective instead.",
+        "dnsh": "Attachments 1, 3–6 apply"
       },
       {
-        "activity": "Water",
-        "criteria": "Sustainable water management, treatment and supply infrastructure, updated with new/revised technical criteria in December 2024.",
-        "threshold": "Recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Sustainable Water Preservation (8 activities)",
+        "criteria": "Water supply; water demand management; sewage, wastewater and livestock-manure treatment; groundwater pollution prevention and remediation; multi-purpose use of discharged groundwater; water reuse; alternative water resources; non-point pollution reduction including low-impact development.",
+        "threshold": "Facility- and permit-based criteria under the Water Supply and Waterworks Act, Sewerage Act and related statutes.",
+        "dnsh": "Attachments 1, 2, 4–6 apply"
       },
       {
-        "activity": "Buildings",
-        "criteria": "Energy-efficient new construction and retrofits that meet defined efficiency thresholds.",
-        "threshold": "Recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Transition to Circular Economy (13 activities)",
+        "criteria": "Production of recycled raw materials and circular resources and of products using them; easily recyclable products; reusable-container services and refill stations; waste collection, sorting and decontamination/dismantling of end-of-life products; waste reuse, recycling, remanufacturing, chemical recycling, energy recovery and landfill-gas capture.",
+        "threshold": "Recycled-content and recyclability criteria under the Act on Promotion of Saving and Recycling of Resources and related statutes.",
+        "dnsh": "Attachments 1–3, 5, 6 apply"
       },
       {
-        "activity": "Nuclear & Transition Industries",
-        "criteria": "A small Transitional area (7 activities) covering nuclear power and LNG-related activities, recognised as bridge technologies under stricter conditions than the Green area.",
-        "threshold": "Transitional-area criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies, with additional conditions specific to transitional status"
-      }
-    ],
-    "officialDocuments": [
-      {
-        "title": "K-Taxonomy Guideline — original guideline (PDF)",
-        "date": "30 Dec 2021",
-        "url": "https://www.korea.kr/common/download.do?tblKey=EDN&fileId=196851182"
+        "activity": "Pollution Prevention and Control (5 activities)",
+        "criteria": "Air pollution prevention and treatment; odour prevention; indoor air quality management; marine pollution prevention and treatment; soil pollution prevention and remediation.",
+        "threshold": "Emission and treatment standards under the Clean Air Conservation Act, Marine Environment Management Act and Soil Environment Conservation Act.",
+        "dnsh": "Attachments 1–4, 6 apply"
       },
       {
-        "title": "K-Taxonomy Guideline — government archive record (정책브리핑)",
-        "date": "30 Dec 2021",
-        "url": "https://www.korea.kr/archive/expDocView.do?docId=40017"
+        "activity": "Biodiversity Preservation (4 activities)",
+        "criteria": "Protection, conservation and restoration of terrestrial and marine ecosystems and protected areas; protection of species and control of disruptive species; urban ecological spaces; sustainable forest management.",
+        "threshold": "Criteria under the Natural Environment Conservation Act, Wildlife Protection Act and Forest Act; activities that first damage an ecosystem and then restore it are excluded.",
+        "dnsh": "Attachments 1–5 apply"
       },
       {
-        "title": "K-Taxonomy Guideline — 1st revision (adds nuclear energy & climate-adaptation activities), PDF",
-        "date": "23 Dec 2022",
-        "url": "https://me.go.kr/home/file/readDownloadFile.do?fileId=273914&fileSeq=3"
-      },
-      {
-        "title": "K-Taxonomy Guideline — later revision (post-2024, adds/updates water, circular economy, pollution & biodiversity activities), PDF",
-        "date": "Dec 2024",
-        "url": "https://www.mcee.go.kr/m/file/readDownloadFile.do?fileId=314448&fileSeq=1"
-      },
-      {
-        "title": "Ministry of Climate, Energy and Environment — K-Taxonomy policy portal (for the Aug 2023 English edition and the Dec 2025 transition-sector revision, which we could not link to directly)",
-        "date": "Updated periodically",
-        "url": "https://www.me.go.kr/eng/web/main.do"
+        "activity": "Transitional Area (7 activities)",
+        "criteria": "SME site emission reduction; LNG and blended-gas power; new-build nuclear power; continued operation of existing nuclear power; LNG-based (blue) hydrogen; construction and equipment manufacture for environment-friendly vessels; deployment of environment-friendly vessels.",
+        "threshold": "Time-limited and conditional — LNG/blended gas for plants with construction plans approved by 2030–2035; nuclear licensed by 2045; SME reduction, blue hydrogen and vessels recognised until 2030 only.",
+        "dnsh": "Same exclusion criteria as the Green Area, with additional conditions attached to transitional status"
       }
     ]
   },
@@ -7158,17 +7430,27 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Thailand Taxonomy",
-    "year": null,
-    "note": "National taxonomy issued by the Bank of Thailand.",
+    "year": 2023,
+    "note": "National taxonomy first issued by the Bank of Thailand in 2023 (Phase 1: energy and transport). Phase 2, launched 27 May 2025 and co-led by the Department of Climate Change and Environment with the BOT, SEC and SET, extends coverage to agriculture, construction and real estate, manufacturing, and waste management.",
     "source": "https://www.bot.or.th/content/dam/bot/financial-innovation/sustainable-finance/green/taxonomy/01_EN_Thailand_Taxonomy-Introduction.pdf",
     "officialDocuments": [
       {
-        "title": "Bank of Thailand — Thailand Taxonomy Phase I: A Reference Tool for Sustainable Economy (official PDF)",
-        "date": "Jun 2023",
+        "title": "Thailand Taxonomy Phase 2 — Introduction: Conceptual Framework and Methodological Approach (official PDF)",
+        "date": "Jul 2025",
         "url": "https://www.bot.or.th/content/dam/bot/financial-innovation/sustainable-finance/green/taxonomy/01_EN_Thailand_Taxonomy-Introduction.pdf"
       },
       {
-        "title": "Bank of Thailand / SEC — Thailand Taxonomy Phase I (joint press release)",
+        "title": "Thailand Taxonomy Phase 2 — joint press release (DCCE, BOT, SEC, SET)",
+        "date": "27 May 2025",
+        "url": "https://www.bot.or.th/en/news-and-media/news/news-20250527.html"
+      },
+      {
+        "title": "Bank of Thailand — Thailand Taxonomy portal (current edition and sector volumes)",
+        "date": "Updated periodically",
+        "url": "https://www.bot.or.th/en/financial-innovation/sustainable-finance/green/Thailand-Taxonomy.html"
+      },
+      {
+        "title": "Bank of Thailand / SEC — Thailand Taxonomy Phase 1 (joint press release)",
         "date": "5 Jul 2023",
         "url": "https://www.bot.or.th/en/news-and-media/news/news-20230630-2.html"
       }
@@ -7189,27 +7471,80 @@ window.TAXONOMY_DATA = {
         ]
       }
     ],
-    "regulator": "Bank of Thailand",
+    "regulator": "Bank of Thailand with DCCE, SEC and SET (Thailand Taxonomy Board)",
     "fullDescription": [
       "In June 2023, Thailand's Taxonomy Board — co-led by the Bank of Thailand and the Securities and Exchange Commission — issued Phase 1 of the Thailand Taxonomy: A Reference Tool for Sustainable Economy. [1][2]",
       "Phase 1 focuses solely on the climate change mitigation objective, covering only scope 1 and 2 emissions, and is limited to the energy and transport sectors — the two sectors contributing the highest proportion of Thailand's carbon emissions. [1]",
       "It uses a traffic-light system classifying activities as Green (substantially contributing to net-zero by 2050), Amber (transitional — relevant mainly for existing, retrofittable infrastructure rather than new activities), or Red (\"stranded\" activities incompatible with a net-zero trajectory that should be phased out). As an ASEAN member, Thailand's national taxonomy also sits alongside the regional ASEAN Taxonomy for Sustainable Finance."
     ],
     "objectives": [
-      { "icon": "climate", "label": "Climate Change Mitigation" },
-      { "icon": "climate-adapt", "label": "Climate Change Adaptation" },
-      { "icon": "water", "label": "Sustainable Use of Water & Marine Resources" },
-      { "icon": "circular", "label": "Transition to a Circular Economy" },
-      { "icon": "pollution", "label": "Pollution Prevention & Control" },
-      { "icon": "biodiversity", "label": "Protection of Biodiversity & Ecosystems" }
+      {
+        "icon": "climate",
+        "label": "Climate Change Mitigation"
+      },
+      {
+        "icon": "climate-adapt",
+        "label": "Climate Change Adaptation"
+      },
+      {
+        "icon": "water",
+        "label": "Sustainable Use of Water & Marine Resources"
+      },
+      {
+        "icon": "circular",
+        "label": "Transition to a Circular Economy"
+      },
+      {
+        "icon": "pollution",
+        "label": "Pollution Prevention & Control"
+      },
+      {
+        "icon": "biodiversity",
+        "label": "Protection of Biodiversity & Ecosystems"
+      }
     ],
     "citations": [
-      { "id": 1, "label": "Bank of Thailand, \"Thailand Taxonomy: A Reference Tool for Sustainable Economy\"", "url": "https://www.bot.or.th/en/financial-innovation/sustainable-finance/green/Thailand-Taxonomy.html" },
-      { "id": 2, "label": "Bank of Thailand / SEC, \"Publication of Thailand Taxonomy Phase I\" (joint press release, 5 Jul 2023)", "url": "https://www.bot.or.th/en/news-and-media/news/news-20230630-2.html" }
+      {
+        "id": 1,
+        "label": "Bank of Thailand, \"Thailand Taxonomy\" (official portal)",
+        "url": "https://www.bot.or.th/en/financial-innovation/sustainable-finance/green/Thailand-Taxonomy.html"
+      },
+      {
+        "id": 2,
+        "label": "DCCE / BOT / SEC / SET, \"Publication of Thailand Taxonomy Phase 2\" (joint press release, 27 May 2025)",
+        "url": "https://www.bot.or.th/en/news-and-media/news/news-20250527.html"
+      },
+      {
+        "id": 3,
+        "label": "Bank of Thailand / SEC, \"Publication of Thailand Taxonomy Phase I\" (joint press release, 5 Jul 2023)",
+        "url": "https://www.bot.or.th/en/news-and-media/news/news-20230630-2.html"
+      }
     ],
     "activityList": [
-      { "activity": "Energy", "criteria": "Renewable generation classified Green; retrofittable existing infrastructure may qualify Amber; incompatible fossil generation classified Red.", "threshold": "Scope 1/2 emissions thresholds aligned with net-zero 2050", "dnsh": "Not yet extended beyond climate mitigation in Phase 1" },
-      { "activity": "Transport", "criteria": "Zero-emission transport and shipping classified Green; transitional retrofits classified Amber.", "threshold": "Scope 1/2 emissions thresholds", "dnsh": "Not yet extended beyond climate mitigation in Phase 1" }
+      {
+        "activity": "Energy",
+        "criteria": "Renewable generation classified Green; retrofittable existing infrastructure may qualify Amber; incompatible fossil generation classified Red.",
+        "threshold": "Scope 1/2 emissions thresholds aligned with net-zero 2050",
+        "dnsh": "Not yet extended beyond climate mitigation in Phase 1"
+      },
+      {
+        "activity": "Transport",
+        "criteria": "Zero-emission transport and shipping classified Green; transitional retrofits classified Amber.",
+        "threshold": "Scope 1/2 emissions thresholds",
+        "dnsh": "Not yet extended beyond climate mitigation in Phase 1"
+      }
+    ],
+    "timeline": [
+      {
+        "label": "Thailand Taxonomy Phase 1 published (energy, transport)",
+        "date": "Jun 2023",
+        "citationId": 3
+      },
+      {
+        "label": "Thailand Taxonomy Phase 2 published (agriculture, construction & real estate, manufacturing, waste)",
+        "date": "27 May 2025",
+        "citationId": 2
+      }
     ]
   },
   "VNM": {
@@ -12069,7 +12404,9 @@ const GST_I18N = {
     "nav.subscribe": "Subscribe", "nav.resources": "Resources", "nav.about": "About",
     "nav.comingSoon": "Coming soon", "nav.toggleTheme": "Toggle theme", "nav.search": "Search",
     "footer.developedBy": "Developed by", "footer.supervisedBy": "Supervised by", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Supervisor", "footer.contactPhone": "Phone", "footer.contactEmail": "Email",
-    "search.placeholder": "Search by country, taxonomy or regulator…", "search.noMatches": "No matches",
+    "search.placeholder": "Search the whole site — countries, criteria, activities, pages…", "search.mapPlaceholder": "Search by country, taxonomy or regulator…", "search.noMatches": "No matches",
+    "search.groupCountries": "Countries", "search.groupActivities": "K-Taxonomy activities", "search.groupPages": "Pages & tools",
+    "advisor.tabCompare": "Multi-Country Comparison", "advisor.tabCountry": "Country-Specific Advisor", "advisor.tabPortfolio": "Portfolio Comparison", "advisor.tabAsk": "Ask AI",
     "search.title": "Search", "search.close": "Close",
     "translate.button": "Translate", "translate.modalTitle": "Translated Document",
     "translate.loading": "Translating this document\u2026",
@@ -12205,7 +12542,8 @@ const GST_I18N = {
     "media.ctaHeading": "Get the Weekly Taxonomy Digest",
     "media.ctaText": "A weekly summary of taxonomy news, reports and trend insights — free.",
     "media.ctaBtn": "Subscribe Free",
-    "country.backToMap": "Back to map", "country.translatingContent": "Translating this page's content…",
+    "country.backToMap": "Back to map", "country.backToAdvisor": "Back to AI Advisor",
+    "home.filterLogicNote": "All filters apply together — a country must match every selection.", "home.activeFiltersLabel": "Active filters", "country.translatingContent": "Translating this page's content…",
     "chat.toggleLabel": "Ask the AI Assistant", "chat.title": "AI Assistant",
     "chat.subtitle": "Ask about taxonomy terms, compare countries, or find your way around the site.",
     "chat.placeholder": "Type your question…", "chat.send": "Send",
@@ -12219,7 +12557,9 @@ const GST_I18N = {
     "nav.subscribe": "Prenumerera", "nav.resources": "Resurser", "nav.about": "Om oss",
     "nav.comingSoon": "Kommer snart", "nav.toggleTheme": "Växla tema", "nav.search": "Sök",
     "footer.developedBy": "Utvecklad av", "footer.supervisedBy": "Handledd av", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Handledare",
-    "search.placeholder": "Sök på land, taxonomi eller tillsynsmyndighet…", "search.noMatches": "Inga träffar",
+    "search.placeholder": "Sök hela webbplatsen — länder, kriterier, aktiviteter, sidor…", "search.mapPlaceholder": "Sök på land, taxonomi eller tillsynsmyndighet…", "search.noMatches": "Inga träffar",
+    "search.groupCountries": "Länder", "search.groupActivities": "K-taxonomiaktiviteter", "search.groupPages": "Sidor & verktyg",
+    "advisor.tabCompare": "Jämförelse av flera länder", "advisor.tabCountry": "Landsspecifik rådgivare", "advisor.tabPortfolio": "Portföljjämförelse", "advisor.tabAsk": "Fråga AI",
     "search.title": "Sök", "search.close": "Stäng",
     "translate.button": "Översätt", "translate.modalTitle": "Översatt dokument",
     "translate.loading": "Översätter dokumentet\u2026",
@@ -12355,7 +12695,8 @@ const GST_I18N = {
     "media.ctaHeading": "Få veckans taxonomibrev",
     "media.ctaText": "En veckovis sammanfattning av taxonominyheter, rapporter och trendinsikter — gratis.",
     "media.ctaBtn": "Prenumerera gratis",
-    "country.backToMap": "Tillbaka till kartan", "country.translatingContent": "Översätter sidans innehåll…",
+    "country.backToMap": "Tillbaka till kartan", "country.backToAdvisor": "Tillbaka till AI-rådgivaren",
+    "home.filterLogicNote": "Alla filter gäller samtidigt — ett land måste matcha varje val.", "home.activeFiltersLabel": "Aktiva filter", "country.translatingContent": "Översätter sidans innehåll…",
     "chat.toggleLabel": "Fråga AI-assistenten", "chat.title": "AI-assistent",
     "chat.subtitle": "Fråga om taxonomibegrepp, jämför länder, eller hitta rätt på sajten.",
     "chat.placeholder": "Skriv din fråga…", "chat.send": "Skicka",
@@ -12369,7 +12710,9 @@ const GST_I18N = {
     "nav.subscribe": "구독", "nav.resources": "자료", "nav.about": "소개",
     "nav.comingSoon": "출시 예정", "nav.toggleTheme": "테마 전환", "nav.search": "검색",
     "footer.developedBy": "개발", "footer.supervisedBy": "감수", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "감수",
-    "search.placeholder": "국가, 택소노미 또는 규제 기관으로 검색…", "search.noMatches": "검색 결과 없음",
+    "search.placeholder": "사이트 전체 검색 — 국가, 판단기준, 경제활동, 페이지…", "search.mapPlaceholder": "국가, 택소노미 또는 규제 기관으로 검색…", "search.noMatches": "검색 결과 없음",
+    "search.groupCountries": "국가", "search.groupActivities": "K-Taxonomy 경제활동", "search.groupPages": "페이지 · 기능",
+    "advisor.tabCompare": "다국가 비교", "advisor.tabCountry": "국가별 어드바이저", "advisor.tabPortfolio": "포트폴리오 비교", "advisor.tabAsk": "AI에게 질문",
     "search.title": "검색", "search.close": "닫기",
     "translate.button": "번역", "translate.modalTitle": "번역된 문서",
     "translate.loading": "문서를 번역하는 중\u2026",
@@ -12505,7 +12848,8 @@ const GST_I18N = {
     "media.ctaHeading": "주간 택소노미 다이제스트 받기",
     "media.ctaText": "택소노미 뉴스, 보고서, 트렌드 인사이트를 담은 주간 요약 — 무료입니다.",
     "media.ctaBtn": "무료로 구독하기",
-    "country.backToMap": "지도로 돌아가기", "country.translatingContent": "이 페이지의 콘텐츠를 번역하는 중…",
+    "country.backToMap": "지도로 돌아가기", "country.backToAdvisor": "AI 어드바이저로 돌아가기",
+    "home.filterLogicNote": "선택한 조건은 모두 동시에 적용됩니다 — 전부 충족하는 국가만 표시됩니다.", "home.activeFiltersLabel": "적용된 필터", "country.translatingContent": "이 페이지의 콘텐츠를 번역하는 중…",
     "chat.toggleLabel": "AI 어시스턴트에게 질문", "chat.title": "AI 어시스턴트",
     "chat.subtitle": "택소노미 용어를 질문하거나, 국가를 비교하거나, 사이트 내 원하는 곳을 찾아보세요.",
     "chat.placeholder": "질문을 입력하세요…", "chat.send": "전송",
@@ -12519,7 +12863,9 @@ const GST_I18N = {
     "nav.subscribe": "Suscribirse", "nav.resources": "Recursos", "nav.about": "Acerca de",
     "nav.comingSoon": "Próximamente", "nav.toggleTheme": "Cambiar tema", "nav.search": "Buscar",
     "footer.developedBy": "Desarrollado por", "footer.supervisedBy": "Supervisado por", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Supervisora",
-    "search.placeholder": "Buscar por país, taxonomía o regulador…", "search.noMatches": "Sin resultados",
+    "search.placeholder": "Busque en todo el sitio: países, criterios, actividades, páginas…", "search.mapPlaceholder": "Buscar por país, taxonomía o regulador…", "search.noMatches": "Sin resultados",
+    "search.groupCountries": "Países", "search.groupActivities": "Actividades de la K-Taxonomy", "search.groupPages": "Páginas y herramientas",
+    "advisor.tabCompare": "Comparación entre países", "advisor.tabCountry": "Asesor por país", "advisor.tabPortfolio": "Comparación de cartera", "advisor.tabAsk": "Preguntar a la IA",
     "search.title": "Buscar", "search.close": "Cerrar",
     "translate.button": "Traducir", "translate.modalTitle": "Documento traducido",
     "translate.loading": "Traduciendo este documento\u2026",
@@ -12655,7 +13001,8 @@ const GST_I18N = {
     "media.ctaHeading": "Reciba el boletín semanal de taxonomías",
     "media.ctaText": "Un resumen semanal de noticias, informes e ideas de tendencias sobre taxonomías — gratis.",
     "media.ctaBtn": "Suscribirse gratis",
-    "country.backToMap": "Volver al mapa", "country.translatingContent": "Traduciendo el contenido de esta página…",
+    "country.backToMap": "Volver al mapa", "country.backToAdvisor": "Volver al Asesor de IA",
+    "home.filterLogicNote": "Todos los filtros se aplican a la vez: un país debe cumplir todas las selecciones.", "home.activeFiltersLabel": "Filtros activos", "country.translatingContent": "Traduciendo el contenido de esta página…",
     "chat.toggleLabel": "Preguntar al asistente de IA", "chat.title": "Asistente de IA",
     "chat.subtitle": "Pregunte sobre términos de taxonomías, compare países, o encuentre lo que busca en el sitio.",
     "chat.placeholder": "Escriba su pregunta…", "chat.send": "Enviar",
@@ -12669,7 +13016,9 @@ const GST_I18N = {
     "nav.subscribe": "S'abonner", "nav.resources": "Ressources", "nav.about": "À propos",
     "nav.comingSoon": "Bientôt disponible", "nav.toggleTheme": "Changer de thème", "nav.search": "Rechercher",
     "footer.developedBy": "Développé par", "footer.supervisedBy": "Supervisé par", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Superviseure",
-    "search.placeholder": "Rechercher par pays, taxonomie ou régulateur…", "search.noMatches": "Aucun résultat",
+    "search.placeholder": "Rechercher dans tout le site — pays, critères, activités, pages…", "search.mapPlaceholder": "Rechercher par pays, taxonomie ou régulateur…", "search.noMatches": "Aucun résultat",
+    "search.groupCountries": "Pays", "search.groupActivities": "Activités K-Taxonomy", "search.groupPages": "Pages et outils",
+    "advisor.tabCompare": "Comparaison multi-pays", "advisor.tabCountry": "Conseiller par pays", "advisor.tabPortfolio": "Comparaison de portefeuille", "advisor.tabAsk": "Demander à l'IA",
     "search.title": "Rechercher", "search.close": "Fermer",
     "translate.button": "Traduire", "translate.modalTitle": "Document traduit",
     "translate.loading": "Traduction du document en cours\u2026",
@@ -12805,7 +13154,8 @@ const GST_I18N = {
     "media.ctaHeading": "Recevez la newsletter hebdomadaire sur les taxonomies",
     "media.ctaText": "Un résumé hebdomadaire des actualités, rapports et analyses de tendances sur les taxonomies — gratuit.",
     "media.ctaBtn": "S'abonner gratuitement",
-    "country.backToMap": "Retour à la carte", "country.translatingContent": "Traduction du contenu de cette page…",
+    "country.backToMap": "Retour à la carte", "country.backToAdvisor": "Retour au conseiller IA",
+    "home.filterLogicNote": "Tous les filtres s'appliquent ensemble : un pays doit satisfaire chaque sélection.", "home.activeFiltersLabel": "Filtres actifs", "country.translatingContent": "Traduction du contenu de cette page…",
     "chat.toggleLabel": "Demander à l'assistant IA", "chat.title": "Assistant IA",
     "chat.subtitle": "Posez des questions sur les termes de taxonomie, comparez des pays, ou trouvez votre chemin sur le site.",
     "chat.placeholder": "Tapez votre question…", "chat.send": "Envoyer",
@@ -12819,7 +13169,9 @@ const GST_I18N = {
     "nav.subscribe": "Abonnieren", "nav.resources": "Ressourcen", "nav.about": "Über uns",
     "nav.comingSoon": "Demnächst", "nav.toggleTheme": "Design wechseln", "nav.search": "Suche",
     "footer.developedBy": "Entwickelt von", "footer.supervisedBy": "Betreut von", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Betreuerin",
-    "search.placeholder": "Nach Land, Taxonomie oder Aufsichtsbehörde suchen…", "search.noMatches": "Keine Treffer",
+    "search.placeholder": "Gesamte Website durchsuchen — Länder, Kriterien, Aktivitäten, Seiten…", "search.mapPlaceholder": "Nach Land, Taxonomie oder Aufsichtsbehörde suchen…", "search.noMatches": "Keine Treffer",
+    "search.groupCountries": "Länder", "search.groupActivities": "K-Taxonomy-Aktivitäten", "search.groupPages": "Seiten & Werkzeuge",
+    "advisor.tabCompare": "Ländervergleich", "advisor.tabCountry": "Länderspezifischer Berater", "advisor.tabPortfolio": "Portfoliovergleich", "advisor.tabAsk": "KI fragen",
     "search.title": "Suche", "search.close": "Schließen",
     "translate.button": "Übersetzen", "translate.modalTitle": "Übersetztes Dokument",
     "translate.loading": "Dokument wird übersetzt\u2026",
@@ -12955,7 +13307,8 @@ const GST_I18N = {
     "media.ctaHeading": "Den wöchentlichen Taxonomie-Newsletter erhalten",
     "media.ctaText": "Eine wöchentliche Zusammenfassung von Taxonomie-Neuigkeiten, Berichten und Trendeinblicken — kostenlos.",
     "media.ctaBtn": "Kostenlos abonnieren",
-    "country.backToMap": "Zurück zur Karte", "country.translatingContent": "Inhalt dieser Seite wird übersetzt…",
+    "country.backToMap": "Zurück zur Karte", "country.backToAdvisor": "Zurück zum KI-Berater",
+    "home.filterLogicNote": "Alle Filter gelten gemeinsam — ein Land muss jede Auswahl erfüllen.", "home.activeFiltersLabel": "Aktive Filter", "country.translatingContent": "Inhalt dieser Seite wird übersetzt…",
     "chat.toggleLabel": "KI-Assistent fragen", "chat.title": "KI-Assistent",
     "chat.subtitle": "Fragen Sie nach Taxonomiebegriffen, vergleichen Sie Länder, oder finden Sie sich auf der Website zurecht.",
     "chat.placeholder": "Ihre Frage eingeben…", "chat.send": "Senden",
@@ -12969,7 +13322,9 @@ const GST_I18N = {
     "nav.subscribe": "登録", "nav.resources": "リソース", "nav.about": "サイトについて",
     "nav.comingSoon": "近日公開", "nav.toggleTheme": "テーマ切替", "nav.search": "検索",
     "footer.developedBy": "開発", "footer.supervisedBy": "監修", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "監修",
-    "search.placeholder": "国、タクソノミー、規制当局で検索…", "search.noMatches": "該当なし",
+    "search.placeholder": "サイト全体を検索 — 国・判断基準・経済活動・ページ…", "search.mapPlaceholder": "国、タクソノミー、規制当局で検索…", "search.noMatches": "該当なし",
+    "search.groupCountries": "国", "search.groupActivities": "K-Taxonomyの経済活動", "search.groupPages": "ページ・機能",
+    "advisor.tabCompare": "多国間比較", "advisor.tabCountry": "国別アドバイザー", "advisor.tabPortfolio": "ポートフォリオ比較", "advisor.tabAsk": "AIに質問",
     "search.title": "検索", "search.close": "閉じる",
     "translate.button": "翻訳", "translate.modalTitle": "翻訳された文書",
     "translate.loading": "文書を翻訳中\u2026",
@@ -13105,7 +13460,8 @@ const GST_I18N = {
     "media.ctaHeading": "週刊タクソノミーダイジェストを受け取る",
     "media.ctaText": "タクソノミーニュース、レポート、トレンドインサイトの週刊まとめ — 無料。",
     "media.ctaBtn": "無料で登録する",
-    "country.backToMap": "地図に戻る", "country.translatingContent": "このページのコンテンツを翻訳中…",
+    "country.backToMap": "地図に戻る", "country.backToAdvisor": "AIアドバイザーに戻る",
+    "home.filterLogicNote": "すべてのフィルターは同時に適用されます — すべての条件を満たす国のみが表示されます。", "home.activeFiltersLabel": "適用中のフィルター", "country.translatingContent": "このページのコンテンツを翻訳中…",
     "chat.toggleLabel": "AIアシスタントに質問", "chat.title": "AIアシスタント",
     "chat.subtitle": "タクソノミー用語について質問したり、国を比較したり、サイト内の目的のページを見つけたりできます。",
     "chat.placeholder": "質問を入力…", "chat.send": "送信",
@@ -13119,7 +13475,9 @@ const GST_I18N = {
     "nav.subscribe": "订阅", "nav.resources": "资源", "nav.about": "关于我们",
     "nav.comingSoon": "即将推出", "nav.toggleTheme": "切换主题", "nav.search": "搜索",
     "footer.developedBy": "开发者", "footer.supervisedBy": "指导", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "指导",
-    "search.placeholder": "按国家、分类标准或监管机构搜索…", "search.noMatches": "无匹配结果",
+    "search.placeholder": "全站搜索 — 国家、判定标准、经济活动、页面…", "search.mapPlaceholder": "按国家、分类标准或监管机构搜索…", "search.noMatches": "无匹配结果",
+    "search.groupCountries": "国家", "search.groupActivities": "K-Taxonomy 经济活动", "search.groupPages": "页面与工具",
+    "advisor.tabCompare": "多国比较", "advisor.tabCountry": "国别顾问", "advisor.tabPortfolio": "组合比较", "advisor.tabAsk": "询问 AI",
     "search.title": "搜索", "search.close": "关闭",
     "translate.button": "翻译", "translate.modalTitle": "翻译文档",
     "translate.loading": "正在翻译此文档\u2026",
@@ -13255,7 +13613,8 @@ const GST_I18N = {
     "media.ctaHeading": "获取每周分类标准简报",
     "media.ctaText": "分类标准新闻、报告和趋势洞察的每周摘要——免费。",
     "media.ctaBtn": "免费订阅",
-    "country.backToMap": "返回地图", "country.translatingContent": "正在翻译此页面的内容…",
+    "country.backToMap": "返回地图", "country.backToAdvisor": "返回 AI 顾问",
+    "home.filterLogicNote": "所有筛选条件同时生效——国家须满足全部所选条件。", "home.activeFiltersLabel": "已启用的筛选", "country.translatingContent": "正在翻译此页面的内容…",
     "chat.toggleLabel": "咨询 AI 助手", "chat.title": "AI 助手",
     "chat.subtitle": "询问分类标准术语、比较各国情况，或在网站中找到您需要的内容。",
     "chat.placeholder": "输入您的问题…", "chat.send": "发送",
@@ -13269,7 +13628,9 @@ const GST_I18N = {
     "nav.subscribe": "اشترك", "nav.resources": "الموارد", "nav.about": "حول",
     "nav.comingSoon": "قريبًا", "nav.toggleTheme": "تبديل المظهر", "nav.search": "بحث",
     "footer.developedBy": "تم التطوير بواسطة", "footer.supervisedBy": "بإشراف", "footer.headOfAI": "رئيس مركز الذكاء الاصطناعي", "footer.supervisorLabel": "المشرفة",
-    "search.placeholder": "ابحث حسب البلد أو التصنيف أو الجهة الرقابية…", "search.noMatches": "لا توجد نتائج",
+    "search.placeholder": "ابحث في الموقع بالكامل — الدول والمعايير والأنشطة والصفحات…", "search.mapPlaceholder": "ابحث حسب البلد أو التصنيف أو الجهة الرقابية…", "search.noMatches": "لا توجد نتائج",
+    "search.groupCountries": "الدول", "search.groupActivities": "أنشطة K-Taxonomy", "search.groupPages": "الصفحات والأدوات",
+    "advisor.tabCompare": "مقارنة بين عدة دول", "advisor.tabCountry": "مستشار خاص بالدولة", "advisor.tabPortfolio": "مقارنة المحفظة", "advisor.tabAsk": "اسأل الذكاء الاصطناعي",
     "search.title": "بحث", "search.close": "إغلاق",
     "translate.button": "ترجمة", "translate.modalTitle": "المستند المترجم",
     "translate.loading": "جارٍ ترجمة هذا المستند…",
@@ -13405,7 +13766,8 @@ const GST_I18N = {
     "media.ctaHeading": "احصل على النشرة الأسبوعية للتصنيفات",
     "media.ctaText": "ملخص أسبوعي لأخبار التصنيفات والتقارير ورؤى الاتجاهات — مجانًا.",
     "media.ctaBtn": "اشترك مجانًا",
-    "country.backToMap": "العودة إلى الخريطة", "country.translatingContent": "جارٍ ترجمة محتوى هذه الصفحة…",
+    "country.backToMap": "العودة إلى الخريطة", "country.backToAdvisor": "العودة إلى مستشار الذكاء الاصطناعي",
+    "home.filterLogicNote": "تُطبَّق جميع عوامل التصفية معًا — يجب أن يستوفي البلد كل اختيار.", "home.activeFiltersLabel": "عوامل التصفية النشطة", "country.translatingContent": "جارٍ ترجمة محتوى هذه الصفحة…",
     "chat.toggleLabel": "اسأل مساعد الذكاء الاصطناعي", "chat.title": "مساعد الذكاء الاصطناعي",
     "chat.subtitle": "اسأل عن مصطلحات التصنيف، أو قارن بين الدول، أو ابحث عن طريقك في الموقع.",
     "chat.placeholder": "اكتب سؤالك…", "chat.send": "إرسال",
@@ -13419,7 +13781,9 @@ const GST_I18N = {
     "nav.subscribe": "Inscrever-se", "nav.resources": "Recursos", "nav.about": "Sobre",
     "nav.comingSoon": "Em breve", "nav.toggleTheme": "Alternar tema", "nav.search": "Pesquisar",
     "footer.developedBy": "Desenvolvido por", "footer.supervisedBy": "Supervisionado por", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Supervisora",
-    "search.placeholder": "Pesquisar por país, taxonomia ou regulador…", "search.noMatches": "Nenhum resultado",
+    "search.placeholder": "Pesquise em todo o site — países, critérios, atividades, páginas…", "search.mapPlaceholder": "Pesquisar por país, taxonomia ou regulador…", "search.noMatches": "Nenhum resultado",
+    "search.groupCountries": "Países", "search.groupActivities": "Atividades da K-Taxonomy", "search.groupPages": "Páginas e ferramentas",
+    "advisor.tabCompare": "Comparação entre países", "advisor.tabCountry": "Consultor por país", "advisor.tabPortfolio": "Comparação de carteira", "advisor.tabAsk": "Perguntar à IA",
     "search.title": "Pesquisar", "search.close": "Fechar",
     "translate.button": "Traduzir", "translate.modalTitle": "Documento Traduzido",
     "translate.loading": "Traduzindo este documento…",
@@ -13555,7 +13919,8 @@ const GST_I18N = {
     "media.ctaHeading": "Receba o Resumo Semanal de Taxonomias",
     "media.ctaText": "Um resumo semanal de notícias, relatórios e insights de tendências sobre taxonomias — gratuito.",
     "media.ctaBtn": "Inscrever-se Gratuitamente",
-    "country.backToMap": "Voltar ao mapa", "country.translatingContent": "Traduzindo o conteúdo desta página…",
+    "country.backToMap": "Voltar ao mapa", "country.backToAdvisor": "Voltar ao Consultor de IA",
+    "home.filterLogicNote": "Todos os filtros se aplicam em conjunto — um país deve atender a todas as seleções.", "home.activeFiltersLabel": "Filtros ativos", "country.translatingContent": "Traduzindo o conteúdo desta página…",
     "chat.toggleLabel": "Perguntar ao assistente de IA", "chat.title": "Assistente de IA",
     "chat.subtitle": "Pergunte sobre termos de taxonomia, compare países, ou encontre o que procura no site.",
     "chat.placeholder": "Digite sua pergunta…", "chat.send": "Enviar",
@@ -13623,29 +13988,270 @@ function gstCloseSearch() {
   if (overlay) overlay.classList.remove("open");
 }
 
-function gstRunSearch(query) {
+/* ---------- Site-wide search ----------
+   The magnifier in the header searches the whole site's CONTENT, not just a
+   list of names. Three indexes are searched at once:
+
+     1. Countries  — every text field the site holds for all 196 jurisdictions:
+                     the taxonomy name, regulator, summary, the full "About the
+                     Taxonomy" write-up, sector lists, environmental objectives,
+                     the screening-criteria table and official document titles.
+     2. Activities — the 100 K-Taxonomy economic activities with their full
+                     determining criteria (fetched on first use).
+     3. Pages      — the actual wording of each page, read out of the site's own
+                     translation dictionary, so a search for a phrase that
+                     appears on the Subscribe or About page finds that page.
+
+   Every hit shows the snippet that matched, with the search term highlighted,
+   so it is obvious why a result is there. The map's own search box is separate
+   and still looks up countries only. */
+
+const GST_SEARCH_LIMITS = { countries: 8, activities: 8, pages: 5 };
+
+/* Which page each group of translation keys belongs to. Keys outside this map
+   (nav.*, footer.*, search.*, chat.*, country.*) are chrome or per-country
+   labels rather than page content, so they are not indexed. */
+const GST_PAGE_SECTIONS = [
+  { prefix: "home.",      href: "index.html",     titleKey: "nav.map" },
+  { prefix: "advisor.",   href: "advisor.html",   titleKey: "nav.advisor" },
+  { prefix: "media.",     href: "media.html",     titleKey: "nav.media" },
+  { prefix: "subscribe.", href: "subscribe.html", titleKey: "nav.subscribe" },
+  { prefix: "about.",     href: "about.html",     titleKey: "nav.about" }
+];
+
+function gstNorm(s) {
+  return String(s == null ? "" : s).toLowerCase();
+}
+
+/* Flattens any nested value (string, array, object) into one searchable run of
+   text, so a new data field starts being searchable without extra code. */
+function gstFlattenText(value, depth) {
+  depth = depth || 0;
+  if (value == null || depth > 4) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map(v => gstFlattenText(v, depth + 1)).join(" · ");
+  if (typeof value === "object") {
+    return Object.keys(value)
+      .filter(k => k !== "url" && k !== "icon" && k !== "citationId")
+      .map(k => gstFlattenText(value[k], depth + 1))
+      .join(" · ");
+  }
+  return "";
+}
+
+/* ---- index 1: countries (built once from the dataset already on the page) ---- */
+
+let gstCountryIndex = null;
+function gstBuildCountryIndex() {
+  if (gstCountryIndex) return gstCountryIndex;
+  if (!window.TAXONOMY_DATA) return [];
+
+  gstCountryIndex = Object.keys(window.TAXONOMY_DATA).map(iso => {
+    const e = window.TAXONOMY_DATA[iso] || {};
+    /* Deliberately broad: the point of a site-wide search is that body text is
+       searchable, not only headings. */
+    const body = [
+      e.name, iso, e.taxonomy, e.regulator, e.region, e.status, e.year, e.note,
+      gstFlattenText(e.features), gstFlattenText(e.fullDescription),
+      gstFlattenText(e.sectors), gstFlattenText(e.objectives),
+      gstFlattenText(e.facts), gstFlattenText(e.activityList),
+      gstFlattenText(e.officialDocuments), gstFlattenText(e.timeline),
+      gstFlattenText(e.overlays)
+    ].filter(Boolean).join("  ");
+
+    return {
+      iso,
+      name: e.name || iso,
+      sub: e.taxonomy || "",
+      body,
+      hay: gstNorm(body),
+      title: gstNorm((e.name || "") + " " + iso + " " + (e.taxonomy || ""))
+    };
+  });
+  return gstCountryIndex;
+}
+
+/* ---- index 2: K-Taxonomy activities (lazy — ~420KB, fetched on first search) ---- */
+
+let gstActivityIndex = null;
+let gstActivityLoading = null;
+function gstLoadActivityIndex() {
+  if (gstActivityIndex) return Promise.resolve(gstActivityIndex);
+  if (gstActivityLoading) return gstActivityLoading;
+  gstActivityLoading = fetch("kr-taxonomy-activities.json")
+    .then(r => (r.ok ? r.json() : []))
+    .then(list => {
+      gstActivityIndex = (list || []).map(a => {
+        const body = [
+          a.code_ko, a.code_en, a.name_ko, a.name_en, a.field_ko, a.field_en,
+          a.objective_ko, a.objective_en, a.section_ko, a.section_en,
+          a.activity_ko, a.activity_en,
+          (a.recognition_ko || []).join(" "), (a.recognition_en || []).join(" "),
+          (a.exclusion_ko || []).map(r => r.objective + " " + r.text).join(" "),
+          (a.exclusion_en || []).map(r => r.objective + " " + r.text).join(" ")
+        ].filter(Boolean).join("  ");
+        return {
+          id: a.id, code: a.code_en, name_ko: a.name_ko, name_en: a.name_en,
+          field_ko: a.field_ko, field_en: a.field_en,
+          body, hay: gstNorm(body),
+          title: gstNorm(a.code_en + " " + a.code_ko + " " + a.name_en + " " + a.name_ko)
+        };
+      });
+      return gstActivityIndex;
+    })
+    .catch(() => { gstActivityIndex = []; return gstActivityIndex; });
+  return gstActivityLoading;
+}
+
+/* ---- index 3: page wording, straight from the translation dictionary ---- */
+
+let gstPageIndex = null;
+let gstPageIndexLang = null;
+function gstBuildPageIndex() {
+  if (gstPageIndex && gstPageIndexLang === gstCurrentLang) return gstPageIndex;
+  if (typeof GST_I18N === "undefined") return [];
+
+  /* Search the current language and English together, so an English term still
+     finds the page when the interface is in Korean, and vice versa. */
+  const dicts = [GST_I18N[gstCurrentLang], GST_I18N.en].filter(Boolean);
+
+  gstPageIndex = GST_PAGE_SECTIONS.map(section => {
+    const lines = [];
+    dicts.forEach(dict => {
+      Object.keys(dict).forEach(key => {
+        if (key.indexOf(section.prefix) === 0 && typeof dict[key] === "string") {
+          lines.push(dict[key]);
+        }
+      });
+    });
+    const body = lines.join("  ");
+    return {
+      href: section.href,
+      title: gstT(section.titleKey),
+      body,
+      hay: gstNorm(body),
+      titleHay: gstNorm(gstT(section.titleKey) + " " + section.href)
+    };
+  });
+  gstPageIndexLang = gstCurrentLang;
+  return gstPageIndex;
+}
+
+/* ---- matching ---- */
+
+/* Title hits rank above body hits, and an earlier body hit above a later one,
+   so "Korea" surfaces South Korea before a country that merely mentions it. */
+function gstScoreAndRank(items, q, limit) {
+  const scored = [];
+  items.forEach(item => {
+    const inTitle = (item.title || item.titleHay || "").indexOf(q);
+    const at = item.hay.indexOf(q);
+    if (inTitle === -1 && at === -1) return;
+    scored.push({ item, at, score: (inTitle !== -1 ? 1000 : 0) - (at === -1 ? 0 : at) / 1000 });
+  });
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, limit);
+}
+
+/* Pulls the matched phrase out of the body with a little context either side,
+   and marks the term. Returns "" when the match was in the title only. */
+function gstSnippet(body, hay, at, q) {
+  if (at === -1) return "";
+  const before = Math.max(0, at - 55);
+  const after = Math.min(body.length, at + q.length + 75);
+  const raw = (before > 0 ? "…" : "") + body.slice(before, after).replace(/\s+/g, " ").trim() +
+              (after < body.length ? "…" : "");
+  const idx = gstNorm(raw).indexOf(q);
+  if (idx === -1) return gstEscapeHtml(raw);
+  return gstEscapeHtml(raw.slice(0, idx)) +
+         "<mark>" + gstEscapeHtml(raw.slice(idx, idx + q.length)) + "</mark>" +
+         gstEscapeHtml(raw.slice(idx + q.length));
+}
+
+function gstResultHtml(href, name, sub, snippet) {
+  return `
+    <a class="search-result-item" href="${href}">
+      <span class="sr-name">${gstEscapeHtml(name)}</span>
+      ${sub ? `<span class="sr-sub">${gstEscapeHtml(sub)}</span>` : ""}
+      ${snippet ? `<span class="sr-snippet">${snippet}</span>` : ""}
+    </a>`;
+}
+
+function gstRenderSearchResults(q) {
   const resultsEl = document.getElementById("globalSearchResults");
-  const q = query.trim().toLowerCase();
-  if (!q) { resultsEl.innerHTML = ""; return; }
+  if (!resultsEl) return;
 
-  const matches = gstGetCountries().filter(({ entry, iso }) => {
-    return (entry.name && entry.name.toLowerCase().includes(q)) ||
-      (entry.taxonomy && entry.taxonomy.toLowerCase().includes(q)) ||
-      (entry.regulator && entry.regulator.toLowerCase().includes(q)) ||
-      iso.toLowerCase().includes(q);
-  }).slice(0, 8);
+  const isKo = gstCurrentLang === "ko";
+  /* Take a wider slice of country hits than we will display: near-identical
+     ones get merged just below, and the surplus keeps the list full afterwards. */
+  const countries = gstScoreAndRank(gstBuildCountryIndex(), q, GST_SEARCH_LIMITS.countries * 8);
+  const activities = gstScoreAndRank(gstActivityIndex || [], q, GST_SEARCH_LIMITS.activities);
+  const pages = gstScoreAndRank(gstBuildPageIndex(), q, GST_SEARCH_LIMITS.pages);
 
-  if (!matches.length) {
-    resultsEl.innerHTML = `<div class="search-empty">${gstT("search.noMatches")}</div>`;
+  if (!countries.length && !activities.length && !pages.length) {
+    resultsEl.innerHTML = `<div class="search-empty">${gstEscapeHtml(gstT("search.noMatches"))}</div>`;
     return;
   }
 
-  resultsEl.innerHTML = matches.map(({ iso, entry }) => `
-    <a class="search-result-item" href="country.html?iso=${iso}">
-      <span class="sr-name">${entry.name}</span>
-      <span class="sr-sub">${entry.taxonomy || ""}</span>
-    </a>
-  `).join("");
+  let html = "";
+
+  if (countries.length) {
+    html += `<div class="search-group-label">${gstEscapeHtml(gstT("search.groupCountries"))}</div>`;
+    /* The 27 EU member states share one write-up, so a term from that shared
+       text would otherwise fill every slot with the same paragraph. Collapse
+       hits whose taxonomy and matched snippet are identical into one row. */
+    const merged = [];
+    const seen = {};
+    countries.forEach(({ item, at }) => {
+      const snippet = gstSnippet(item.body, item.hay, at, q);
+      const key = item.sub + "||" + snippet;
+      if (seen[key] !== undefined) { merged[seen[key]].names.push(item.name); return; }
+      seen[key] = merged.length;
+      merged.push({ iso: item.iso, names: [item.name], sub: item.sub, snippet });
+    });
+    html += merged.slice(0, GST_SEARCH_LIMITS.countries).map(m => {
+      const shown = m.names.slice(0, 3).join(", ");
+      const extra = m.names.length > 3 ? ` +${m.names.length - 3}` : "";
+      return gstResultHtml(`country.html?iso=${m.iso}`, shown + extra, m.sub, m.snippet);
+    }).join("");
+  }
+
+  if (activities.length) {
+    html += `<div class="search-group-label">${gstEscapeHtml(gstT("search.groupActivities"))}</div>`;
+    html += activities.map(({ item, at }) =>
+      gstResultHtml(`country.html?iso=KOR&activity=${encodeURIComponent(item.id)}`,
+        item.code + " " + (isKo ? item.name_ko : item.name_en),
+        (isKo ? item.field_ko : item.field_en) + " · K-Taxonomy",
+        gstSnippet(item.body, item.hay, at, q))
+    ).join("");
+  }
+
+  if (pages.length) {
+    html += `<div class="search-group-label">${gstEscapeHtml(gstT("search.groupPages"))}</div>`;
+    html += pages.map(({ item, at }) =>
+      gstResultHtml(item.href, item.title, "", gstSnippet(item.body, item.hay, at, q))
+    ).join("");
+  }
+
+  resultsEl.innerHTML = html;
+}
+
+function gstRunSearch(query) {
+  const resultsEl = document.getElementById("globalSearchResults");
+  const q = gstNorm(query.trim());
+  if (!q) { resultsEl.innerHTML = ""; return; }
+
+  gstRenderSearchResults(q);
+
+  /* The activity file arrives a moment later on the very first search; re-render
+     then, but only if the box still holds the query these results belong to. */
+  if (!gstActivityIndex) {
+    gstLoadActivityIndex().then(() => {
+      const input = document.getElementById("globalSearchInput");
+      if (input && gstNorm(input.value.trim()) === q) gstRenderSearchResults(q);
+    });
+  }
 }
 
 function gstSetupGlobalSearch() {
@@ -14017,6 +14623,43 @@ function onFiltersChanged() {
   renderFilteredList();
 }
 
+/* Spells out which filters produced the "Matching Countries" number. Without
+   this the figure sits directly under the Global Stats block and reads like
+   another global statistic — which is exactly what reviewers found confusing.
+   The labels come from the select options, so they follow the site language. */
+function renderActiveFilters() {
+  const el = document.getElementById("activeFilters");
+  if (!el) return;
+  const t = (typeof gstT === "function") ? gstT : (k => k);
+
+  const selectedLabel = (selectId, value) => {
+    const sel = document.getElementById(selectId);
+    if (!sel) return value;
+    const opt = Array.prototype.find.call(sel.options, o => o.value === value);
+    return opt ? opt.textContent : value;
+  };
+
+  const statusKey = {
+    established: "home.chipDeveloped",
+    developing: "home.chipUnderDevelopment",
+    none: "home.chipNoTaxonomy"
+  };
+  const regionKey = {
+    "Europe": "home.chipEurope", "Asia-Pacific": "home.chipAsiaPacific",
+    "Americas": "home.chipAmericas", "Africa": "home.chipAfrica",
+    "Middle East": "home.chipMiddleEast"
+  };
+
+  const parts = [];
+  if (currentRegion !== "All") parts.push(regionKey[currentRegion] ? t(regionKey[currentRegion]) : currentRegion);
+  if (currentStatus !== "All") parts.push(statusKey[currentStatus] ? t(statusKey[currentStatus]) : (STATUS_LABEL[currentStatus] || currentStatus));
+  if (currentObjective !== "All") parts.push(selectedLabel("homeObjectiveSelect", currentObjective));
+  if (currentSector !== "All") parts.push(selectedLabel("homeSectorSelect", currentSector));
+
+  if (!parts.length) { el.textContent = ""; return; }
+  el.textContent = t("home.activeFiltersLabel") + ": " + parts.join(" + ");
+}
+
 function renderFilteredList() {
   const listEl = document.getElementById("filteredList");
   const countEl = document.getElementById("filteredCount");
@@ -14037,6 +14680,7 @@ function renderFilteredList() {
     .sort((a, b) => a.entry.name.localeCompare(b.entry.name));
 
   countEl.textContent = matches.length;
+  renderActiveFilters();
 
   if (!matches.length) {
     listEl.innerHTML = `<li class="search-empty">${(typeof gstT === "function" && gstT("home.noMatchingCountries")) || "No countries match these filters yet."}</li>`;
@@ -14211,6 +14855,13 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+/* gstApplyI18n only refreshes elements carrying data-i18n. The filter result
+   list and the active-filter summary are written by JS, so they have to be
+   re-rendered when the language changes or they stay in the previous one. */
+document.addEventListener("gst-lang-changed", () => {
+  renderFilteredList();
+});
 
 </script>
 </body>

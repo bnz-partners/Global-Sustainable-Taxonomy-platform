@@ -27,6 +27,146 @@ function loadData() {
   return TAXONOMY_DATA;
 }
 
+/* ---------------------------------------------------------------------------
+   Activity-level detail (currently South Korea only)
+
+   The reference data above is one line per jurisdiction — enough to compare
+   countries, but far too coarse to answer "does my hydrogen plant qualify
+   under the K-Taxonomy?". kr-taxonomy-activities.json holds all 100 K-Taxonomy
+   economic activities with their verbatim determining criteria.
+
+   Sending all 100 in full on every question would add ~90k characters to the
+   prompt, so this file is used in two tiers:
+     tier 1 — a compact index of all 100 activities (~8k characters), added
+              only when the question is about Korea;
+     tier 2 — the full criteria for up to MAX_DETAIL activities whose text
+              matches the question's keywords.
+   The copy read here is produced by build.py from the root
+   kr-taxonomy-activities.json, so the two can never drift apart.
+   --------------------------------------------------------------------------- */
+
+let KR_ACTIVITIES = null;
+function loadKrActivities() {
+  if (KR_ACTIVITIES === null) {
+    try {
+      const raw = fs.readFileSync(path.join(__dirname, "kr-taxonomy-activities.json"), "utf8");
+      KR_ACTIVITIES = JSON.parse(raw);
+    } catch (e) {
+      console.warn("K-Taxonomy activity data unavailable:", e.message);
+      KR_ACTIVITIES = [];
+    }
+  }
+  return KR_ACTIVITIES;
+}
+
+const KR_TRIGGERS = [
+  "korea", "korean", "k-taxonomy", "ktaxonomy", "kor", "seoul", "mcee",
+  "k-green", "kepco", "k-ets",
+  "한국", "한국형", "녹색분류체계", "케이택소노미", "기후에너지환경부", "환경부"
+];
+
+/* Very small stop-word list so that "the", "for", "of" don't match every
+   activity. Korean is matched on raw substrings instead of tokens. */
+const STOP = new Set([
+  "the", "and", "for", "are", "is", "of", "in", "on", "to", "a", "an", "or",
+  "does", "do", "what", "which", "how", "can", "under", "with", "my", "our",
+  "this", "that", "it", "be", "i", "we", "taxonomy", "korea", "korean",
+  "activity", "activities", "criteria", "green"
+]);
+
+const MAX_DETAIL = 6;
+
+function mentionsKorea(text) {
+  const low = text.toLowerCase();
+  return KR_TRIGGERS.some(k => low.includes(k));
+}
+
+function krIndexLines(acts) {
+  return acts.map(a =>
+    `- ${a.code_en} | ${a.name_en} | ${a.section_en} / ${a.objective_en} / ${a.field_en}`
+  ).join("\n");
+}
+
+function krActivityDetail(a) {
+  const exclusion = (a.exclusion_en || [])
+    .map(r => `    - ${r.objective}: ${r.text}`).join("\n");
+  return [
+    `### ${a.code_en} ${a.name_en} (${a.section_en} — ${a.objective_en} — ${a.field_en})`,
+    `  Activity criteria: ${a.activity_en}`,
+    `  Recognition criteria (technical thresholds):`,
+    (a.recognition_en || []).map(line => `    - ${line}`).join("\n"),
+    `  Exclusion criteria (DNSH):`,
+    exclusion,
+    `  Protection criteria: ${a.protection_en}`
+  ].join("\n");
+}
+
+/* Picks the activities most likely to be relevant to the question by counting
+   how many of the question's keywords appear in each activity's text. */
+function pickKrActivities(acts, question) {
+  const low = question.toLowerCase();
+  const words = low.match(/[a-z0-9][a-z0-9-]{2,}/g) || [];
+  const terms = Array.from(new Set(words.filter(w => !STOP.has(w))));
+
+  /* Korean compounds don't split on spaces — a user types "해상풍력" while the
+     guideline says "풍력 기반 에너지 생산". Matching whole words alone would
+     miss that, so each Korean chunk also contributes its 2- and 3-character
+     substrings, scored lower than a whole-word hit. */
+  const korean = low.match(/[가-힣]{2,}/g) || [];
+  const koParts = new Set();
+  korean.forEach(w => {
+    for (let n = 3; n >= 2; n--) {
+      for (let i = 0; i + n <= w.length; i++) koParts.add(w.slice(i, i + n));
+    }
+  });
+  korean.forEach(w => koParts.delete(w));
+
+  const scored = acts.map(a => {
+    const hayEn = (a.name_en + " " + a.field_en + " " + a.activity_en + " " +
+      (a.recognition_en || []).join(" ")).toLowerCase();
+    const hayKo = a.name_ko + " " + a.field_ko + " " + a.activity_ko + " " +
+      (a.recognition_ko || []).join(" ");
+    let score = 0;
+    terms.forEach(term => {
+      if (a.name_en.toLowerCase().includes(term)) score += 3;
+      else if (hayEn.includes(term)) score += 1;
+    });
+    korean.forEach(term => {
+      if (a.name_ko.includes(term)) score += 3;
+      else if (hayKo.includes(term)) score += 1;
+    });
+    koParts.forEach(part => {
+      if (a.name_ko.includes(part)) score += 1;
+    });
+    return { a, score };
+  }).filter(x => x.score > 0);
+
+  scored.sort((x, y) => y.score - x.score);
+  return scored.slice(0, MAX_DETAIL).map(x => x.a);
+}
+
+function krDetailBlock(question) {
+  const acts = loadKrActivities();
+  if (!acts.length) return "";
+
+  const matches = pickKrActivities(acts, question);
+  let block = [
+    "",
+    "SOUTH KOREA — K-TAXONOMY ACTIVITY LIST (전체 100개 경제활동, 31 Dec 2025 guideline).",
+    "Codes read as objective-sector-number, e.g. 1-B-(3) = objective 1 (GHG reduction), sector B (Power Generation and Energy), activity 3.",
+    "Green Area holds 93 activities, the Transitional Area 7 (marked with a leading T).",
+    krIndexLines(acts)
+  ].join("\n");
+
+  if (matches.length) {
+    block += "\n\nFULL DETERMINING CRITERIA for the activities most relevant to this question " +
+      "(verbatim from the official English edition of the guideline — quote the thresholds exactly, " +
+      "and say plainly when the user's case is not covered by these entries):\n" +
+      matches.map(krActivityDetail).join("\n\n");
+  }
+  return block;
+}
+
 const LANGUAGE_NAMES = {
   en: "English",
   sv: "Swedish (Svenska)",
@@ -38,7 +178,7 @@ const LANGUAGE_NAMES = {
   zh: "Chinese (中文)"
 };
 
-function buildSystemPrompt(langCode) {
+function buildSystemPrompt(langCode, question, countryIso) {
   const data = loadData();
   const lines = Object.entries(data).map(([iso, e]) => {
     const parts = [
@@ -63,13 +203,13 @@ function buildSystemPrompt(langCode) {
     ? `Respond in ${languageName} — this is the language the user has selected for the site's interface. If the user's question is clearly written in a different language, respond in that language instead.`
     : "Respond in the same language the user's question is written in.";
 
-  return [
+  const staticPrompt = [
     "You are the AI Assistant for the Global Sustainable Taxonomies website — available both as the Advisor page's dedicated chat and as a persistent assistant widget on every page of the site.",
     "You help users understand and compare countries' sustainable finance taxonomies (green/sustainable activity classification frameworks), explain taxonomy terminology and concepts, and guide users to the relevant section of the platform for what they're trying to do. You should be equally useful to a seasoned sustainable finance professional and to a student encountering taxonomies for the first time — adjust the depth of your explanation to the question, and don't assume prior jargon knowledge unless the question demonstrates it.",
-    languageLine,
     "Answer using the reference data listed below, plus your general knowledge of how sustainable finance taxonomies typically work (e.g. explaining what DNSH or minimum safeguards mean in general).",
     "If asked to compare two or more countries, structure your answer clearly (e.g. short paragraphs or a simple comparison), highlighting concrete differences: status, year, scope/sectors, DNSH, minimum safeguards, mandatory vs voluntary.",
     "If the data needed to answer isn't in the reference data below, say so plainly instead of guessing or inventing specifics.",
+    "For South Korea the reference data goes down to individual economic activities. When you use it, cite the activity by its code and name (e.g. \"1-B-(3) Production of Hydrogen\"), quote thresholds exactly as written rather than rounding or paraphrasing them, and remind the user that the four steps — activity, recognition, exclusion and protection criteria — must all be satisfied. If an activity the user describes is not on the list, say so rather than stretching a neighbouring activity to fit; point them to the country page's objective drill-down for the full list.",
     "This is an informational tool, not legal, financial, or regulatory advice — if the user asks for a compliance determination for a specific transaction, remind them to confirm against official sources.",
     "Keep answers concise and readable in a chat widget — avoid long walls of text.",
     "",
@@ -85,6 +225,39 @@ function buildSystemPrompt(langCode) {
     "REFERENCE DATA (one line per jurisdiction):",
     lines.join("\n")
   ].join("\n");
+
+  /* Korea is the one jurisdiction where the site holds activity-level
+     criteria. Adding them only when the question is about Korea keeps the
+     prompt (and the per-question API cost) small for everything else. */
+  /* The chat on a country page sends that page's ISO code, so a question like
+     "is offshore wind covered?" still gets Korea's activity data even though
+     the question itself never says "Korea". */
+  const koreaContext = countryIso === "KOR" || (question && mentionsKorea(question));
+
+  const dynamic = [
+    languageLine,
+    countryIso ? `The user is reading the country page for ${countryIso}. Assume questions are about that jurisdiction unless they name another one.` : "",
+    koreaContext ? krDetailBlock(question || "") : ""
+  ].filter(Boolean).join("\n");
+
+  /* The static half is byte-identical on every question, so it is marked as a
+     cache breakpoint: Anthropic then charges the cheaper cache-read rate for
+     it instead of re-reading ~30k tokens of reference data at full price on
+     every single question. The Korea block changes per question and therefore
+     sits after the breakpoint, uncached. Set ASK_DISABLE_PROMPT_CACHE=1 in
+     Vercel to fall back to a plain string prompt. */
+  const blocks = [{ type: "text", text: staticPrompt }];
+  if (process.env.ASK_DISABLE_PROMPT_CACHE !== "1") {
+    blocks[0].cache_control = { type: "ephemeral" };
+  }
+  if (dynamic) blocks.push({ type: "text", text: dynamic });
+  return blocks;
+}
+
+/* Plain-string version of the same prompt, used as a fallback if the API
+   rejects the cache_control field for any reason. */
+function flattenSystem(blocks) {
+  return blocks.map(b => b.text).join("\n");
 }
 
 module.exports = async function handler(req, res) {
@@ -110,6 +283,9 @@ module.exports = async function handler(req, res) {
   const question = String(body.question || "").trim();
   const history = Array.isArray(body.history) ? body.history : [];
   const langCode = LANGUAGE_NAMES[body.lang] ? body.lang : null;
+  /* Optional page context sent by the country-page chat. */
+  const countryIso = /^[A-Z]{3}$/.test(String(body.country || "").toUpperCase())
+    ? String(body.country).toUpperCase() : null;
 
   if (!question) {
     res.status(400).json({ error: "Missing 'question' in request body." });
@@ -126,7 +302,9 @@ module.exports = async function handler(req, res) {
     .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
   messages.push({ role: "user", content: question });
 
-  try {
+  const systemBlocks = buildSystemPrompt(langCode, question, countryIso);
+
+  async function callModel(system) {
     const upstream = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -137,12 +315,26 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         model: process.env.ANTHROPIC_MODEL || "claude-sonnet-5",
         max_tokens: 1024,
-        system: buildSystemPrompt(langCode),
+        system,
         messages
       })
     });
+    return { upstream, data: await upstream.json() };
+  }
 
-    const data = await upstream.json();
+  try {
+    let { upstream, data } = await callModel(systemBlocks);
+
+    /* If this account or API version doesn't accept the prompt-cache field,
+       retry once with a plain string prompt rather than showing the user an
+       error. Everything still works, just without the caching discount. */
+    const rejectedCache = !upstream.ok && /cache_control|system\.0|invalid_request/i.test(
+      (data && data.error && data.error.message) || ""
+    );
+    if (rejectedCache) {
+      console.warn("Prompt caching rejected, retrying without it:", data.error.message);
+      ({ upstream, data } = await callModel(flattenSystem(systemBlocks)));
+    }
 
     if (!upstream.ok) {
       const msg = (data && data.error && data.error.message) || `Upstream API error (HTTP ${upstream.status})`;

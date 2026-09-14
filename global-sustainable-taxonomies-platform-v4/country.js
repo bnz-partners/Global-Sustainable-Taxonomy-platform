@@ -74,8 +74,25 @@ function overviewTable(entry, name, label) {
   return html;
 }
 
-function objectivesSection(entry) {
+/* Countries that ship an activity-level drill-down (kr-taxonomy.js and its
+   companion JSON). For these, the "Environmental Objectives" card becomes
+   interactive: clicking an objective opens that objective's economic
+   activities and their full determining criteria. */
+const DRILLDOWN_COUNTRIES = { KOR: true };
+
+function hasDrilldown(iso) {
+  return !!DRILLDOWN_COUNTRIES[iso] && typeof window.KR_TAXONOMY !== "undefined";
+}
+
+function objectivesSection(entry, iso) {
   const t = (typeof gstT === "function") ? gstT : (k => k);
+
+  /* Interactive drill-down replaces the static pill list where available.
+     The container is filled asynchronously by KR_TAXONOMY.render(). */
+  if (hasDrilldown(iso)) {
+    return `<div id="krTaxonomyDrilldown" class="kr-drill"></div>`;
+  }
+
   const objs = (entry && entry.objectives && entry.objectives.length) ? entry.objectives : null;
   if (!objs) {
     return `<p class="data-not-available">${t("country.notYetDocumented")}</p>`;
@@ -248,6 +265,11 @@ function renderCountryChatLog() {
   log.scrollTop = log.scrollHeight;
 }
 
+/* ISO code of the country page this chat belongs to. Sent with each question
+   so the server knows the context even when the question itself doesn't name
+   the country ("is offshore wind covered?" asked on the Korea page). */
+let countryChatIso = "";
+
 async function sendCountryChatMessage(question) {
   if (countryChatBusy) return;
   countryChatBusy = true;
@@ -264,7 +286,12 @@ async function sendCountryChatMessage(question) {
     const res = await fetch("/api/ask", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ question, history: historyForApi })
+      body: JSON.stringify({
+        question,
+        history: historyForApi,
+        lang: (typeof gstCurrentLang === "string") ? gstCurrentLang : undefined,
+        country: countryChatIso || undefined
+      })
     });
     let data;
     try { data = await res.json(); } catch (e) { data = {}; }
@@ -293,9 +320,10 @@ async function sendCountryChatMessage(question) {
   if (sendBtn) sendBtn.disabled = false;
 }
 
-function setupCountryChat(name, taxonomy) {
+function setupCountryChat(name, taxonomy, iso) {
   const form = document.getElementById("countryChatForm");
   if (!form) return;
+  countryChatIso = iso || "";
   const t = (typeof gstT === "function") ? gstT : (k => k);
 
   countryChatWelcome = t("country.chatWelcomeWithName").replace("{name}", name);
@@ -527,6 +555,26 @@ async function maybeTranslateAndRender() {
   }
 }
 
+/* The AI Advisor's "View full profile" links open this page in a NEW TAB, so
+   the browser's Back button is disabled and there is no way back to the
+   analysis. When those links tag themselves with from=advisor, show a second
+   back link that returns to the advisor on the tab the visitor is already in,
+   reopening the same mode and country. */
+function setupBackToAdvisor(params, iso) {
+  const link = document.getElementById("backToAdvisor");
+  if (!link) return;
+  if (params.get("from") !== "advisor") { link.hidden = true; return; }
+
+  const allowedModes = ["compare", "country", "portfolio", "ask"];
+  const raw = params.get("amode");
+  const mode = allowedModes.indexOf(raw) !== -1 ? raw : "country";
+  const q = params.get("q");
+  link.href = `advisor.html?mode=${mode}` +
+    (iso ? `&iso=${encodeURIComponent(iso)}` : "") +
+    (q ? `&q=${encodeURIComponent(q)}` : "");
+  link.hidden = false;
+}
+
 function renderCountry(entryOverride) {
   const t = (typeof gstT === "function") ? gstT : (k => k);
   const params = new URLSearchParams(window.location.search);
@@ -562,7 +610,7 @@ function renderCountry(entryOverride) {
   }
 
   left += `<div class="card-block"><h2>${t("country.headingOfficialDocuments")}</h2>${officialDocumentsSection(entry)}${sourcesNote()}${generalResourcesHtml(iso, entry)}</div>`;
-  left += `<div class="card-block"><h2>${t("country.headingEnvironmentalObjectives")}</h2>${objectivesSection(entry)}</div>`;
+  left += `<div class="card-block"><h2>${t("country.headingEnvironmentalObjectives")}</h2>${objectivesSection(entry, iso)}</div>`;
   left += `<div class="card-block"><h2>${t("country.headingTechnicalCriteria")}</h2>${criteriaTable(entry)}</div>`;
 
   if (entry && entry.overlays && entry.overlays.length) {
@@ -591,8 +639,15 @@ function renderCountry(entryOverride) {
     </div>
   `;
 
-  setupCountryChat(name, entry && entry.taxonomy);
+  setupBackToAdvisor(params, iso);
+  setupCountryChat(name, entry && entry.taxonomy, iso);
   setupCompare(iso, name);
+
+  /* Activity-level drill-down (currently South Korea only). Loads its own
+     dataset lazily, so it costs nothing on other country pages. */
+  if (hasDrilldown(iso)) {
+    window.KR_TAXONOMY.render(document.getElementById("krTaxonomyDrilldown"));
+  }
 }
 
 /* ---------- Translate document modal ---------- */

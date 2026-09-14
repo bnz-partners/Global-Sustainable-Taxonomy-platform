@@ -46,7 +46,7 @@
   <div class="global-search-panel">
     <div class="global-search-input-row">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="globalSearchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+      <input id="globalSearchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search the whole site — countries, criteria, activities, pages…" autocomplete="off" />
       <button class="icon-btn" id="globalSearchCloseBtn" title="Close" aria-label="Close" data-i18n-title="search.close" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -62,7 +62,7 @@
 
     <div class="search-bar-dark">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
+      <input id="searchInput" type="text" data-i18n-placeholder="search.mapPlaceholder" placeholder="Search by country, taxonomy or regulator…" autocomplete="off" />
     </div>
     <div id="searchResults" class="search-results"></div>
 
@@ -102,7 +102,10 @@
       <div class="stat-row"><span class="stat-row-num accent-none" id="statNone">–</span><span class="stat-row-label" data-i18n="home.chipNoTaxonomy">No Taxonomy</span></div>
 
       <div id="filteredSection" class="filtered-section">
-        <div class="stat-row"><span class="stat-row-num" id="filteredCount">–</span><span class="stat-row-label" data-i18n="home.matchingCountriesHeading">Matching Countries</span></div>
+        <div class="stat-row stat-row-filtered"><span class="stat-row-num" id="filteredCount">–</span><span class="stat-row-label" data-i18n="home.matchingCountriesHeading">Matching Countries</span></div>
+        <!-- Filled by app.js with the filters actually in force, so this number
+             is visibly a filter result rather than another global statistic. -->
+        <p class="active-filters" id="activeFilters"></p>
         <ul class="recent-list filtered-list" id="filteredList"></ul>
         <p class="filtered-note" data-i18n="home.partialDataNote">Objective and sector filters currently match against the countries we've compiled this detail for so far — others may not appear here yet even if their taxonomy could cover it.</p>
       </div>
@@ -118,6 +121,10 @@
       <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div class="advanced-filter-panel" id="advancedFilterPanel">
+      <!-- Feedback: it wasn't clear whether picking both an objective and a
+           sector shows countries matching either one or both. matchesFilters()
+           requires all of them, so say so on screen. -->
+      <p class="filter-logic-note" data-i18n="home.filterLogicNote">All filters apply together — a country must match every selection.</p>
       <div class="advanced-filter-field">
         <label for="homeObjectiveSelect" data-i18n="home.objectiveFilterHeading">Filter by Environmental Objective</label>
         <select id="homeObjectiveSelect">
