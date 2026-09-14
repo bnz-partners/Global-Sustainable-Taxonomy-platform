@@ -21,6 +21,7 @@ on:
       - 'global-sustainable-taxonomies-platform-v4/*.template.html'
       - 'global-sustainable-taxonomies-platform-v4/styles.css'
       - 'global-sustainable-taxonomies-platform-v4/*.js'
+      - 'global-sustainable-taxonomies-platform-v4/*.json'
       - 'global-sustainable-taxonomies-platform-v4/build.py'
   workflow_dispatch:        # Actions 탭에서 손으로 실행할 수도 있게
 
@@ -72,6 +73,8 @@ jobs:
           check about.html     'id="key-resources"'        'Key Reference Resources 표'
           check country.html   'id="countryContent"'       '국가 상세 본문'
           check country.html   'window.TAXONOMY_DATA'      '국가 데이터 인라인'
+          check country.html   'krTaxonomyDrilldown'       'K-Taxonomy 활동 드릴다운 컨테이너'
+          check country.html   'kr-taxonomy.js'            'K-Taxonomy 드릴다운 스크립트 연결'
           check advisor.html   'id="advisorTabs"'          'AI Advisor 탭'
           check advisor.html   'window.TAXONOMY_DATA'      '국가 데이터 인라인'
           check media.html     'id="mediaGrid"'            'Media Hub 목록'
@@ -87,7 +90,7 @@ jobs:
       - name: 변경사항 커밋
         working-directory: global-sustainable-taxonomies-platform-v4
         run: |
-          if [ -z "$(git status --porcelain -- '*.html')" ]; then
+          if [ -z "$(git status --porcelain -- '*.html' 'api/*.json')" ]; then
             echo "조립 결과가 기존과 동일합니다. 커밋할 것 없음."
             echo "### 조립 결과: 변경 없음" >> "$GITHUB_STEP_SUMMARY"
             exit 0
@@ -95,11 +98,11 @@ jobs:
 
           echo "### 자동 조립 완료" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          git diff --stat -- '*.html' >> "$GITHUB_STEP_SUMMARY"
+          git diff --stat -- '*.html' 'api/*.json' >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- '*.html'
+          git add -- '*.html' 'api/*.json'
           git commit -m "build: 템플릿으로부터 HTML 자동 재생성 [skip ci]"
           git push origin "HEAD:${GITHUB_REF#refs/heads/}"
