@@ -1730,3 +1730,40 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif;
   padding: 10px 14px 4px;
 }
 .search-group-label:first-child { padding-top: 4px; }
+
+/* Overlay results now stack name / context / matched snippet vertically.
+   The bare .search-result-item rules elsewhere lay the map's own result rows out
+   as a single flex line; this more specific selector overrides that for the
+   header search only, leaving the map search untouched. */
+.global-search-results .search-result-item {
+  display: block;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+.global-search-results .search-result-item:last-child { border-bottom: none; }
+.global-search-results .sr-sub {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: left;
+  margin-top: 1px;
+}
+
+/* Each hit shows the phrase that matched, with the term marked, so it is clear
+   why the result is there. */
+.sr-snippet {
+  display: block;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.sr-snippet mark {
+  background: rgba(21, 128, 61, 0.16);
+  color: inherit;
+  font-weight: 700;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+[data-theme="dark"] .sr-snippet mark { background: rgba(74, 222, 128, 0.22); }
