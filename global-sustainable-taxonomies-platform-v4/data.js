@@ -4622,27 +4622,49 @@ window.TAXONOMY_DATA = {
     "name": "South Korea",
     "status": "established",
     "region": "Asia-Pacific",
-    "taxonomy": "K-Taxonomy (Korean Green Taxonomy)",
+    "taxonomy": "K-Taxonomy (Korean Green Taxonomy, 한국형 녹색분류체계)",
     "year": 2021,
-    "note": "Established by the Ministry of Environment (now Ministry of Climate, Energy and Environment) in December 2021. Based on Substantial Contribution, DNSH and Minimum Safeguards; originally 69 activities (64 Green, 5 Transitional), expanded by a December 2024 amendment.",
-    "source": "https://www.me.go.kr/eng/web/main.do",
+    "note": "Established by the Ministry of Environment in December 2021 and revised most recently on 31 December 2025. Built on Substantial Contribution to one of six environmental objectives, Do No Significant Harm (exclusion criteria) and Minimum Safeguards (protection criteria). The current guideline covers 100 economic activities — 93 in the Green Area and 7 in the Transitional Area.",
+    "source": "https://www.gmi.go.kr/gc/gcGuideLine.do",
     "officialDocuments": [
       {
-        "title": "Ministry of Environment — K-Taxonomy Guideline (한국형 녹색분류체계 가이드라인), original guideline (official PDF)",
-        "date": "30 Dec 2021",
-        "url": "https://www.korea.kr/common/download.do?tblKey=EDN&fileId=196851182"
+        "title": "한국형 녹색분류체계 가이드라인 — current guideline, Korean (PDF)",
+        "date": "31 Dec 2025",
+        "url": "docs/kr/K-Taxonomy-Guidelines-KO-2025-12-31.pdf"
+      },
+      {
+        "title": "K-Taxonomy Guidelines — official English edition of the 31 Dec 2025 guideline (PDF)",
+        "date": "31 Dec 2025 edition",
+        "url": "docs/kr/K-Taxonomy-Guidelines-EN-2025-12-31.pdf"
+      },
+      {
+        "title": "한국형 녹색분류체계 경제활동 해설서 — activity-by-activity commentary, Korean (PDF)",
+        "date": "2026",
+        "url": "docs/kr/K-Taxonomy-Activity-Commentary-KO.pdf"
+      },
+      {
+        "title": "한국형 녹색분류체계 적합성판단 참고서 — alignment-assessment handbook incl. calculation methods, Korean (PDF)",
+        "date": "Jun 2026",
+        "url": "docs/kr/K-Taxonomy-Alignment-Assessment-Reference-KO.pdf"
+      },
+      {
+        "title": "환경책임투자 종합플랫폼 (GMI) — official K-Taxonomy portal, always carries the latest edition",
+        "date": "Updated periodically",
+        "url": "https://www.gmi.go.kr/gc/gcGuideLine.do"
       }
     ],
     "overlays": [],
     "features": [
-      "Established by the Ministry of Environment (renamed Ministry of Climate, Energy and Environment in October 2025) in December 2021 to support South Korea's 2050 carbon-neutrality goal. [1][5]",
-      "Based on three principles: Substantial Contribution to at least one of six environmental objectives, Do No Significant Harm (DNSH), and Minimum Safeguards (MS).",
-      "Six environmental objectives: greenhouse gas reduction, climate change adaptation, sustainable water management, circular economy, pollution prevention and control, and biodiversity conservation.",
-      "Two categories, originally covering 69 activities in the 2021 guideline: a Green area (64 activities that directly contribute to carbon neutrality) and a Transitional area (5 activities, e.g. nuclear power and LNG-related activities, considered necessary bridges toward a low-carbon economy); a December 2024 amendment added 10 further green activities. [1][2]",
-      "Alignment requires passing a four-step Alignment Assessment Process: Activity Criteria → Recognition Criteria (technical thresholds) → Exclusion Criteria (DNSH) → Protection Criteria (Minimum Safeguards).",
-      "Widely used for green bonds, green loans, green asset-backed securities, sustainable investment funds, and ESG disclosures."
+      "Established by the Ministry of Environment in December 2021 to support Korea's 2050 carbon-neutrality goal; the ministry was reorganised as the Ministry of Climate, Energy and Environment (MCEE) in October 2025. [1][4]",
+      "An activity qualifies only by passing all four steps in order: Activity Criteria (활동기준) → Recognition Criteria (인정기준, the technical thresholds) → Exclusion Criteria (배제기준, Korea's DNSH test) → Protection Criteria (보호기준, minimum safeguards on human rights, labour, safety, anti-corruption and cultural heritage). Failing any one step means the activity is not aligned. [1]",
+      "Six environmental objectives: greenhouse gas reduction, climate change adaptation, sustainable water preservation, transition to circular economy, pollution prevention and control, and biodiversity preservation. [1]",
+      "The 31 December 2025 guideline sets out 100 economic activities: 93 in the Green Area (4 common activities plus 48 GHG reduction, 11 climate adaptation, 8 water, 13 circular economy, 5 pollution and 4 biodiversity) and 7 in the Transitional Area. [1]",
+      "The Transitional Area is time-limited and conditional: LNG and blended-gas power for facilities whose construction plans are approved by 2030–2035, new-build and continued-operation nuclear for facilities licensed by 2045, and SME emission reduction, blue hydrogen and environment-friendly vessels recognised only until 2030. [1]",
+      "Recognition criteria are largely quantitative and benchmarked to Korean data — for example, steel, cement, basic chemicals, semiconductor and display manufacturing must fall within the top-20% emission-intensity benchmark of the 4th planning period of the Korea Emissions Trading Scheme (K-ETS). [1]",
+      "Used mainly for green bonds, green loans and green asset-backed securitisation. K-Green Bonds have made up roughly 70–80% of Korea's won-denominated green bond market, with about KRW 4.7tn issued in 2023 and KRW 5.2tn in each of 2024 and 2025; Green ABS for SMEs added about KRW 320bn in 2025. [1]",
+      "Since 2024 the MCEE has published an environmental-benefit calculation methodology tied to the taxonomy; as of end-2025 about 70 GHG calculation methodologies covering 37 economic activities were available on the GMI platform. [1]"
     ],
-    "regulator": "Ministry of Climate, Energy and Environment (MCEE)",
+    "regulator": "Ministry of Climate, Energy and Environment (MCEE, 기후에너지환경부)",
     "objectives": [
       {
         "label": "Greenhouse Gas Reduction",
@@ -4653,29 +4675,29 @@ window.TAXONOMY_DATA = {
         "icon": "climate-adapt"
       },
       {
-        "label": "Sustainable Water Management",
+        "label": "Sustainable Water Preservation",
         "icon": "water"
       },
       {
-        "label": "Circular Economy",
+        "label": "Transition to Circular Economy",
         "icon": "circular"
       },
       {
-        "label": "Pollution Prevention & Control",
+        "label": "Pollution Prevention and Control",
         "icon": "pollution"
       },
       {
-        "label": "Biodiversity Conservation",
+        "label": "Biodiversity Preservation",
         "icon": "biodiversity"
       }
     ],
     "facts": {
-      "activities": "69 activities originally (64 Green + 5 Transitional) under the 2021 guideline; +10 new green activities added Dec 2024",
+      "activities": "100 activities under the 31 Dec 2025 guideline — 93 Green Area + 7 Transitional Area",
       "objectives": 6,
       "dnsh": true,
       "minimumSafeguards": true,
-      "euAlignment": "Closely modelled on the EU Taxonomy, with added transition activities",
-      "mandatory": "Used for green bond/loan verification; not a general mandatory disclosure regime"
+      "euAlignment": "Modelled on the EU Taxonomy's structure (substantial contribution / DNSH / safeguards) but with Korea-specific benchmarks and a separate Transitional Area",
+      "mandatory": "Not a general mandatory disclosure regime; used for green bond, green loan and green ABS verification and for green-credit management by banks"
     },
     "timeline": [
       {
@@ -4684,104 +4706,143 @@ window.TAXONOMY_DATA = {
         "citationId": 3
       },
       {
-        "label": "K-Taxonomy established (69 activities: 64 Green, 5 Transitional)",
+        "label": "K-Taxonomy established by the Ministry of Environment",
         "date": "Dec 2021",
+        "citationId": 2
+      },
+      {
+        "label": "First revision — nuclear power and LNG added to the Transitional Area",
+        "date": "Dec 2022",
+        "citationId": 5
+      },
+      {
+        "label": "Full-scale implementation; first K-Green Bonds and Green ABS",
+        "date": "2023",
         "citationId": 1
       },
       {
-        "label": "Nuclear power and LNG added to Transitional area",
-        "date": "Dec 2022",
+        "label": "Revision adding water, circular-economy, pollution and biodiversity criteria; Green Credit Management Guidelines",
+        "date": "Dec 2024",
+        "citationId": 6
+      },
+      {
+        "label": "Ministry of Environment reorganised as Ministry of Climate, Energy and Environment",
+        "date": "Oct 2025",
         "citationId": 4
       },
       {
-        "label": "Amendment adds 10 new green activities, revises 21; Green Credit Management Guidelines enacted",
-        "date": "Dec 2024",
-        "citationId": 2
+        "label": "2035 NDC finalised at 53–61% below 2018 net emissions",
+        "date": "Nov 2025",
+        "citationId": 1
+      },
+      {
+        "label": "Current guideline issued — 100 activities (93 Green + 7 Transitional)",
+        "date": "31 Dec 2025",
+        "citationId": 1
       }
     ],
     "sectors": [
-      "Energy",
+      "Industry",
+      "R&D",
+      "ICT",
+      "Power Generation and Energy",
       "Transport",
-      "Manufacturing",
+      "Cities and Buildings",
+      "Agriculture and Livestock",
+      "CCUS",
+      "Forestry",
       "Water",
-      "Buildings",
-      "Nuclear & Transition Industries"
+      "Circular Economy",
+      "Pollution Control",
+      "Biodiversity",
+      "Nuclear and LNG (Transitional)"
     ],
     "fullDescription": [
-      "South Korea's K-Taxonomy (Korean Green Taxonomy) was established by the (then) Ministry of Environment in December 2021, as part of the country's push toward its 2050 carbon-neutrality goal. [1] It is built on the same three core principles used by most major taxonomies: an activity must make a Substantial Contribution to at least one of six environmental objectives, satisfy Do No Significant Harm (DNSH) toward the others, and meet Minimum Safeguards on social and governance conduct.",
-      "The six environmental objectives are greenhouse gas reduction, climate change adaptation, sustainable water management, transition to a circular economy, pollution prevention and control, and biodiversity conservation. Activities were originally organised into two areas under the 2021 guideline: a Green area (64 activities that directly and substantially contribute to carbon neutrality, spanning energy, transport, manufacturing, water and buildings) and a smaller Transitional area (5 activities, including specific nuclear power and LNG-related activities, treated as bridge technologies toward a low-carbon economy rather than end-state green activities). [1][4]",
-      "Alignment is assessed through a four-step process: Activity Criteria (is the activity on the list at all), Recognition Criteria (does it meet the technical/quantitative thresholds), Exclusion Criteria (does it avoid significant harm to the other objectives), and Protection Criteria (does it meet minimum safeguards). In December 2024, the guidelines were updated to add 10 new eligible activities and revise 21 existing ones — particularly around water conservation, the circular economy, pollution control and biodiversity — introducing 25 new and 6 updated technical criteria. [2] The K-Taxonomy is used mainly for green bond and green loan verification, and since December 2024 also underpins Green Credit Management Guidelines applied to bank lending. [2]"
+      "The Korean Green Taxonomy (K-Taxonomy, 한국형 녹색분류체계) is the classification system that defines which economic activities count as green in Korea. It was established by the Ministry of Environment in December 2021 under the Framework Act on Carbon Neutrality and Green Growth, and has been revised repeatedly since — most recently on 31 December 2025. [1][2][3]",
+      "Alignment is assessed in four sequential steps, and an activity must pass every one of them. The Activity Criteria (활동기준) place the project inside one of the listed economic activities. The Recognition Criteria (인정기준) are the technical thresholds for contributing to at least one of the six environmental objectives — for heavy industry these are quantitative benchmarks drawn from the Korea Emissions Trading Scheme, such as 0.15709 tCO2eq per tonne for crude steel semi-finished products made in a basic oxygen furnace. The Exclusion Criteria (배제기준) are Korea's do-no-significant-harm test, applied objective by objective. The Protection Criteria (보호기준) require that the activity involve no breach of law on human rights, labour, safety, anti-corruption or cultural heritage. [1]",
+      "The current guideline covers 100 economic activities. The Green Area holds 93 of them — four common activities (innovative-item manufacturing, materials and components for those items, RD&D, and ICT solutions) plus 48 under greenhouse gas reduction, 11 under climate change adaptation, 8 under sustainable water preservation, 13 under transition to circular economy, 5 under pollution prevention and control, and 4 under biodiversity preservation. The Transitional Area holds the remaining 7, covering LNG and blended-gas power, new-build and continued-operation nuclear power, blue hydrogen, SME emission reduction and environment-friendly vessels; each carries an explicit sunset condition rather than open-ended recognition. [1]",
+      "In practice the K-Taxonomy underpins Korea's green bond and green loan market. K-Green Bonds have accounted for roughly 70–80% of the domestic won-denominated green bond market, with about KRW 4.7 trillion issued in 2023 and KRW 5.2 trillion in each of 2024 and 2025, alongside Green ABS aimed at smaller companies. Since December 2024 the taxonomy also underpins the Green Credit Management Guidelines applied to bank lending. [1][6]"
     ],
     "citations": [
-      { "id": 1, "label": "Kim & Chang, \"Introduction of K-Taxonomy Guideline\"", "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=24748" },
-      { "id": 2, "label": "Kim & Chang, \"Amendment to K-Taxonomy and Establishment of Green Credit Management Guidelines\" (2024)", "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=31914" },
-      { "id": 3, "label": "IEA, \"Carbon Neutrality and Green Growth Act for the Climate Change\"", "url": "https://www.iea.org/policies/14212-carbon-neutrality-and-green-growth-act-for-the-climate-change" },
-      { "id": 4, "label": "Lexology, \"The Korean Green Taxonomy (K-Taxonomy) Guideline and Its Implications\"", "url": "https://www.lexology.com/library/detail.aspx?g=861eba8d-0fdd-44d8-af20-2dc26ce55fbc" },
-      { "id": 5, "label": "Lexology, \"The new Ministry of Climate, Energy and Environment of Korea\"", "url": "https://www.lexology.com/library/detail.aspx?g=83c7592e-f02b-4276-bd3e-223a537eeb15" }
+      {
+        "id": 1,
+        "label": "Ministry of Climate, Energy and Environment, 「한국형 녹색분류체계 가이드라인」 (31 Dec 2025) / K-Taxonomy Guidelines, official English edition",
+        "url": "docs/kr/K-Taxonomy-Guidelines-EN-2025-12-31.pdf"
+      },
+      {
+        "id": 2,
+        "label": "Kim & Chang, \"Introduction of K-Taxonomy Guideline\"",
+        "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=24748"
+      },
+      {
+        "id": 3,
+        "label": "IEA, \"Carbon Neutrality and Green Growth Act for the Climate Change\"",
+        "url": "https://www.iea.org/policies/14212-carbon-neutrality-and-green-growth-act-for-the-climate-change"
+      },
+      {
+        "id": 4,
+        "label": "Lexology, \"The new Ministry of Climate, Energy and Environment of Korea\"",
+        "url": "https://www.lexology.com/library/detail.aspx?g=83c7592e-f02b-4276-bd3e-223a537eeb15"
+      },
+      {
+        "id": 5,
+        "label": "Lexology, \"The Korean Green Taxonomy (K-Taxonomy) Guideline and Its Implications\"",
+        "url": "https://www.lexology.com/library/detail.aspx?g=861eba8d-0fdd-44d8-af20-2dc26ce55fbc"
+      },
+      {
+        "id": 6,
+        "label": "Kim & Chang, \"Amendment to K-Taxonomy and Establishment of Green Credit Management Guidelines\" (2024)",
+        "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=31914"
+      }
     ],
     "activityList": [
       {
-        "activity": "Energy",
-        "criteria": "Renewable power generation (solar, wind, hydro, geothermal) and energy-efficiency/storage infrastructure that substantially reduces greenhouse gas emissions.",
-        "threshold": "Technical criteria set by the K-Taxonomy Guideline (Ministry of Environment / Ministry of Climate, Energy and Environment)",
-        "dnsh": "Applies"
+        "activity": "Common (4 activities)",
+        "criteria": "Manufacture of innovative items and of their materials/components/equipment; research, development and demonstration; ICT solutions and systems supporting a Green Area activity.",
+        "threshold": "Must match Attachment 7 (innovative items) or Attachment 8 (core GHG reduction technologies), and select at least one of the six objectives.",
+        "dnsh": "Common exclusion criteria (Attachments 1–6) for every objective not selected"
       },
       {
-        "activity": "Transport",
-        "criteria": "Low- and zero-emission vehicles, railways, and supporting infrastructure such as EV charging networks.",
-        "threshold": "Sector-specific recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Greenhouse Gas Reduction (48 activities)",
+        "criteria": "Low-emission steel, cement, basic chemicals, semiconductors and displays; bioenergy, clean methanol, hydrogen and ammonia; solar, wind, hydro, ocean, geothermal, hydrothermal and waste-based power; storage, grid and heat-pump infrastructure; zero-emission vehicles, vessels, aircraft and charging networks; zero-energy buildings and low-carbon data centres; low-carbon agriculture and livestock; CCUS; forest carbon sinks.",
+        "threshold": "Mostly quantitative — e.g. K-ETS top-20% product benchmarks for industry (0.15709 tCO2eq/t for BOF crude steel semi-finished products), Clean Hydrogen Certification grade 1–2 for hydrogen, zero-energy building certification for buildings.",
+        "dnsh": "Attachments 2–6 apply, plus activity-specific conditions"
       },
       {
-        "activity": "Manufacturing",
-        "criteria": "Manufacture of low-carbon and energy-efficient products, and process improvements that measurably cut emissions intensity.",
-        "threshold": "Sector-specific recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Climate Change Adaptation (11 activities)",
+        "criteria": "Climate monitoring and forecasting; climate impact, vulnerability and risk assessment; protection of vulnerable groups and regions; adaptation education; climate insurance and reinsurance; prevention, preparedness, response and recovery infrastructure for water, forest/ecosystem, land/coastal and agriculture/fisheries.",
+        "threshold": "Qualitative — the activity must be demonstrably directed at climate adaptation; activities also covered by another objective are assessed under that objective instead.",
+        "dnsh": "Attachments 1, 3–6 apply"
       },
       {
-        "activity": "Water",
-        "criteria": "Sustainable water management, treatment and supply infrastructure, updated with new/revised technical criteria in December 2024.",
-        "threshold": "Recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Sustainable Water Preservation (8 activities)",
+        "criteria": "Water supply; water demand management; sewage, wastewater and livestock-manure treatment; groundwater pollution prevention and remediation; multi-purpose use of discharged groundwater; water reuse; alternative water resources; non-point pollution reduction including low-impact development.",
+        "threshold": "Facility- and permit-based criteria under the Water Supply and Waterworks Act, Sewerage Act and related statutes.",
+        "dnsh": "Attachments 1, 2, 4–6 apply"
       },
       {
-        "activity": "Buildings",
-        "criteria": "Energy-efficient new construction and retrofits that meet defined efficiency thresholds.",
-        "threshold": "Recognition criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies"
+        "activity": "Transition to Circular Economy (13 activities)",
+        "criteria": "Production of recycled raw materials and circular resources and of products using them; easily recyclable products; reusable-container services and refill stations; waste collection, sorting and decontamination/dismantling of end-of-life products; waste reuse, recycling, remanufacturing, chemical recycling, energy recovery and landfill-gas capture.",
+        "threshold": "Recycled-content and recyclability criteria under the Act on Promotion of Saving and Recycling of Resources and related statutes.",
+        "dnsh": "Attachments 1–3, 5, 6 apply"
       },
       {
-        "activity": "Nuclear & Transition Industries",
-        "criteria": "A small Transitional area (7 activities) covering nuclear power and LNG-related activities, recognised as bridge technologies under stricter conditions than the Green area.",
-        "threshold": "Transitional-area criteria under the K-Taxonomy Guideline",
-        "dnsh": "Applies, with additional conditions specific to transitional status"
-      }
-    ],
-    "officialDocuments": [
-      {
-        "title": "K-Taxonomy Guideline — original guideline (PDF)",
-        "date": "30 Dec 2021",
-        "url": "https://www.korea.kr/common/download.do?tblKey=EDN&fileId=196851182"
+        "activity": "Pollution Prevention and Control (5 activities)",
+        "criteria": "Air pollution prevention and treatment; odour prevention; indoor air quality management; marine pollution prevention and treatment; soil pollution prevention and remediation.",
+        "threshold": "Emission and treatment standards under the Clean Air Conservation Act, Marine Environment Management Act and Soil Environment Conservation Act.",
+        "dnsh": "Attachments 1–4, 6 apply"
       },
       {
-        "title": "K-Taxonomy Guideline — government archive record (정책브리핑)",
-        "date": "30 Dec 2021",
-        "url": "https://www.korea.kr/archive/expDocView.do?docId=40017"
+        "activity": "Biodiversity Preservation (4 activities)",
+        "criteria": "Protection, conservation and restoration of terrestrial and marine ecosystems and protected areas; protection of species and control of disruptive species; urban ecological spaces; sustainable forest management.",
+        "threshold": "Criteria under the Natural Environment Conservation Act, Wildlife Protection Act and Forest Act; activities that first damage an ecosystem and then restore it are excluded.",
+        "dnsh": "Attachments 1–5 apply"
       },
       {
-        "title": "K-Taxonomy Guideline — 1st revision (adds nuclear energy & climate-adaptation activities), PDF",
-        "date": "23 Dec 2022",
-        "url": "https://me.go.kr/home/file/readDownloadFile.do?fileId=273914&fileSeq=3"
-      },
-      {
-        "title": "K-Taxonomy Guideline — later revision (post-2024, adds/updates water, circular economy, pollution & biodiversity activities), PDF",
-        "date": "Dec 2024",
-        "url": "https://www.mcee.go.kr/m/file/readDownloadFile.do?fileId=314448&fileSeq=1"
-      },
-      {
-        "title": "Ministry of Climate, Energy and Environment — K-Taxonomy policy portal (for the Aug 2023 English edition and the Dec 2025 transition-sector revision, which we could not link to directly)",
-        "date": "Updated periodically",
-        "url": "https://www.me.go.kr/eng/web/main.do"
+        "activity": "Transitional Area (7 activities)",
+        "criteria": "SME site emission reduction; LNG and blended-gas power; new-build nuclear power; continued operation of existing nuclear power; LNG-based (blue) hydrogen; construction and equipment manufacture for environment-friendly vessels; deployment of environment-friendly vessels.",
+        "threshold": "Time-limited and conditional — LNG/blended gas for plants with construction plans approved by 2030–2035; nuclear licensed by 2045; SME reduction, blue hydrogen and vessels recognised until 2030 only.",
+        "dnsh": "Same exclusion criteria as the Green Area, with additional conditions attached to transitional status"
       }
     ]
   },
@@ -5390,17 +5451,27 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Thailand Taxonomy",
-    "year": null,
-    "note": "National taxonomy issued by the Bank of Thailand.",
+    "year": 2023,
+    "note": "National taxonomy first issued by the Bank of Thailand in 2023 (Phase 1: energy and transport). Phase 2, launched 27 May 2025 and co-led by the Department of Climate Change and Environment with the BOT, SEC and SET, extends coverage to agriculture, construction and real estate, manufacturing, and waste management.",
     "source": "https://www.bot.or.th/content/dam/bot/financial-innovation/sustainable-finance/green/taxonomy/01_EN_Thailand_Taxonomy-Introduction.pdf",
     "officialDocuments": [
       {
-        "title": "Bank of Thailand — Thailand Taxonomy Phase I: A Reference Tool for Sustainable Economy (official PDF)",
-        "date": "Jun 2023",
+        "title": "Thailand Taxonomy Phase 2 — Introduction: Conceptual Framework and Methodological Approach (official PDF)",
+        "date": "Jul 2025",
         "url": "https://www.bot.or.th/content/dam/bot/financial-innovation/sustainable-finance/green/taxonomy/01_EN_Thailand_Taxonomy-Introduction.pdf"
       },
       {
-        "title": "Bank of Thailand / SEC — Thailand Taxonomy Phase I (joint press release)",
+        "title": "Thailand Taxonomy Phase 2 — joint press release (DCCE, BOT, SEC, SET)",
+        "date": "27 May 2025",
+        "url": "https://www.bot.or.th/en/news-and-media/news/news-20250527.html"
+      },
+      {
+        "title": "Bank of Thailand — Thailand Taxonomy portal (current edition and sector volumes)",
+        "date": "Updated periodically",
+        "url": "https://www.bot.or.th/en/financial-innovation/sustainable-finance/green/Thailand-Taxonomy.html"
+      },
+      {
+        "title": "Bank of Thailand / SEC — Thailand Taxonomy Phase 1 (joint press release)",
         "date": "5 Jul 2023",
         "url": "https://www.bot.or.th/en/news-and-media/news/news-20230630-2.html"
       }
@@ -5421,27 +5492,80 @@ window.TAXONOMY_DATA = {
         ]
       }
     ],
-    "regulator": "Bank of Thailand",
+    "regulator": "Bank of Thailand with DCCE, SEC and SET (Thailand Taxonomy Board)",
     "fullDescription": [
       "In June 2023, Thailand's Taxonomy Board — co-led by the Bank of Thailand and the Securities and Exchange Commission — issued Phase 1 of the Thailand Taxonomy: A Reference Tool for Sustainable Economy. [1][2]",
       "Phase 1 focuses solely on the climate change mitigation objective, covering only scope 1 and 2 emissions, and is limited to the energy and transport sectors — the two sectors contributing the highest proportion of Thailand's carbon emissions. [1]",
       "It uses a traffic-light system classifying activities as Green (substantially contributing to net-zero by 2050), Amber (transitional — relevant mainly for existing, retrofittable infrastructure rather than new activities), or Red (\"stranded\" activities incompatible with a net-zero trajectory that should be phased out). As an ASEAN member, Thailand's national taxonomy also sits alongside the regional ASEAN Taxonomy for Sustainable Finance."
     ],
     "objectives": [
-      { "icon": "climate", "label": "Climate Change Mitigation" },
-      { "icon": "climate-adapt", "label": "Climate Change Adaptation" },
-      { "icon": "water", "label": "Sustainable Use of Water & Marine Resources" },
-      { "icon": "circular", "label": "Transition to a Circular Economy" },
-      { "icon": "pollution", "label": "Pollution Prevention & Control" },
-      { "icon": "biodiversity", "label": "Protection of Biodiversity & Ecosystems" }
+      {
+        "icon": "climate",
+        "label": "Climate Change Mitigation"
+      },
+      {
+        "icon": "climate-adapt",
+        "label": "Climate Change Adaptation"
+      },
+      {
+        "icon": "water",
+        "label": "Sustainable Use of Water & Marine Resources"
+      },
+      {
+        "icon": "circular",
+        "label": "Transition to a Circular Economy"
+      },
+      {
+        "icon": "pollution",
+        "label": "Pollution Prevention & Control"
+      },
+      {
+        "icon": "biodiversity",
+        "label": "Protection of Biodiversity & Ecosystems"
+      }
     ],
     "citations": [
-      { "id": 1, "label": "Bank of Thailand, \"Thailand Taxonomy: A Reference Tool for Sustainable Economy\"", "url": "https://www.bot.or.th/en/financial-innovation/sustainable-finance/green/Thailand-Taxonomy.html" },
-      { "id": 2, "label": "Bank of Thailand / SEC, \"Publication of Thailand Taxonomy Phase I\" (joint press release, 5 Jul 2023)", "url": "https://www.bot.or.th/en/news-and-media/news/news-20230630-2.html" }
+      {
+        "id": 1,
+        "label": "Bank of Thailand, \"Thailand Taxonomy\" (official portal)",
+        "url": "https://www.bot.or.th/en/financial-innovation/sustainable-finance/green/Thailand-Taxonomy.html"
+      },
+      {
+        "id": 2,
+        "label": "DCCE / BOT / SEC / SET, \"Publication of Thailand Taxonomy Phase 2\" (joint press release, 27 May 2025)",
+        "url": "https://www.bot.or.th/en/news-and-media/news/news-20250527.html"
+      },
+      {
+        "id": 3,
+        "label": "Bank of Thailand / SEC, \"Publication of Thailand Taxonomy Phase I\" (joint press release, 5 Jul 2023)",
+        "url": "https://www.bot.or.th/en/news-and-media/news/news-20230630-2.html"
+      }
     ],
     "activityList": [
-      { "activity": "Energy", "criteria": "Renewable generation classified Green; retrofittable existing infrastructure may qualify Amber; incompatible fossil generation classified Red.", "threshold": "Scope 1/2 emissions thresholds aligned with net-zero 2050", "dnsh": "Not yet extended beyond climate mitigation in Phase 1" },
-      { "activity": "Transport", "criteria": "Zero-emission transport and shipping classified Green; transitional retrofits classified Amber.", "threshold": "Scope 1/2 emissions thresholds", "dnsh": "Not yet extended beyond climate mitigation in Phase 1" }
+      {
+        "activity": "Energy",
+        "criteria": "Renewable generation classified Green; retrofittable existing infrastructure may qualify Amber; incompatible fossil generation classified Red.",
+        "threshold": "Scope 1/2 emissions thresholds aligned with net-zero 2050",
+        "dnsh": "Not yet extended beyond climate mitigation in Phase 1"
+      },
+      {
+        "activity": "Transport",
+        "criteria": "Zero-emission transport and shipping classified Green; transitional retrofits classified Amber.",
+        "threshold": "Scope 1/2 emissions thresholds",
+        "dnsh": "Not yet extended beyond climate mitigation in Phase 1"
+      }
+    ],
+    "timeline": [
+      {
+        "label": "Thailand Taxonomy Phase 1 published (energy, transport)",
+        "date": "Jun 2023",
+        "citationId": 3
+      },
+      {
+        "label": "Thailand Taxonomy Phase 2 published (agriculture, construction & real estate, manufacturing, waste)",
+        "date": "27 May 2025",
+        "citationId": 2
+      }
     ]
   },
   "VNM": {

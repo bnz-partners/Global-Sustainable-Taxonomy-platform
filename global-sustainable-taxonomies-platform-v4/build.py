@@ -13,9 +13,16 @@ Build script: takes each *.template.html and produces a self-contained
 import glob
 import os
 import re
+import shutil
 
 LOCAL_JS = ["theme.js", "data.js", "global.js", "app.js", "country.js",
             "advisor.js", "media.js", "subscribe.js", "preferences.js"]
+
+# Data files the browser loads from the site root but the serverless functions
+# in api/ must also be able to read. Vercel only bundles files that sit inside
+# api/, so the build copies them there — this keeps the two copies in step
+# automatically instead of relying on anyone to remember.
+API_DATA_COPIES = ["kr-taxonomy-activities.json"]
 
 def inline_styles(html, css_content):
     return re.sub(
@@ -34,7 +41,19 @@ def inline_scripts(html):
         return m.group(0)
     return re.sub(r'<script src="([^"]+)"></script>', repl, html)
 
+def sync_api_data():
+    for name in API_DATA_COPIES:
+        if not os.path.exists(name):
+            print(f"WARNING: {name} not found — api/ copy left as is")
+            continue
+        dest = os.path.join("api", name)
+        shutil.copyfile(name, dest)
+        print(f"Synced {dest} from {name}")
+
+
 def main():
+    sync_api_data()
+
     with open("styles.css", encoding="utf-8") as f:
         css_content = f.read()
 

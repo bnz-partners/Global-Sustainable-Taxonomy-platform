@@ -1013,7 +1013,9 @@ function runPortfolioAnalysis() {
       html += `<li><span class="status-icon ${iconClass}">${icon}</span><div><strong>${r.activity.label}.</strong> ${qualityTag} ${r.criterion}</div></li>`;
     });
     html += `</ul>`;
-    html += `<a class="btn-secondary" href="country.html?iso=${c.iso}" target="_blank" rel="noopener">${t("viewFullProfile")}</a>`;
+    /* `from`/`amode` let the country page offer a way back to this analysis:
+       these links open a new tab, where the browser's Back button is dead. */
+    html += `<a class="btn-secondary" href="country.html?iso=${c.iso}&from=advisor&amode=${currentMode}" target="_blank" rel="noopener">${t("viewFullProfile")}</a>`;
     html += `</div>`;
   });
 
@@ -1106,7 +1108,7 @@ function runCompareAnalysis() {
 
   html += `<div class="results-table-wrap"><table class="results-table"><thead><tr><th>${t("colJurisdiction")}</th><th>${t("colStatus")}</th><th>${t("colKeyCriterion")}</th><th></th></tr></thead><tbody>`;
   rows.forEach(r => {
-    html += `<tr><td>${r.entry.name}</td><td><span class="badge badge-sm ${BUCKET_BADGE[r.bucket]}">${bucketLabel(r.bucket)}</span></td><td>${matchQualityTag(r)}${r.criterion}</td><td><a href="country.html?iso=${r.iso}" target="_blank" rel="noopener">${t("viewLink")}</a></td></tr>`;
+    html += `<tr><td>${r.entry.name}</td><td><span class="badge badge-sm ${BUCKET_BADGE[r.bucket]}">${bucketLabel(r.bucket)}</span></td><td>${matchQualityTag(r)}${r.criterion}</td><td><a href="country.html?iso=${r.iso}&from=advisor&amode=${currentMode}" target="_blank" rel="noopener">${t("viewLink")}</a></td></tr>`;
   });
   html += `</tbody></table></div>`;
 
@@ -1179,7 +1181,10 @@ function runCountryAnalysis() {
   html += `</ul>`;
 
   html += `<p class="sample-note">${t("illustrativeNote")}</p>`;
-  html += `<a class="btn-secondary" href="country.html?iso=${iso}" target="_blank" rel="noopener">${t("viewFullProfile")}</a>`;
+  /* Carry the activity text too, so the Back link on the country page
+     reopens this exact analysis rather than an empty advisor form. */
+  const backQ = lastQuery && lastQuery.text ? `&q=${encodeURIComponent(lastQuery.text)}` : "";
+  html += `<a class="btn-secondary" href="country.html?iso=${iso}&from=advisor&amode=${currentMode}${backQ}" target="_blank" rel="noopener">${t("viewFullProfile")}</a>`;
   html += `</div>`;
 
   html += `<div class="results-actions" style="margin-top:16px;"><button class="btn-secondary" id="exportBtn">${t("exportBtn")}</button><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;

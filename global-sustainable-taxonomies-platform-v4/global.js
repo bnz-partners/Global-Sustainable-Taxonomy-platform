@@ -28,7 +28,9 @@ const GST_I18N = {
     "nav.subscribe": "Subscribe", "nav.resources": "Resources", "nav.about": "About",
     "nav.comingSoon": "Coming soon", "nav.toggleTheme": "Toggle theme", "nav.search": "Search",
     "footer.developedBy": "Developed by", "footer.supervisedBy": "Supervised by", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Supervisor", "footer.contactPhone": "Phone", "footer.contactEmail": "Email",
-    "search.placeholder": "Search by country, taxonomy or regulator…", "search.noMatches": "No matches",
+    "search.placeholder": "Search countries, K-Taxonomy activities, or site pages…", "search.mapPlaceholder": "Search by country, taxonomy or regulator…", "search.noMatches": "No matches",
+    "search.groupCountries": "Countries", "search.groupActivities": "K-Taxonomy activities", "search.groupPages": "Pages & tools",
+    "advisor.tabCompare": "Multi-Country Comparison", "advisor.tabCountry": "Country-Specific Advisor", "advisor.tabPortfolio": "Portfolio Comparison", "advisor.tabAsk": "Ask AI",
     "search.title": "Search", "search.close": "Close",
     "translate.button": "Translate", "translate.modalTitle": "Translated Document",
     "translate.loading": "Translating this document\u2026",
@@ -164,7 +166,8 @@ const GST_I18N = {
     "media.ctaHeading": "Get the Weekly Taxonomy Digest",
     "media.ctaText": "A weekly summary of taxonomy news, reports and trend insights — free.",
     "media.ctaBtn": "Subscribe Free",
-    "country.backToMap": "Back to map", "country.translatingContent": "Translating this page's content…",
+    "country.backToMap": "Back to map", "country.backToAdvisor": "Back to AI Advisor",
+    "home.filterLogicNote": "All filters apply together — a country must match every selection.", "home.activeFiltersLabel": "Active filters", "country.translatingContent": "Translating this page's content…",
     "chat.toggleLabel": "Ask the AI Assistant", "chat.title": "AI Assistant",
     "chat.subtitle": "Ask about taxonomy terms, compare countries, or find your way around the site.",
     "chat.placeholder": "Type your question…", "chat.send": "Send",
@@ -178,7 +181,9 @@ const GST_I18N = {
     "nav.subscribe": "Prenumerera", "nav.resources": "Resurser", "nav.about": "Om oss",
     "nav.comingSoon": "Kommer snart", "nav.toggleTheme": "Växla tema", "nav.search": "Sök",
     "footer.developedBy": "Utvecklad av", "footer.supervisedBy": "Handledd av", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Handledare",
-    "search.placeholder": "Sök på land, taxonomi eller tillsynsmyndighet…", "search.noMatches": "Inga träffar",
+    "search.placeholder": "Sök länder, K-taxonomiaktiviteter eller sidor…", "search.mapPlaceholder": "Sök på land, taxonomi eller tillsynsmyndighet…", "search.noMatches": "Inga träffar",
+    "search.groupCountries": "Länder", "search.groupActivities": "K-taxonomiaktiviteter", "search.groupPages": "Sidor & verktyg",
+    "advisor.tabCompare": "Jämförelse av flera länder", "advisor.tabCountry": "Landsspecifik rådgivare", "advisor.tabPortfolio": "Portföljjämförelse", "advisor.tabAsk": "Fråga AI",
     "search.title": "Sök", "search.close": "Stäng",
     "translate.button": "Översätt", "translate.modalTitle": "Översatt dokument",
     "translate.loading": "Översätter dokumentet\u2026",
@@ -314,7 +319,8 @@ const GST_I18N = {
     "media.ctaHeading": "Få veckans taxonomibrev",
     "media.ctaText": "En veckovis sammanfattning av taxonominyheter, rapporter och trendinsikter — gratis.",
     "media.ctaBtn": "Prenumerera gratis",
-    "country.backToMap": "Tillbaka till kartan", "country.translatingContent": "Översätter sidans innehåll…",
+    "country.backToMap": "Tillbaka till kartan", "country.backToAdvisor": "Tillbaka till AI-rådgivaren",
+    "home.filterLogicNote": "Alla filter gäller samtidigt — ett land måste matcha varje val.", "home.activeFiltersLabel": "Aktiva filter", "country.translatingContent": "Översätter sidans innehåll…",
     "chat.toggleLabel": "Fråga AI-assistenten", "chat.title": "AI-assistent",
     "chat.subtitle": "Fråga om taxonomibegrepp, jämför länder, eller hitta rätt på sajten.",
     "chat.placeholder": "Skriv din fråga…", "chat.send": "Skicka",
@@ -328,7 +334,9 @@ const GST_I18N = {
     "nav.subscribe": "구독", "nav.resources": "자료", "nav.about": "소개",
     "nav.comingSoon": "출시 예정", "nav.toggleTheme": "테마 전환", "nav.search": "검색",
     "footer.developedBy": "개발", "footer.supervisedBy": "감수", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "감수",
-    "search.placeholder": "국가, 택소노미 또는 규제 기관으로 검색…", "search.noMatches": "검색 결과 없음",
+    "search.placeholder": "국가, K-Taxonomy 경제활동, 사이트 페이지 검색…", "search.mapPlaceholder": "국가, 택소노미 또는 규제 기관으로 검색…", "search.noMatches": "검색 결과 없음",
+    "search.groupCountries": "국가", "search.groupActivities": "K-Taxonomy 경제활동", "search.groupPages": "페이지 · 기능",
+    "advisor.tabCompare": "다국가 비교", "advisor.tabCountry": "국가별 어드바이저", "advisor.tabPortfolio": "포트폴리오 비교", "advisor.tabAsk": "AI에게 질문",
     "search.title": "검색", "search.close": "닫기",
     "translate.button": "번역", "translate.modalTitle": "번역된 문서",
     "translate.loading": "문서를 번역하는 중\u2026",
@@ -464,7 +472,8 @@ const GST_I18N = {
     "media.ctaHeading": "주간 택소노미 다이제스트 받기",
     "media.ctaText": "택소노미 뉴스, 보고서, 트렌드 인사이트를 담은 주간 요약 — 무료입니다.",
     "media.ctaBtn": "무료로 구독하기",
-    "country.backToMap": "지도로 돌아가기", "country.translatingContent": "이 페이지의 콘텐츠를 번역하는 중…",
+    "country.backToMap": "지도로 돌아가기", "country.backToAdvisor": "AI 어드바이저로 돌아가기",
+    "home.filterLogicNote": "선택한 조건은 모두 동시에 적용됩니다 — 전부 충족하는 국가만 표시됩니다.", "home.activeFiltersLabel": "적용된 필터", "country.translatingContent": "이 페이지의 콘텐츠를 번역하는 중…",
     "chat.toggleLabel": "AI 어시스턴트에게 질문", "chat.title": "AI 어시스턴트",
     "chat.subtitle": "택소노미 용어를 질문하거나, 국가를 비교하거나, 사이트 내 원하는 곳을 찾아보세요.",
     "chat.placeholder": "질문을 입력하세요…", "chat.send": "전송",
@@ -478,7 +487,9 @@ const GST_I18N = {
     "nav.subscribe": "Suscribirse", "nav.resources": "Recursos", "nav.about": "Acerca de",
     "nav.comingSoon": "Próximamente", "nav.toggleTheme": "Cambiar tema", "nav.search": "Buscar",
     "footer.developedBy": "Desarrollado por", "footer.supervisedBy": "Supervisado por", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Supervisora",
-    "search.placeholder": "Buscar por país, taxonomía o regulador…", "search.noMatches": "Sin resultados",
+    "search.placeholder": "Busque países, actividades de la K-Taxonomy o páginas…", "search.mapPlaceholder": "Buscar por país, taxonomía o regulador…", "search.noMatches": "Sin resultados",
+    "search.groupCountries": "Países", "search.groupActivities": "Actividades de la K-Taxonomy", "search.groupPages": "Páginas y herramientas",
+    "advisor.tabCompare": "Comparación entre países", "advisor.tabCountry": "Asesor por país", "advisor.tabPortfolio": "Comparación de cartera", "advisor.tabAsk": "Preguntar a la IA",
     "search.title": "Buscar", "search.close": "Cerrar",
     "translate.button": "Traducir", "translate.modalTitle": "Documento traducido",
     "translate.loading": "Traduciendo este documento\u2026",
@@ -614,7 +625,8 @@ const GST_I18N = {
     "media.ctaHeading": "Reciba el boletín semanal de taxonomías",
     "media.ctaText": "Un resumen semanal de noticias, informes e ideas de tendencias sobre taxonomías — gratis.",
     "media.ctaBtn": "Suscribirse gratis",
-    "country.backToMap": "Volver al mapa", "country.translatingContent": "Traduciendo el contenido de esta página…",
+    "country.backToMap": "Volver al mapa", "country.backToAdvisor": "Volver al Asesor de IA",
+    "home.filterLogicNote": "Todos los filtros se aplican a la vez: un país debe cumplir todas las selecciones.", "home.activeFiltersLabel": "Filtros activos", "country.translatingContent": "Traduciendo el contenido de esta página…",
     "chat.toggleLabel": "Preguntar al asistente de IA", "chat.title": "Asistente de IA",
     "chat.subtitle": "Pregunte sobre términos de taxonomías, compare países, o encuentre lo que busca en el sitio.",
     "chat.placeholder": "Escriba su pregunta…", "chat.send": "Enviar",
@@ -628,7 +640,9 @@ const GST_I18N = {
     "nav.subscribe": "S'abonner", "nav.resources": "Ressources", "nav.about": "À propos",
     "nav.comingSoon": "Bientôt disponible", "nav.toggleTheme": "Changer de thème", "nav.search": "Rechercher",
     "footer.developedBy": "Développé par", "footer.supervisedBy": "Supervisé par", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Superviseure",
-    "search.placeholder": "Rechercher par pays, taxonomie ou régulateur…", "search.noMatches": "Aucun résultat",
+    "search.placeholder": "Rechercher pays, activités K-Taxonomy ou pages…", "search.mapPlaceholder": "Rechercher par pays, taxonomie ou régulateur…", "search.noMatches": "Aucun résultat",
+    "search.groupCountries": "Pays", "search.groupActivities": "Activités K-Taxonomy", "search.groupPages": "Pages et outils",
+    "advisor.tabCompare": "Comparaison multi-pays", "advisor.tabCountry": "Conseiller par pays", "advisor.tabPortfolio": "Comparaison de portefeuille", "advisor.tabAsk": "Demander à l'IA",
     "search.title": "Rechercher", "search.close": "Fermer",
     "translate.button": "Traduire", "translate.modalTitle": "Document traduit",
     "translate.loading": "Traduction du document en cours\u2026",
@@ -764,7 +778,8 @@ const GST_I18N = {
     "media.ctaHeading": "Recevez la newsletter hebdomadaire sur les taxonomies",
     "media.ctaText": "Un résumé hebdomadaire des actualités, rapports et analyses de tendances sur les taxonomies — gratuit.",
     "media.ctaBtn": "S'abonner gratuitement",
-    "country.backToMap": "Retour à la carte", "country.translatingContent": "Traduction du contenu de cette page…",
+    "country.backToMap": "Retour à la carte", "country.backToAdvisor": "Retour au conseiller IA",
+    "home.filterLogicNote": "Tous les filtres s'appliquent ensemble : un pays doit satisfaire chaque sélection.", "home.activeFiltersLabel": "Filtres actifs", "country.translatingContent": "Traduction du contenu de cette page…",
     "chat.toggleLabel": "Demander à l'assistant IA", "chat.title": "Assistant IA",
     "chat.subtitle": "Posez des questions sur les termes de taxonomie, comparez des pays, ou trouvez votre chemin sur le site.",
     "chat.placeholder": "Tapez votre question…", "chat.send": "Envoyer",
@@ -778,7 +793,9 @@ const GST_I18N = {
     "nav.subscribe": "Abonnieren", "nav.resources": "Ressourcen", "nav.about": "Über uns",
     "nav.comingSoon": "Demnächst", "nav.toggleTheme": "Design wechseln", "nav.search": "Suche",
     "footer.developedBy": "Entwickelt von", "footer.supervisedBy": "Betreut von", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Betreuerin",
-    "search.placeholder": "Nach Land, Taxonomie oder Aufsichtsbehörde suchen…", "search.noMatches": "Keine Treffer",
+    "search.placeholder": "Länder, K-Taxonomy-Aktivitäten oder Seiten suchen…", "search.mapPlaceholder": "Nach Land, Taxonomie oder Aufsichtsbehörde suchen…", "search.noMatches": "Keine Treffer",
+    "search.groupCountries": "Länder", "search.groupActivities": "K-Taxonomy-Aktivitäten", "search.groupPages": "Seiten & Werkzeuge",
+    "advisor.tabCompare": "Ländervergleich", "advisor.tabCountry": "Länderspezifischer Berater", "advisor.tabPortfolio": "Portfoliovergleich", "advisor.tabAsk": "KI fragen",
     "search.title": "Suche", "search.close": "Schließen",
     "translate.button": "Übersetzen", "translate.modalTitle": "Übersetztes Dokument",
     "translate.loading": "Dokument wird übersetzt\u2026",
@@ -914,7 +931,8 @@ const GST_I18N = {
     "media.ctaHeading": "Den wöchentlichen Taxonomie-Newsletter erhalten",
     "media.ctaText": "Eine wöchentliche Zusammenfassung von Taxonomie-Neuigkeiten, Berichten und Trendeinblicken — kostenlos.",
     "media.ctaBtn": "Kostenlos abonnieren",
-    "country.backToMap": "Zurück zur Karte", "country.translatingContent": "Inhalt dieser Seite wird übersetzt…",
+    "country.backToMap": "Zurück zur Karte", "country.backToAdvisor": "Zurück zum KI-Berater",
+    "home.filterLogicNote": "Alle Filter gelten gemeinsam — ein Land muss jede Auswahl erfüllen.", "home.activeFiltersLabel": "Aktive Filter", "country.translatingContent": "Inhalt dieser Seite wird übersetzt…",
     "chat.toggleLabel": "KI-Assistent fragen", "chat.title": "KI-Assistent",
     "chat.subtitle": "Fragen Sie nach Taxonomiebegriffen, vergleichen Sie Länder, oder finden Sie sich auf der Website zurecht.",
     "chat.placeholder": "Ihre Frage eingeben…", "chat.send": "Senden",
@@ -928,7 +946,9 @@ const GST_I18N = {
     "nav.subscribe": "登録", "nav.resources": "リソース", "nav.about": "サイトについて",
     "nav.comingSoon": "近日公開", "nav.toggleTheme": "テーマ切替", "nav.search": "検索",
     "footer.developedBy": "開発", "footer.supervisedBy": "監修", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "監修",
-    "search.placeholder": "国、タクソノミー、規制当局で検索…", "search.noMatches": "該当なし",
+    "search.placeholder": "国・K-Taxonomyの経済活動・サイトページを検索…", "search.mapPlaceholder": "国、タクソノミー、規制当局で検索…", "search.noMatches": "該当なし",
+    "search.groupCountries": "国", "search.groupActivities": "K-Taxonomyの経済活動", "search.groupPages": "ページ・機能",
+    "advisor.tabCompare": "多国間比較", "advisor.tabCountry": "国別アドバイザー", "advisor.tabPortfolio": "ポートフォリオ比較", "advisor.tabAsk": "AIに質問",
     "search.title": "検索", "search.close": "閉じる",
     "translate.button": "翻訳", "translate.modalTitle": "翻訳された文書",
     "translate.loading": "文書を翻訳中\u2026",
@@ -1064,7 +1084,8 @@ const GST_I18N = {
     "media.ctaHeading": "週刊タクソノミーダイジェストを受け取る",
     "media.ctaText": "タクソノミーニュース、レポート、トレンドインサイトの週刊まとめ — 無料。",
     "media.ctaBtn": "無料で登録する",
-    "country.backToMap": "地図に戻る", "country.translatingContent": "このページのコンテンツを翻訳中…",
+    "country.backToMap": "地図に戻る", "country.backToAdvisor": "AIアドバイザーに戻る",
+    "home.filterLogicNote": "すべてのフィルターは同時に適用されます — すべての条件を満たす国のみが表示されます。", "home.activeFiltersLabel": "適用中のフィルター", "country.translatingContent": "このページのコンテンツを翻訳中…",
     "chat.toggleLabel": "AIアシスタントに質問", "chat.title": "AIアシスタント",
     "chat.subtitle": "タクソノミー用語について質問したり、国を比較したり、サイト内の目的のページを見つけたりできます。",
     "chat.placeholder": "質問を入力…", "chat.send": "送信",
@@ -1078,7 +1099,9 @@ const GST_I18N = {
     "nav.subscribe": "订阅", "nav.resources": "资源", "nav.about": "关于我们",
     "nav.comingSoon": "即将推出", "nav.toggleTheme": "切换主题", "nav.search": "搜索",
     "footer.developedBy": "开发者", "footer.supervisedBy": "指导", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "指导",
-    "search.placeholder": "按国家、分类标准或监管机构搜索…", "search.noMatches": "无匹配结果",
+    "search.placeholder": "搜索国家、K-Taxonomy 经济活动或站点页面…", "search.mapPlaceholder": "按国家、分类标准或监管机构搜索…", "search.noMatches": "无匹配结果",
+    "search.groupCountries": "国家", "search.groupActivities": "K-Taxonomy 经济活动", "search.groupPages": "页面与工具",
+    "advisor.tabCompare": "多国比较", "advisor.tabCountry": "国别顾问", "advisor.tabPortfolio": "组合比较", "advisor.tabAsk": "询问 AI",
     "search.title": "搜索", "search.close": "关闭",
     "translate.button": "翻译", "translate.modalTitle": "翻译文档",
     "translate.loading": "正在翻译此文档\u2026",
@@ -1214,7 +1237,8 @@ const GST_I18N = {
     "media.ctaHeading": "获取每周分类标准简报",
     "media.ctaText": "分类标准新闻、报告和趋势洞察的每周摘要——免费。",
     "media.ctaBtn": "免费订阅",
-    "country.backToMap": "返回地图", "country.translatingContent": "正在翻译此页面的内容…",
+    "country.backToMap": "返回地图", "country.backToAdvisor": "返回 AI 顾问",
+    "home.filterLogicNote": "所有筛选条件同时生效——国家须满足全部所选条件。", "home.activeFiltersLabel": "已启用的筛选", "country.translatingContent": "正在翻译此页面的内容…",
     "chat.toggleLabel": "咨询 AI 助手", "chat.title": "AI 助手",
     "chat.subtitle": "询问分类标准术语、比较各国情况，或在网站中找到您需要的内容。",
     "chat.placeholder": "输入您的问题…", "chat.send": "发送",
@@ -1228,7 +1252,9 @@ const GST_I18N = {
     "nav.subscribe": "اشترك", "nav.resources": "الموارد", "nav.about": "حول",
     "nav.comingSoon": "قريبًا", "nav.toggleTheme": "تبديل المظهر", "nav.search": "بحث",
     "footer.developedBy": "تم التطوير بواسطة", "footer.supervisedBy": "بإشراف", "footer.headOfAI": "رئيس مركز الذكاء الاصطناعي", "footer.supervisorLabel": "المشرفة",
-    "search.placeholder": "ابحث حسب البلد أو التصنيف أو الجهة الرقابية…", "search.noMatches": "لا توجد نتائج",
+    "search.placeholder": "ابحث عن الدول أو أنشطة K-Taxonomy أو صفحات الموقع…", "search.mapPlaceholder": "ابحث حسب البلد أو التصنيف أو الجهة الرقابية…", "search.noMatches": "لا توجد نتائج",
+    "search.groupCountries": "الدول", "search.groupActivities": "أنشطة K-Taxonomy", "search.groupPages": "الصفحات والأدوات",
+    "advisor.tabCompare": "مقارنة بين عدة دول", "advisor.tabCountry": "مستشار خاص بالدولة", "advisor.tabPortfolio": "مقارنة المحفظة", "advisor.tabAsk": "اسأل الذكاء الاصطناعي",
     "search.title": "بحث", "search.close": "إغلاق",
     "translate.button": "ترجمة", "translate.modalTitle": "المستند المترجم",
     "translate.loading": "جارٍ ترجمة هذا المستند…",
@@ -1364,7 +1390,8 @@ const GST_I18N = {
     "media.ctaHeading": "احصل على النشرة الأسبوعية للتصنيفات",
     "media.ctaText": "ملخص أسبوعي لأخبار التصنيفات والتقارير ورؤى الاتجاهات — مجانًا.",
     "media.ctaBtn": "اشترك مجانًا",
-    "country.backToMap": "العودة إلى الخريطة", "country.translatingContent": "جارٍ ترجمة محتوى هذه الصفحة…",
+    "country.backToMap": "العودة إلى الخريطة", "country.backToAdvisor": "العودة إلى مستشار الذكاء الاصطناعي",
+    "home.filterLogicNote": "تُطبَّق جميع عوامل التصفية معًا — يجب أن يستوفي البلد كل اختيار.", "home.activeFiltersLabel": "عوامل التصفية النشطة", "country.translatingContent": "جارٍ ترجمة محتوى هذه الصفحة…",
     "chat.toggleLabel": "اسأل مساعد الذكاء الاصطناعي", "chat.title": "مساعد الذكاء الاصطناعي",
     "chat.subtitle": "اسأل عن مصطلحات التصنيف، أو قارن بين الدول، أو ابحث عن طريقك في الموقع.",
     "chat.placeholder": "اكتب سؤالك…", "chat.send": "إرسال",
@@ -1378,7 +1405,9 @@ const GST_I18N = {
     "nav.subscribe": "Inscrever-se", "nav.resources": "Recursos", "nav.about": "Sobre",
     "nav.comingSoon": "Em breve", "nav.toggleTheme": "Alternar tema", "nav.search": "Pesquisar",
     "footer.developedBy": "Desenvolvido por", "footer.supervisedBy": "Supervisionado por", "footer.headOfAI": "Head of AI Centre", "footer.supervisorLabel": "Supervisora",
-    "search.placeholder": "Pesquisar por país, taxonomia ou regulador…", "search.noMatches": "Nenhum resultado",
+    "search.placeholder": "Pesquise países, atividades da K-Taxonomy ou páginas…", "search.mapPlaceholder": "Pesquisar por país, taxonomia ou regulador…", "search.noMatches": "Nenhum resultado",
+    "search.groupCountries": "Países", "search.groupActivities": "Atividades da K-Taxonomy", "search.groupPages": "Páginas e ferramentas",
+    "advisor.tabCompare": "Comparação entre países", "advisor.tabCountry": "Consultor por país", "advisor.tabPortfolio": "Comparação de carteira", "advisor.tabAsk": "Perguntar à IA",
     "search.title": "Pesquisar", "search.close": "Fechar",
     "translate.button": "Traduzir", "translate.modalTitle": "Documento Traduzido",
     "translate.loading": "Traduzindo este documento…",
@@ -1514,7 +1543,8 @@ const GST_I18N = {
     "media.ctaHeading": "Receba o Resumo Semanal de Taxonomias",
     "media.ctaText": "Um resumo semanal de notícias, relatórios e insights de tendências sobre taxonomias — gratuito.",
     "media.ctaBtn": "Inscrever-se Gratuitamente",
-    "country.backToMap": "Voltar ao mapa", "country.translatingContent": "Traduzindo o conteúdo desta página…",
+    "country.backToMap": "Voltar ao mapa", "country.backToAdvisor": "Voltar ao Consultor de IA",
+    "home.filterLogicNote": "Todos os filtros se aplicam em conjunto — um país deve atender a todas as seleções.", "home.activeFiltersLabel": "Filtros ativos", "country.translatingContent": "Traduzindo o conteúdo desta página…",
     "chat.toggleLabel": "Perguntar ao assistente de IA", "chat.title": "Assistente de IA",
     "chat.subtitle": "Pergunte sobre termos de taxonomia, compare países, ou encontre o que procura no site.",
     "chat.placeholder": "Digite sua pergunta…", "chat.send": "Enviar",
@@ -1582,29 +1612,134 @@ function gstCloseSearch() {
   if (overlay) overlay.classList.remove("open");
 }
 
+/* ---------- Site-wide search ----------
+   Reviewers expected the magnifier in the header to search the whole site, not
+   just repeat the map's country lookup. It now searches three things at once:
+   countries, the site's own pages and tools, and — once the dataset has been
+   fetched — the 100 K-Taxonomy economic activities. */
+
+const GST_SEARCH_PAGES = [
+  { href: "index.html",     i18n: "nav.map",       keys: "map world countries global 지도 국가 세계" },
+  { href: "advisor.html?mode=compare",   i18n: "advisor.tabCompare",   keys: "compare multi country activity 비교 다국가" },
+  { href: "advisor.html?mode=country",   i18n: "advisor.tabCountry",   keys: "country specific dnsh screening 국가별 적합성 스크리닝" },
+  { href: "advisor.html?mode=portfolio", i18n: "advisor.tabPortfolio", keys: "portfolio multiple activities 포트폴리오" },
+  { href: "advisor.html?mode=ask",       i18n: "advisor.tabAsk",       keys: "ask ai chat question 질문 챗 인공지능" },
+  { href: "media.html",     i18n: "nav.media",     keys: "news trends reports papers podcast video 뉴스 트렌드 보고서" },
+  { href: "subscribe.html", i18n: "nav.subscribe", keys: "subscribe newsletter digest email 구독 뉴스레터 다이제스트" },
+  { href: "about.html",     i18n: "nav.about",     keys: "about bnz partners team mission contact 회사 소개 문의 연락" },
+  { href: "about.html#key-resources", i18n: "footer.references", keys: "references sources resources 참고 출처 자료" }
+];
+
+/* The activity dataset is ~420KB, so it is fetched once, in the background,
+   the first time someone actually types in the search box — never on page load
+   and never on a page where the box is not used. */
+let gstActivityIndex = null;
+let gstActivityLoading = null;
+function gstLoadActivityIndex() {
+  if (gstActivityIndex) return Promise.resolve(gstActivityIndex);
+  if (gstActivityLoading) return gstActivityLoading;
+  gstActivityLoading = fetch("kr-taxonomy-activities.json")
+    .then(r => (r.ok ? r.json() : []))
+    .then(list => {
+      gstActivityIndex = (list || []).map(a => ({
+        id: a.id,
+        code: a.code_en,
+        name_en: a.name_en,
+        name_ko: a.name_ko,
+        blob: [a.code_en, a.code_ko, a.name_en, a.name_ko, a.field_en, a.field_ko,
+               a.objective_en, a.objective_ko, a.activity_en, a.activity_ko,
+               (a.recognition_en || []).join(" "), (a.recognition_ko || []).join(" ")]
+          .join(" ").toLowerCase()
+      }));
+      return gstActivityIndex;
+    })
+    .catch(() => { gstActivityIndex = []; return gstActivityIndex; });
+  return gstActivityLoading;
+}
+
+function gstSearchCountries(q) {
+  return gstGetCountries().filter(({ entry, iso }) =>
+    (entry.name && entry.name.toLowerCase().includes(q)) ||
+    (entry.taxonomy && entry.taxonomy.toLowerCase().includes(q)) ||
+    (entry.regulator && entry.regulator.toLowerCase().includes(q)) ||
+    (entry.region && entry.region.toLowerCase().includes(q)) ||
+    (entry.note && entry.note.toLowerCase().includes(q)) ||
+    iso.toLowerCase().includes(q)
+  ).slice(0, 6);
+}
+
+function gstSearchPages(q) {
+  return GST_SEARCH_PAGES.filter(p =>
+    gstT(p.i18n).toLowerCase().includes(q) || p.keys.toLowerCase().includes(q)
+  ).slice(0, 4);
+}
+
+function gstSearchActivities(q) {
+  if (!gstActivityIndex) return [];
+  return gstActivityIndex.filter(a => a.blob.includes(q)).slice(0, 6);
+}
+
+function gstRenderSearchResults(q) {
+  const resultsEl = document.getElementById("globalSearchResults");
+  if (!resultsEl) return;
+
+  const countries = gstSearchCountries(q);
+  const pages = gstSearchPages(q);
+  const activities = gstSearchActivities(q);
+
+  if (!countries.length && !pages.length && !activities.length) {
+    resultsEl.innerHTML = `<div class="search-empty">${gstEscapeHtml(gstT("search.noMatches"))}</div>`;
+    return;
+  }
+
+  const isKo = gstCurrentLang === "ko";
+  let html = "";
+
+  if (countries.length) {
+    html += `<div class="search-group-label">${gstEscapeHtml(gstT("search.groupCountries"))}</div>`;
+    html += countries.map(({ iso, entry }) => `
+      <a class="search-result-item" href="country.html?iso=${iso}">
+        <span class="sr-name">${gstEscapeHtml(entry.name)}</span>
+        <span class="sr-sub">${gstEscapeHtml(entry.taxonomy || "")}</span>
+      </a>`).join("");
+  }
+
+  if (activities.length) {
+    html += `<div class="search-group-label">${gstEscapeHtml(gstT("search.groupActivities"))}</div>`;
+    html += activities.map(a => `
+      <a class="search-result-item" href="country.html?iso=KOR&activity=${encodeURIComponent(a.id)}">
+        <span class="sr-name">${gstEscapeHtml(a.code)} ${gstEscapeHtml(isKo ? a.name_ko : a.name_en)}</span>
+        <span class="sr-sub">K-Taxonomy</span>
+      </a>`).join("");
+  }
+
+  if (pages.length) {
+    html += `<div class="search-group-label">${gstEscapeHtml(gstT("search.groupPages"))}</div>`;
+    html += pages.map(p => `
+      <a class="search-result-item" href="${p.href}">
+        <span class="sr-name">${gstEscapeHtml(gstT(p.i18n))}</span>
+        <span class="sr-sub">${gstEscapeHtml(gstT("search.groupPages"))}</span>
+      </a>`).join("");
+  }
+
+  resultsEl.innerHTML = html;
+}
+
 function gstRunSearch(query) {
   const resultsEl = document.getElementById("globalSearchResults");
   const q = query.trim().toLowerCase();
   if (!q) { resultsEl.innerHTML = ""; return; }
 
-  const matches = gstGetCountries().filter(({ entry, iso }) => {
-    return (entry.name && entry.name.toLowerCase().includes(q)) ||
-      (entry.taxonomy && entry.taxonomy.toLowerCase().includes(q)) ||
-      (entry.regulator && entry.regulator.toLowerCase().includes(q)) ||
-      iso.toLowerCase().includes(q);
-  }).slice(0, 8);
+  gstRenderSearchResults(q);
 
-  if (!matches.length) {
-    resultsEl.innerHTML = `<div class="search-empty">${gstT("search.noMatches")}</div>`;
-    return;
+  /* Activities arrive a moment later on the first search; re-render then, but
+     only if the box still holds the query these results belong to. */
+  if (!gstActivityIndex) {
+    gstLoadActivityIndex().then(() => {
+      const input = document.getElementById("globalSearchInput");
+      if (input && input.value.trim().toLowerCase() === q) gstRenderSearchResults(q);
+    });
   }
-
-  resultsEl.innerHTML = matches.map(({ iso, entry }) => `
-    <a class="search-result-item" href="country.html?iso=${iso}">
-      <span class="sr-name">${entry.name}</span>
-      <span class="sr-sub">${entry.taxonomy || ""}</span>
-    </a>
-  `).join("");
 }
 
 function gstSetupGlobalSearch() {
