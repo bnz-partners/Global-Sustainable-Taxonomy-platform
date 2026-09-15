@@ -174,7 +174,9 @@ function relevantGeneralResources(iso, entry) {
     resources.push({ name: "EU Taxonomy", url: "https://finance.ec.europa.eu/sustainable-finance/tools-and-standards/eu-taxonomy-sustainable-activities_en" });
   }
   if (iso === "KOR") {
-    resources.push({ name: "K-Taxonomy", url: "https://www.investkorea.org/upload/kotraexpress/2022/03/images/Special_Report.pdf" });
+    /* Same change as the About page: the old link was a 2022 KOTRA promotional
+       PDF, which sat oddly under the official 2025 guidelines listed above it. */
+    resources.push({ name: "K-Taxonomy", url: "https://www.gmi.go.kr/gc/gcGuideLine.do" });
   }
   return resources;
 }
