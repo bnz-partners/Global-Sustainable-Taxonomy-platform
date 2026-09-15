@@ -18,6 +18,11 @@
 :root {
   --navy: #0F172A;
   --green: #15803D;
+  /* Countries covered only by a regional framework — same hue, clearly lighter
+     so the map reads as "green, but not its own taxonomy". The -text variant is
+     darkened for legibility on white where the fill colour would be too pale. */
+  --green-light: #7CC49B;
+  --green-light-text: #2E8B61;
   --amber: #D97706;
   --grey-status: #B8C0CC;
   --bg: #FFFFFF;
@@ -35,6 +40,8 @@
 [data-theme="dark"] {
   --navy: #E2E8F0;
   --green: #22C55E;
+  --green-light: #7CC49B;
+  --green-light-text: #8FE0B4;
   --bg: #0B1220;
   --bg-soft: #10192E;
   --card-bg: #121B2E;
@@ -524,7 +531,11 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border-radius: 50%;
   display: inline-block;
 }
-.dot.established { background: var(--green); }
+/* Four-tier map key (2026-09). --green-light marks countries covered only by
+   a regional framework; .established stays for any older markup. */
+.dot.established,
+.dot.national { background: var(--green); }
+.dot.regional { background: var(--green-light); }
 .dot.developing { background: var(--amber); }
 .dot.none { background: var(--grey-status); }
 
@@ -644,7 +655,9 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .stat-row:last-of-type { border-bottom: none; }
 .stat-row-num { font-family: "Playfair Display", serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); }
 .stat-row-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
-.accent-established { color: var(--green); }
+.accent-established,
+.accent-national { color: var(--green); }
+.accent-regional { color: var(--green-light-text); }
 .accent-developing { color: var(--amber); }
 .accent-none { color: var(--text-muted); }
 
@@ -851,11 +864,15 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   font-size: 0.76rem;
   font-weight: 600;
 }
-.badge-established { background: rgba(21, 128, 61, 0.14); color: #14532D; }
+.badge-established,
+.badge-national { background: rgba(21, 128, 61, 0.14); color: #14532D; }
+.badge-regional { background: rgba(124, 196, 155, 0.22); color: #256B45; }
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
-[data-theme="dark"] .badge-established { color: #4ADE80; }
+[data-theme="dark"] .badge-established,
+[data-theme="dark"] .badge-national { color: #4ADE80; }
+[data-theme="dark"] .badge-regional { color: #8FE0B4; }
 [data-theme="dark"] .badge-developing { color: #FBBF24; }
 
 /* ---------- Country report page ---------- */
@@ -1877,13 +1894,15 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif;
     </div>
     <div class="chip-row" id="statusChips">
       <button class="chip active" data-status="All" data-i18n="home.chipAllStatuses">All Statuses</button>
-      <button class="chip" data-status="established" data-i18n="home.chipDeveloped">Developed</button>
+      <button class="chip" data-status="national" data-i18n="home.chipNational">National taxonomy</button>
+      <button class="chip" data-status="regional" data-i18n="home.chipRegional">Regional framework</button>
       <button class="chip" data-status="developing" data-i18n="home.chipUnderDevelopment">Under Development</button>
       <button class="chip" data-status="none" data-i18n="home.chipNoTaxonomy">No Taxonomy</button>
     </div>
 
     <div class="legend legend-dark">
-      <span class="legend-item"><i class="dot established"></i><span data-i18n="home.chipDeveloped">Developed</span></span>
+      <span class="legend-item"><i class="dot national"></i><span data-i18n="home.chipNational">National taxonomy</span></span>
+      <span class="legend-item"><i class="dot regional"></i><span data-i18n="home.chipRegional">Regional framework</span></span>
       <span class="legend-item"><i class="dot developing"></i><span data-i18n="home.chipUnderDevelopment">Under Development</span></span>
       <span class="legend-item"><i class="dot none"></i><span data-i18n="home.chipNoTaxonomy">No Taxonomy</span></span>
     </div>
@@ -1898,7 +1917,8 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif;
     <aside class="stats-sidebar">
       <h2 data-i18n="home.globalStats">Global Stats</h2>
       <div class="stat-row"><span class="stat-row-num" id="statTotal">–</span><span class="stat-row-label" data-i18n="home.totalCountriesTracked">Total Countries Tracked</span></div>
-      <div class="stat-row"><span class="stat-row-num accent-established" id="statEstablished">–</span><span class="stat-row-label" data-i18n="home.chipDeveloped">Developed</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-national" id="statNational">–</span><span class="stat-row-label" data-i18n="home.chipNational">National taxonomy</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-regional" id="statRegional">–</span><span class="stat-row-label" data-i18n="home.chipRegional">Regional framework</span></div>
       <div class="stat-row"><span class="stat-row-num accent-developing" id="statDeveloping">–</span><span class="stat-row-label" data-i18n="home.chipUnderDevelopment">Under Development</span></div>
       <div class="stat-row"><span class="stat-row-num accent-none" id="statNone">–</span><span class="stat-row-label" data-i18n="home.chipNoTaxonomy">No Taxonomy</span></div>
 
@@ -12511,7 +12531,7 @@ const GST_I18N = {
     "home.heroSub": "Select a country on the map, or use the search bar below.",
     "home.chipAllRegions": "All Regions", "home.chipEurope": "Europe", "home.chipAsiaPacific": "Asia-Pacific",
     "home.chipAmericas": "Americas", "home.chipAfrica": "Africa", "home.chipMiddleEast": "Middle East",
-    "home.chipAllStatuses": "All Statuses", "home.chipDeveloped": "Developed",
+    "home.chipAllStatuses": "All Statuses", "home.chipDeveloped": "Developed", "home.chipNational": "National taxonomy", "home.chipRegional": "Regional framework",
     "home.chipUnderDevelopment": "Under Development", "home.chipNoTaxonomy": "No Taxonomy",
     "home.globalStats": "Global Stats", "home.totalCountriesTracked": "Total Countries Tracked",
     "home.recentlyUpdated": "Recently Updated", "home.askAi": "Ask AI",
@@ -12664,7 +12684,7 @@ const GST_I18N = {
     "home.heroSub": "Välj ett land på kartan, eller använd sökfältet nedan.",
     "home.chipAllRegions": "Alla regioner", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asien-Stillahavsregionen",
     "home.chipAmericas": "Amerika", "home.chipAfrica": "Afrika", "home.chipMiddleEast": "Mellanöstern",
-    "home.chipAllStatuses": "Alla statusar", "home.chipDeveloped": "Utvecklad",
+    "home.chipAllStatuses": "Alla statusar", "home.chipDeveloped": "Utvecklad", "home.chipNational": "Nationell taxonomi", "home.chipRegional": "Regionalt ramverk",
     "home.chipUnderDevelopment": "Under utveckling", "home.chipNoTaxonomy": "Ingen taxonomi",
     "home.globalStats": "Global statistik", "home.totalCountriesTracked": "Totalt antal länder som bevakas",
     "home.recentlyUpdated": "Senast uppdaterat", "home.askAi": "Fråga AI",
@@ -12817,7 +12837,7 @@ const GST_I18N = {
     "home.heroSub": "지도에서 국가를 선택하거나 아래 검색창을 이용하세요.",
     "home.chipAllRegions": "전체 지역", "home.chipEurope": "유럽", "home.chipAsiaPacific": "아시아·태평양",
     "home.chipAmericas": "아메리카", "home.chipAfrica": "아프리카", "home.chipMiddleEast": "중동",
-    "home.chipAllStatuses": "전체 상태", "home.chipDeveloped": "구축 완료",
+    "home.chipAllStatuses": "전체 상태", "home.chipDeveloped": "구축 완료", "home.chipNational": "자국 제도", "home.chipRegional": "지역 프레임워크 적용",
     "home.chipUnderDevelopment": "개발 중", "home.chipNoTaxonomy": "택소노미 없음",
     "home.globalStats": "글로벌 통계", "home.totalCountriesTracked": "추적 중인 총 국가 수",
     "home.recentlyUpdated": "최근 업데이트", "home.askAi": "AI에게 질문",
@@ -12970,7 +12990,7 @@ const GST_I18N = {
     "home.heroSub": "Seleccione un país en el mapa, o use la barra de búsqueda a continuación.",
     "home.chipAllRegions": "Todas las regiones", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asia-Pacífico",
     "home.chipAmericas": "América", "home.chipAfrica": "África", "home.chipMiddleEast": "Oriente Medio",
-    "home.chipAllStatuses": "Todos los estados", "home.chipDeveloped": "Desarrollada",
+    "home.chipAllStatuses": "Todos los estados", "home.chipDeveloped": "Desarrollada", "home.chipNational": "Taxonomía nacional", "home.chipRegional": "Marco regional",
     "home.chipUnderDevelopment": "En desarrollo", "home.chipNoTaxonomy": "Sin taxonomía",
     "home.globalStats": "Estadísticas globales", "home.totalCountriesTracked": "Total de países monitoreados",
     "home.recentlyUpdated": "Actualizado recientemente", "home.askAi": "Preguntar a la IA",
@@ -13123,7 +13143,7 @@ const GST_I18N = {
     "home.heroSub": "Sélectionnez un pays sur la carte, ou utilisez la barre de recherche ci-dessous.",
     "home.chipAllRegions": "Toutes les régions", "home.chipEurope": "Europe", "home.chipAsiaPacific": "Asie-Pacifique",
     "home.chipAmericas": "Amériques", "home.chipAfrica": "Afrique", "home.chipMiddleEast": "Moyen-Orient",
-    "home.chipAllStatuses": "Tous les statuts", "home.chipDeveloped": "Développée",
+    "home.chipAllStatuses": "Tous les statuts", "home.chipDeveloped": "Développée", "home.chipNational": "Taxonomie nationale", "home.chipRegional": "Cadre régional",
     "home.chipUnderDevelopment": "En développement", "home.chipNoTaxonomy": "Aucune taxonomie",
     "home.globalStats": "Statistiques globales", "home.totalCountriesTracked": "Total des pays suivis",
     "home.recentlyUpdated": "Récemment mis à jour", "home.askAi": "Demander à l'IA",
@@ -13276,7 +13296,7 @@ const GST_I18N = {
     "home.heroSub": "Wählen Sie ein Land auf der Karte, oder nutzen Sie die Suchleiste unten.",
     "home.chipAllRegions": "Alle Regionen", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asien-Pazifik",
     "home.chipAmericas": "Amerika", "home.chipAfrica": "Afrika", "home.chipMiddleEast": "Naher Osten",
-    "home.chipAllStatuses": "Alle Status", "home.chipDeveloped": "Etabliert",
+    "home.chipAllStatuses": "Alle Status", "home.chipDeveloped": "Etabliert", "home.chipNational": "Nationale Taxonomie", "home.chipRegional": "Regionaler Rahmen",
     "home.chipUnderDevelopment": "In Entwicklung", "home.chipNoTaxonomy": "Keine Taxonomie",
     "home.globalStats": "Globale Statistiken", "home.totalCountriesTracked": "Erfasste Länder insgesamt",
     "home.recentlyUpdated": "Kürzlich aktualisiert", "home.askAi": "KI fragen",
@@ -13429,7 +13449,7 @@ const GST_I18N = {
     "home.heroSub": "地図から国を選択するか、下の検索バーをご利用ください。",
     "home.chipAllRegions": "すべての地域", "home.chipEurope": "ヨーロッパ", "home.chipAsiaPacific": "アジア太平洋",
     "home.chipAmericas": "南北アメリカ", "home.chipAfrica": "アフリカ", "home.chipMiddleEast": "中東",
-    "home.chipAllStatuses": "すべてのステータス", "home.chipDeveloped": "整備済み",
+    "home.chipAllStatuses": "すべてのステータス", "home.chipDeveloped": "整備済み", "home.chipNational": "自国の制度", "home.chipRegional": "地域枠組みの適用",
     "home.chipUnderDevelopment": "開発中", "home.chipNoTaxonomy": "タクソノミーなし",
     "home.globalStats": "グローバル統計", "home.totalCountriesTracked": "追跡対象の総国数",
     "home.recentlyUpdated": "最近の更新", "home.askAi": "AIに質問",
@@ -13582,7 +13602,7 @@ const GST_I18N = {
     "home.heroSub": "在地图上选择一个国家，或使用下方的搜索栏。",
     "home.chipAllRegions": "所有地区", "home.chipEurope": "欧洲", "home.chipAsiaPacific": "亚太地区",
     "home.chipAmericas": "美洲", "home.chipAfrica": "非洲", "home.chipMiddleEast": "中东",
-    "home.chipAllStatuses": "所有状态", "home.chipDeveloped": "已建立",
+    "home.chipAllStatuses": "所有状态", "home.chipDeveloped": "已建立", "home.chipNational": "本国制度", "home.chipRegional": "适用区域框架",
     "home.chipUnderDevelopment": "开发中", "home.chipNoTaxonomy": "无分类标准",
     "home.globalStats": "全球统计", "home.totalCountriesTracked": "追踪国家总数",
     "home.recentlyUpdated": "最近更新", "home.askAi": "咨询 AI",
@@ -13735,7 +13755,7 @@ const GST_I18N = {
     "home.heroSub": "اختر بلدًا على الخريطة، أو استخدم شريط البحث أدناه.",
     "home.chipAllRegions": "جميع المناطق", "home.chipEurope": "أوروبا", "home.chipAsiaPacific": "آسيا والمحيط الهادئ",
     "home.chipAmericas": "الأمريكتان", "home.chipAfrica": "أفريقيا", "home.chipMiddleEast": "الشرق الأوسط",
-    "home.chipAllStatuses": "جميع الحالات", "home.chipDeveloped": "مكتمل",
+    "home.chipAllStatuses": "جميع الحالات", "home.chipDeveloped": "مكتمل", "home.chipNational": "تصنيف وطني", "home.chipRegional": "إطار إقليمي",
     "home.chipUnderDevelopment": "قيد التطوير", "home.chipNoTaxonomy": "لا يوجد تصنيف",
     "home.globalStats": "إحصاءات عالمية", "home.totalCountriesTracked": "إجمالي عدد البلدان المتابَعة",
     "home.recentlyUpdated": "آخر التحديثات", "home.askAi": "اسأل الذكاء الاصطناعي",
@@ -13888,7 +13908,7 @@ const GST_I18N = {
     "home.heroSub": "Selecione um país no mapa, ou use a barra de pesquisa abaixo.",
     "home.chipAllRegions": "Todas as Regiões", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Ásia-Pacífico",
     "home.chipAmericas": "Américas", "home.chipAfrica": "África", "home.chipMiddleEast": "Oriente Médio",
-    "home.chipAllStatuses": "Todos os Status", "home.chipDeveloped": "Desenvolvida",
+    "home.chipAllStatuses": "Todos os Status", "home.chipDeveloped": "Desenvolvida", "home.chipNational": "Taxonomia nacional", "home.chipRegional": "Quadro regional",
     "home.chipUnderDevelopment": "Em Desenvolvimento", "home.chipNoTaxonomy": "Sem Taxonomia",
     "home.globalStats": "Estatísticas Globais", "home.totalCountriesTracked": "Total de Países Monitorados",
     "home.recentlyUpdated": "Atualizado Recentemente", "home.askAi": "Perguntar à IA",
@@ -14612,17 +14632,43 @@ document.addEventListener("DOMContentLoaded", gstInit);
 <script>
 /* Global Sustainable Taxonomies — Home / Interactive Map */
 
-const STATUS_LABEL = {
-  established: "Developed",
+/* Four buckets, not three (2026-09, SB본부 review).
+   36 of the 76 countries counted as "Developed" do not have a taxonomy of
+   their own — they are covered by a regional framework (EU 27, UMOA 7, ASEAN
+   2). Showing them in the same green made the spread of taxonomies look wider
+   than it is. `national` and `regional` are therefore separate buckets
+   everywhere: map colour, legend, statistics and the status filter.
+
+   The split is derived from the taxonomy's own name rather than a new data
+   field, so data.js needs no edits. Checked against the dataset: these three
+   labels cover exactly the 36 regional countries and no national one. */
+const REGIONAL_TAXONOMY_LABELS = ["EU Taxonomy", "ASEAN Taxonomy", "UMOA"];
+
+const BUCKET_LABEL = {
+  national: "National taxonomy",
+  regional: "Regional framework",
   developing: "Under Development",
   none: "No Taxonomy"
 };
 
-const STATUS_COLOR = {
-  established: "#15803D",
+const BUCKET_I18N = {
+  national: "home.chipNational",
+  regional: "home.chipRegional",
+  developing: "home.chipUnderDevelopment",
+  none: "home.chipNoTaxonomy"
+};
+
+const BUCKET_COLOR = {
+  national: "#15803D",   /* own taxonomy in force */
+  regional: "#7CC49B",   /* covered by a regional framework only */
   developing: "#D97706",
   none: "#B8C0CC"
 };
+
+function bucketLabel(bucket) {
+  const key = BUCKET_I18N[bucket];
+  return (typeof gstT === "function" && key && gstT(key)) || BUCKET_LABEL[bucket] || bucket;
+}
 
 const GEOJSON_URL = "https://cdn.jsdelivr.net/gh/johan/world.geo.json@master/countries.geo.json";
 const GEOJSON_FALLBACK_URL = "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json";
@@ -14642,6 +14688,16 @@ function getStatus(iso) {
   const entry = getEntry(iso);
   const raw = entry ? entry.status : "none";
   return (raw === "established" || raw === "developing") ? raw : "none";
+}
+
+/* The bucket the map, legend, statistics and filter all work from. Splits
+   `established` into `national` / `regional`; the other two pass through. */
+function getBucket(iso) {
+  const status = getStatus(iso);
+  if (status !== "established") return status === "developing" ? "developing" : "none";
+  const entry = getEntry(iso);
+  const name = (entry && entry.taxonomy) || "";
+  return REGIONAL_TAXONOMY_LABELS.some(l => name.indexOf(l) !== -1) ? "regional" : "national";
 }
 
 // Environmental objective labels are free text and vary a lot between
@@ -14670,9 +14726,9 @@ function entryMatchesSector(entry, sector) {
 
 function matchesFilters(iso) {
   const entry = getEntry(iso);
-  const status = getStatus(iso);
+  const bucket = getBucket(iso);
   const region = entry ? entry.region : null;
-  if (currentStatus !== "All" && status !== currentStatus) return false;
+  if (currentStatus !== "All" && bucket !== currentStatus) return false;
   if (currentRegion !== "All" && region !== currentRegion) return false;
   if (currentObjective !== "All" && !entryMatchesObjective(entry, currentObjective)) return false;
   if (currentSector !== "All" && !entryMatchesSector(entry, currentSector)) return false;
@@ -14680,10 +14736,10 @@ function matchesFilters(iso) {
 }
 
 function styleFeature(feature) {
-  const status = getStatus(feature.id);
+  const bucket = getBucket(feature.id);
   const match = matchesFilters(feature.id);
   return {
-    fillColor: STATUS_COLOR[status],
+    fillColor: BUCKET_COLOR[bucket],
     weight: 0.7,
     color: "#ffffff",
     fillOpacity: match ? 0.9 : 0.12,
@@ -14711,12 +14767,11 @@ function buildPopupHtml(feature) {
   const iso = feature.id;
   const entry = getEntry(iso);
   const name = entry ? entry.name : feature.properties.name;
-  const status = getStatus(iso);
-  const label = STATUS_LABEL[status];
+  const bucket = getBucket(iso);
 
   let html = `<div class="taxo-popup">`;
   html += `<h3>${name}</h3>`;
-  html += `<span class="badge badge-${status}">${label}</span>`;
+  html += `<span class="badge badge-${bucket}">${escapeHtml(bucketLabel(bucket))}</span>`;
   if (entry && entry.taxonomy) {
     html += `<div class="taxo-name">${entry.taxonomy}${entry.year ? " (" + entry.year + ")" : ""}</div>`;
     html += overlayPopupTags(entry);
@@ -14755,7 +14810,7 @@ function onEachFeature(feature, layer) {
 }
 
 function renderStats() {
-  const counts = { established: 0, developing: 0, none: 0 };
+  const counts = { national: 0, regional: 0, developing: 0, none: 0 };
   // Count only countries we actually have a compiled research entry for.
   // The map background (GeoJSON) renders ~180 country shapes total, but most
   // of those have no entry in data.js at all — they're just gray/"No Taxonomy"
@@ -14764,20 +14819,15 @@ function renderStats() {
   // "Total Countries Tracked" with countries we've never actually looked at,
   // which misrepresents how much of the world this site actually covers.
   const isoList = Object.keys(window.TAXONOMY_DATA);
-  isoList.forEach(iso => {
-    const bucket = getStatus(iso);
-    counts[bucket] += 1;
-  });
-  const total = counts.established + counts.developing + counts.none;
+  isoList.forEach(iso => { counts[getBucket(iso)] += 1; });
+  const total = counts.national + counts.regional + counts.developing + counts.none;
 
-  const totalEl = document.getElementById("statTotal");
-  const estEl = document.getElementById("statEstablished");
-  const devEl = document.getElementById("statDeveloping");
-  const noneEl = document.getElementById("statNone");
-  if (totalEl) totalEl.textContent = total;
-  if (estEl) estEl.textContent = counts.established;
-  if (devEl) devEl.textContent = counts.developing;
-  if (noneEl) noneEl.textContent = counts.none;
+  const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  set("statTotal", total);
+  set("statNational", counts.national);
+  set("statRegional", counts.regional);
+  set("statDeveloping", counts.developing);
+  set("statNone", counts.none);
 }
 
 function renderRecentUpdates() {
@@ -14837,11 +14887,6 @@ function renderActiveFilters() {
     return opt ? opt.textContent : value;
   };
 
-  const statusKey = {
-    established: "home.chipDeveloped",
-    developing: "home.chipUnderDevelopment",
-    none: "home.chipNoTaxonomy"
-  };
   const regionKey = {
     "Europe": "home.chipEurope", "Asia-Pacific": "home.chipAsiaPacific",
     "Americas": "home.chipAmericas", "Africa": "home.chipAfrica",
@@ -14850,7 +14895,7 @@ function renderActiveFilters() {
 
   const parts = [];
   if (currentRegion !== "All") parts.push(regionKey[currentRegion] ? t(regionKey[currentRegion]) : currentRegion);
-  if (currentStatus !== "All") parts.push(statusKey[currentStatus] ? t(statusKey[currentStatus]) : (STATUS_LABEL[currentStatus] || currentStatus));
+  if (currentStatus !== "All") parts.push(bucketLabel(currentStatus));
   if (currentObjective !== "All") parts.push(selectedLabel("homeObjectiveSelect", currentObjective));
   if (currentSector !== "All") parts.push(selectedLabel("homeSectorSelect", currentSector));
 
@@ -14891,7 +14936,7 @@ function renderFilteredList() {
     <li>
       <a href="country.html?iso=${iso}" data-iso="${iso}">
         <div class="recent-top"><strong>${entry.name}</strong></div>
-        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${status}">${STATUS_LABEL[status]}</span></div>
+        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${getBucket(iso)}">${escapeHtml(bucketLabel(getBucket(iso)))}</span></div>
       </a>
     </li>`;
   }).join("");
