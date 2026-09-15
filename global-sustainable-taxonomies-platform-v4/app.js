@@ -355,10 +355,14 @@ function setupSearch() {
   const input = document.getElementById("searchInput");
   const results = document.getElementById("searchResults");
 
-  function matchesQuery(entry, name, q) {
+  function matchesQuery(entry, name, q, iso) {
     if (name.toLowerCase().includes(q)) return true;
     if (entry && entry.taxonomy && entry.taxonomy.toLowerCase().includes(q)) return true;
     if (entry && entry.regulator && entry.regulator.toLowerCase().includes(q)) return true;
+    /* The dataset is English-only, so "태국" / "미국" would otherwise miss.
+       gstCountryNameMatches (global.js) checks the country's name in every
+       interface language, plus common short forms. */
+    if (iso && typeof gstCountryNameMatches === "function" && gstCountryNameMatches(iso, q)) return true;
     return false;
   }
 
@@ -372,21 +376,26 @@ function setupSearch() {
       const entry = getEntry(iso);
       const layer = layerByIso[iso];
       const name = entry ? entry.name : layer.feature.properties.name;
-      if (matchesQuery(entry, name, q)) matches.push({ name, iso, layer, entry });
+      if (matchesQuery(entry, name, q, iso)) matches.push({ name, iso, layer, entry });
     });
 
     if (!matches.length) {
-      results.innerHTML = `<div class="search-empty">No matches</div>`;
+      const msg = (typeof gstT === "function" && gstT("search.noMatches")) || "No matches";
+      results.innerHTML = `<div class="search-empty">${msg}</div>`;
     } else {
       matches.slice(0, 8).forEach(m => {
         const div = document.createElement("div");
         div.className = "search-result-item";
-        const sub = m.entry && m.entry.taxonomy ? m.entry.taxonomy : "No taxonomy data";
-        div.innerHTML = `<span class="sr-name">${m.name}</span><span class="sr-sub">${sub}</span>`;
+        const sub = m.entry && m.entry.taxonomy ? m.entry.taxonomy
+          : ((typeof gstT === "function" && gstT("search.noTaxonomyData")) || "No taxonomy data");
+        /* Shows "Thailand (태국)" when the interface language has its own name. */
+        const label = typeof gstCountryDisplayName === "function"
+          ? gstCountryDisplayName(m.iso, m.name) : m.name;
+        div.innerHTML = `<span class="sr-name">${label}</span><span class="sr-sub">${sub}</span>`;
         div.addEventListener("click", () => {
           highlightLayer(m.layer);
           results.classList.remove("show");
-          input.value = m.name;
+          input.value = label;
         });
         results.appendChild(div);
       });
