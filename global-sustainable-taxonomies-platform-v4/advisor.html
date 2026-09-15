@@ -998,6 +998,23 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .advisor-header h1 { font-size: 2rem; margin: 0 0 8px; }
 .advisor-header .lede { max-width: 760px; }
 
+/* Scope-of-the-tool notice. Deliberately a calm bordered note rather than a
+   red warning: it explains the four layers of taxonomy criteria and that this
+   page screens only the first, so it should read as guidance, not an alarm. */
+.advisor-scope-note {
+  max-width: 900px;
+  margin: 14px 0 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+.advisor-scope-note:empty { display: none; }
+
 .advisor-tabs { display: flex; gap: 8px; margin: 18px 0 20px; border-bottom: 1px solid var(--border); }
 .advisor-tab {
   background: none; border: none; border-bottom: 2px solid transparent;
@@ -1844,6 +1861,13 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif;
     <p class="lede" id="advisorPageLede">Describe an economic activity to see how it may align with sustainable finance taxonomies worldwide. Simulated, illustrative analysis — not a substitute for professional or legal compliance advice.</p>
   </div>
 
+  <!-- Scope of this tool. Filled from advisor.js (screeningNotice, 10 languages)
+       so it stays in the reader's language. It states plainly that a taxonomy
+       alignment determination needs all four layers of criteria and that this
+       page screens only the first — added after the SB본부 review flagged that
+       the results read as a formal determination. -->
+  <p class="advisor-scope-note" id="advisorScopeNote"></p>
+
   <div class="advisor-tabs" id="advisorTabs">
     <button class="advisor-tab active" data-mode="compare" type="button">Multi-Country Comparison</button>
     <button class="advisor-tab" data-mode="country" type="button">Country-Specific Advisor</button>
@@ -1904,12 +1928,12 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif;
         <div class="example-cards" id="exampleCards"></div>
       </div>
 
-      <button class="btn-analyze" id="analyzeBtn" type="button">Analyze Compliance</button>
+      <button class="btn-analyze" id="analyzeBtn" type="button">Screen Activity Criteria</button>
     </section>
 
     <section class="advisor-panel advisor-results">
       <div id="resultsEmpty" class="results-empty">
-        <p>Enter an activity description and click <strong>Analyze Compliance</strong> to see results.</p>
+        <p>Enter an activity description and click <strong>Screen Activity Criteria</strong> to see results.</p>
       </div>
       <div id="resultsContent" style="display:none;"></div>
     </section>
@@ -1939,7 +1963,6 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif;
   <span class="footer-references"><a href="about.html#key-resources" data-i18n="footer.references">References</a></span>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* Shared light/dark theme toggle for all pages */
 (function () {
@@ -12438,7 +12461,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Technical Screening Criteria",
     "country.headingAlsoApplies": "Also Applies",
     "country.headingRelatedMedia": "Related Media & Updates",
-    "country.headingAiChat": "AI Compliance Chat",
+    "country.headingAiChat": "Ask AI about this Taxonomy", "home.popupScreening": "Activity Criteria Screening",
     "country.headingCompare": "Compare With Another Taxonomy",
     "country.compareAllCountriesBtn": "Compare All Countries",
     "country.noCountrySelected": "No country selected",
@@ -12591,7 +12614,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Tekniska granskningskriterier",
     "country.headingAlsoApplies": "Gäller även",
     "country.headingRelatedMedia": "Relaterad media och uppdateringar",
-    "country.headingAiChat": "AI-efterlevnadschatt",
+    "country.headingAiChat": "Fråga AI om denna taxonomi", "home.popupScreening": "Granska aktivitetskriterier",
     "country.headingCompare": "Jämför med en annan taxonomi",
     "country.compareAllCountriesBtn": "Jämför alla länder",
     "country.noCountrySelected": "Inget land valt",
@@ -12744,7 +12767,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "기술 심사 기준",
     "country.headingAlsoApplies": "추가 적용 사항",
     "country.headingRelatedMedia": "관련 미디어 및 업데이트",
-    "country.headingAiChat": "AI 컴플라이언스 채팅",
+    "country.headingAiChat": "이 택소노미에 AI 질문하기", "home.popupScreening": "활동 기준 판별",
     "country.headingCompare": "다른 택소노미와 비교",
     "country.compareAllCountriesBtn": "모든 국가 비교",
     "country.noCountrySelected": "선택된 국가 없음",
@@ -12897,7 +12920,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Criterios técnicos de evaluación",
     "country.headingAlsoApplies": "También aplica",
     "country.headingRelatedMedia": "Medios y actualizaciones relacionadas",
-    "country.headingAiChat": "Chat de cumplimiento con IA",
+    "country.headingAiChat": "Pregunte a la IA sobre esta taxonomía", "home.popupScreening": "Evaluar criterios de actividad",
     "country.headingCompare": "Comparar con otra taxonomía",
     "country.compareAllCountriesBtn": "Comparar todos los países",
     "country.noCountrySelected": "Ningún país seleccionado",
@@ -13050,7 +13073,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Critères techniques d'évaluation",
     "country.headingAlsoApplies": "S'applique également",
     "country.headingRelatedMedia": "Médias et mises à jour associés",
-    "country.headingAiChat": "Chat de conformité IA",
+    "country.headingAiChat": "Interroger l'IA sur cette taxonomie", "home.popupScreening": "Évaluer les critères d'activité",
     "country.headingCompare": "Comparer avec une autre taxonomie",
     "country.compareAllCountriesBtn": "Comparer tous les pays",
     "country.noCountrySelected": "Aucun pays sélectionné",
@@ -13203,7 +13226,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Technische Prüfkriterien",
     "country.headingAlsoApplies": "Gilt auch für",
     "country.headingRelatedMedia": "Zugehörige Medien & Updates",
-    "country.headingAiChat": "KI-Compliance-Chat",
+    "country.headingAiChat": "KI zu dieser Taxonomie fragen", "home.popupScreening": "Aktivitätskriterien prüfen",
     "country.headingCompare": "Mit einer anderen Taxonomie vergleichen",
     "country.compareAllCountriesBtn": "Alle Länder vergleichen",
     "country.noCountrySelected": "Kein Land ausgewählt",
@@ -13356,7 +13379,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "技術的審査基準",
     "country.headingAlsoApplies": "その他適用事項",
     "country.headingRelatedMedia": "関連メディア・アップデート",
-    "country.headingAiChat": "AIコンプライアンスチャット",
+    "country.headingAiChat": "このタクソノミーについてAIに質問", "home.popupScreening": "活動基準の判別",
     "country.headingCompare": "他のタクソノミーと比較",
     "country.compareAllCountriesBtn": "すべての国を比較",
     "country.noCountrySelected": "国が選択されていません",
@@ -13509,7 +13532,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "技术筛选标准",
     "country.headingAlsoApplies": "同时适用",
     "country.headingRelatedMedia": "相关媒体与更新",
-    "country.headingAiChat": "AI合规聊天",
+    "country.headingAiChat": "就该分类标准询问 AI", "home.popupScreening": "活动标准判别",
     "country.headingCompare": "与其他分类标准比较",
     "country.compareAllCountriesBtn": "比较所有国家",
     "country.noCountrySelected": "未选择国家",
@@ -13662,7 +13685,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "معايير الفحص الفني",
     "country.headingAlsoApplies": "ينطبق أيضًا",
     "country.headingRelatedMedia": "الوسائط والتحديثات ذات الصلة",
-    "country.headingAiChat": "محادثة الامتثال بالذكاء الاصطناعي",
+    "country.headingAiChat": "اسأل الذكاء الاصطناعي عن هذا التصنيف", "home.popupScreening": "فحص معايير النشاط",
     "country.headingCompare": "مقارنة مع تصنيف آخر",
     "country.compareAllCountriesBtn": "مقارنة جميع الدول",
     "country.noCountrySelected": "لم يتم اختيار دولة",
@@ -13815,7 +13838,7 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Critérios Técnicos de Triagem",
     "country.headingAlsoApplies": "Também se Aplica",
     "country.headingRelatedMedia": "Mídia e Atualizações Relacionadas",
-    "country.headingAiChat": "Chat de Conformidade com IA",
+    "country.headingAiChat": "Pergunte à IA sobre esta taxonomia", "home.popupScreening": "Avaliar critérios de atividade",
     "country.headingCompare": "Comparar com Outra Taxonomia",
     "country.compareAllCountriesBtn": "Comparar Todos os Países",
     "country.noCountrySelected": "Nenhum país selecionado",
@@ -14675,8 +14698,9 @@ const I18N = {
     additionalDocsHeading: "Additional Documentation Likely Required", viewFullProfile: "View Full Country Profile",
     illustrativeNote: "This is an illustrative demonstration, not a substitute for professional or legal compliance advice.",
     promptBeforeAnalyze: "Please describe an activity before analyzing.",
-    emptyPromptCompare: "Enter an activity description and click Analyze Compliance to see results.",
-    analyzeBtn: "Analyze Compliance",
+    emptyPromptCompare: "Enter an activity description and click Screen Activity Criteria to see results.",
+    analyzeBtn: "Screen Activity Criteria",
+    screeningNotice: "A taxonomy alignment determination requires every layer of criteria to be met: not only the activity criteria, but also the technical screening (recognition) criteria, the exclusion criteria ensuring the activity does no significant harm (DNSH) to the other environmental objectives, and the minimum safeguards covering human rights, labour and cultural heritage. This screening should therefore be understood as a first-pass check against the activity criteria alone, and for a formal taxonomy alignment determination we recommend engaging a qualified professional body.",
     docs: ["Technical screening assessment report", "DNSH compliance declaration", "Minimum safeguards / human rights due diligence statement", "Independent third-party verification (where required by the regulator)"],
     coversTemplate: 'Covers "{sector}" under {taxonomy}{year}.',
     resemblesTemplate: 'Activity resembles a "{category}" category commonly covered by taxonomies, but explicit sector coverage is not confirmed in our dataset for {taxonomy}.',
@@ -14689,7 +14713,7 @@ const I18N = {
     pdfCriteria: "Criteria", pdfMet: "Met", pdfNotConfirmedShort: "Not confirmed",
     deepMatchTemplate: "Matches a specific listed activity — \"{activity}\" under {taxonomy}: {criteria}",
     portfolioTabLabel: "Portfolio Comparison", selectActivitiesHeading: "Select the economic activities you invest in",
-    analyzeBtnPortfolio: "Analyze Portfolio", deepMatchBadge: "Explicit activity match", sectorOnlyBadge: "Sector-level match only", noDataBadge: "No detailed data yet",
+    analyzeBtnPortfolio: "Screen Portfolio Activities", deepMatchBadge: "Explicit activity match", sectorOnlyBadge: "Sector-level match only", noDataBadge: "No detailed data yet",
     noDetailedDataTemplate: "Detailed activity-level data is not yet available for {taxonomy} in our dataset — check the official source for the exact scope of coverage.",
     portfolioSummaryTemplate: "Across {total} reviewed jurisdictions, {meets} have documented criteria matching at least one of your {n} selected activities, {partial} show sector-level or partial coverage only, and {none} currently have no taxonomy in place.",
     selectActivitiesPrompt: "Select at least one activity before analyzing.", pdfTitlePortfolio: "AI Taxonomy Advisor — Portfolio Comparison",
@@ -14723,8 +14747,9 @@ const I18N = {
     additionalDocsHeading: "Ytterligare dokumentation som troligen krävs", viewFullProfile: "Visa fullständig landsprofil",
     illustrativeNote: "Detta är en illustrativ demonstration, inte en ersättning för professionell eller juridisk rådgivning om regelefterlevnad.",
     promptBeforeAnalyze: "Beskriv en aktivitet innan du analyserar.",
-    emptyPromptCompare: "Ange en aktivitetsbeskrivning och klicka på Analysera efterlevnad för att se resultat.",
-    analyzeBtn: "Analysera efterlevnad",
+    emptyPromptCompare: "Ange en aktivitetsbeskrivning och klicka på Granska aktivitetskriterier för att se resultat.",
+    analyzeBtn: "Granska aktivitetskriterier",
+    screeningNotice: "Ett fastställande av taxonomiförenlighet kräver att samtliga kriterienivåer uppfylls: inte bara aktivitetskriterierna, utan även de tekniska granskningskriterierna, uteslutningskriterierna som säkerställer att verksamheten inte orsakar betydande skada (DNSH) för övriga miljömål, samt minimiskyddsåtgärderna för mänskliga rättigheter, arbetsvillkor och kulturarv. Denna granskning ska därför förstås som en första kontroll enbart mot aktivitetskriterierna, och för ett formellt fastställande rekommenderar vi att anlita ett kvalificerat fackorgan.",
     docs: ["Teknisk granskningsrapport", "DNSH-efterlevnadsdeklaration", "Redogörelse för minimiskyddsåtgärder / mänskliga rättigheter", "Oberoende tredjepartsverifiering (där det krävs av tillsynsmyndigheten)"],
     coversTemplate: 'Omfattar "{sector}" enligt {taxonomy}{year}.',
     resemblesTemplate: 'Aktiviteten liknar kategorin "{category}" som ofta omfattas av taxonomier, men explicit sektortäckning är inte bekräftad i vårt dataset för {taxonomy}.',
@@ -14737,7 +14762,7 @@ const I18N = {
     pdfCriteria: "Kriterier", pdfMet: "Uppfyllt", pdfNotConfirmedShort: "Ej bekräftat",
     deepMatchTemplate: "Matchar en specifik listad verksamhet — \"{activity}\" enligt {taxonomy}: {criteria}",
     portfolioTabLabel: "Portföljjämförelse", selectActivitiesHeading: "Välj de ekonomiska verksamheter du investerar i",
-    analyzeBtnPortfolio: "Analysera portfölj", deepMatchBadge: "Uttrycklig aktivitetsträff", sectorOnlyBadge: "Endast sektornivåträff", noDataBadge: "Ingen detaljerad data än",
+    analyzeBtnPortfolio: "Granska portföljaktiviteter", deepMatchBadge: "Uttrycklig aktivitetsträff", sectorOnlyBadge: "Endast sektornivåträff", noDataBadge: "Ingen detaljerad data än",
     noDetailedDataTemplate: "Detaljerad aktivitetsdata är ännu inte tillgänglig för {taxonomy} i vårt dataset — kontrollera den officiella källan för exakt omfattning.",
     portfolioSummaryTemplate: "Av {total} granskade jurisdiktioner har {meets} dokumenterade kriterier som matchar minst en av dina {n} valda verksamheter, {partial} visar endast sektornivå- eller partiell täckning, och {none} saknar för närvarande en taxonomi.",
     selectActivitiesPrompt: "Välj minst en verksamhet innan du analyserar.", pdfTitlePortfolio: "AI Taxonomy Advisor — Portföljjämförelse",
@@ -14771,8 +14796,9 @@ const I18N = {
     additionalDocsHeading: "추가로 필요할 수 있는 문서", viewFullProfile: "국가 전체 프로필 보기",
     illustrativeNote: "이는 예시를 위한 시연이며, 전문적이거나 법적인 컴플라이언스 자문을 대체하지 않습니다.",
     promptBeforeAnalyze: "분석하기 전에 활동을 설명해 주세요.",
-    emptyPromptCompare: "활동 설명을 입력하고 '적합성 분석'을 클릭하여 결과를 확인하세요.",
-    analyzeBtn: "적합성 분석",
+    emptyPromptCompare: "활동 설명을 입력하고 '활동 기준 판별'을 클릭하여 결과를 확인하세요.",
+    analyzeBtn: "활동 기준 판별",
+    screeningNotice: "택소노미 적합성 판정은 복합적인 판단기준을 모두 충족해야 이루어집니다. 활동기준뿐 아니라 기술적인 인정기준에 부합해야 하고, 다른 환경목표에 심각한 해를 끼치지 않는(DNSH) 배제기준과 인권·노동·문화재 등 보호기준도 함께 충족해야 합니다. 따라서 본 판별은 1차적인 활동기준 스크리닝 수준으로 이해되어야 하며, 공식적인 택소노미 적합성 판정은 전문기관에 의뢰하기를 권장합니다.",
     docs: ["기술 심사 평가 보고서", "DNSH 준수 선언서", "최소 안전장치 / 인권 실사 진술서", "독립적인 제3자 검증 (규제 기관이 요구하는 경우)"],
     coversTemplate: '{taxonomy}{year}에 따라 "{sector}"을(를) 포함합니다.',
     resemblesTemplate: '이 활동은 택소노미에서 흔히 다루는 "{category}" 범주와 유사하지만, {taxonomy}에 대한 명시적인 부문 적용 범위는 데이터셋에서 확인되지 않았습니다.',
@@ -14785,7 +14811,7 @@ const I18N = {
     pdfCriteria: "기준", pdfMet: "충족", pdfNotConfirmedShort: "미확인",
     deepMatchTemplate: "구체적으로 명시된 활동과 일치합니다 — \"{activity}\" ({taxonomy} 기준): {criteria}",
     portfolioTabLabel: "포트폴리오 비교", selectActivitiesHeading: "투자 중인 경제 활동을 선택하세요",
-    analyzeBtnPortfolio: "포트폴리오 분석", deepMatchBadge: "명시적 활동 일치", sectorOnlyBadge: "부문 수준 일치만 해당", noDataBadge: "아직 상세 데이터 없음",
+    analyzeBtnPortfolio: "포트폴리오 활동 기준 판별", deepMatchBadge: "명시적 활동 일치", sectorOnlyBadge: "부문 수준 일치만 해당", noDataBadge: "아직 상세 데이터 없음",
     noDetailedDataTemplate: "{taxonomy}에 대한 상세 활동 수준 데이터가 아직 데이터셋에 없습니다 — 정확한 적용 범위는 공식 출처를 확인하십시오.",
     portfolioSummaryTemplate: "검토된 {total}개 관할권 중 {meets}개는 선택하신 {n}개 활동 중 하나 이상과 일치하는 문서화된 기준을 보유하고 있으며, {partial}개는 부문 수준 또는 부분적 적용 범위만 나타내고, {none}개는 현재 택소노미가 없습니다.",
     selectActivitiesPrompt: "분석하기 전에 하나 이상의 활동을 선택하세요.", pdfTitlePortfolio: "AI 택소노미 어드바이저 — 포트폴리오 비교",
@@ -14819,8 +14845,9 @@ const I18N = {
     additionalDocsHeading: "Documentación adicional probablemente requerida", viewFullProfile: "Ver perfil completo del país",
     illustrativeNote: "Esta es una demostración ilustrativa, no un sustituto del asesoramiento profesional o legal sobre cumplimiento.",
     promptBeforeAnalyze: "Describa una actividad antes de analizar.",
-    emptyPromptCompare: "Ingrese una descripción de la actividad y haga clic en Analizar cumplimiento para ver los resultados.",
-    analyzeBtn: "Analizar cumplimiento",
+    emptyPromptCompare: "Ingrese una descripción de la actividad y haga clic en Evaluar criterios de actividad para ver los resultados.",
+    analyzeBtn: "Evaluar criterios de actividad",
+    screeningNotice: "Una determinación de alineación con la taxonomía exige cumplir todos los niveles de criterios: no solo los criterios de actividad, sino también los criterios técnicos de selección, los criterios de exclusión que garantizan que la actividad no causa un perjuicio significativo (DNSH) a los demás objetivos medioambientales, y las garantías mínimas relativas a derechos humanos, trabajo y patrimonio cultural. Por tanto, esta evaluación debe entenderse como una primera verificación únicamente frente a los criterios de actividad, y para una determinación formal recomendamos recurrir a un organismo profesional cualificado.",
     docs: ["Informe de evaluación técnica", "Declaración de cumplimiento DNSH", "Declaración de salvaguardias mínimas / debida diligencia en derechos humanos", "Verificación independiente de terceros (cuando lo exija el regulador)"],
     coversTemplate: 'Cubre "{sector}" según {taxonomy}{year}.',
     resemblesTemplate: 'La actividad se asemeja a una categoría de "{category}" comúnmente cubierta por las taxonomías, pero la cobertura sectorial explícita no está confirmada en nuestro conjunto de datos para {taxonomy}.',
@@ -14833,7 +14860,7 @@ const I18N = {
     pdfCriteria: "Criterios", pdfMet: "Cumple", pdfNotConfirmedShort: "No confirmado",
     deepMatchTemplate: "Coincide con una actividad específica listada — \"{activity}\" según {taxonomy}: {criteria}",
     portfolioTabLabel: "Comparación de cartera", selectActivitiesHeading: "Seleccione las actividades económicas en las que invierte",
-    analyzeBtnPortfolio: "Analizar cartera", deepMatchBadge: "Coincidencia explícita de actividad", sectorOnlyBadge: "Coincidencia solo a nivel sectorial", noDataBadge: "Aún sin datos detallados",
+    analyzeBtnPortfolio: "Evaluar actividades de la cartera", deepMatchBadge: "Coincidencia explícita de actividad", sectorOnlyBadge: "Coincidencia solo a nivel sectorial", noDataBadge: "Aún sin datos detallados",
     noDetailedDataTemplate: "Aún no se dispone de datos detallados a nivel de actividad para {taxonomy} en nuestro conjunto de datos — consulte la fuente oficial para conocer el alcance exacto de la cobertura.",
     portfolioSummaryTemplate: "De {total} jurisdicciones revisadas, {meets} cuentan con criterios documentados que coinciden con al menos una de sus {n} actividades seleccionadas, {partial} muestran cobertura solo a nivel sectorial o parcial, y {none} actualmente no tienen taxonomía.",
     selectActivitiesPrompt: "Seleccione al menos una actividad antes de analizar.", pdfTitlePortfolio: "Asesor de Taxonomías IA — Comparación de cartera",
@@ -14867,8 +14894,9 @@ const I18N = {
     additionalDocsHeading: "Documentation supplémentaire probablement requise", viewFullProfile: "Voir le profil complet du pays",
     illustrativeNote: "Il s'agit d'une démonstration illustrative, qui ne remplace pas un conseil professionnel ou juridique en matière de conformité.",
     promptBeforeAnalyze: "Veuillez décrire une activité avant d'analyser.",
-    emptyPromptCompare: "Saisissez une description d'activité et cliquez sur Analyser la conformité pour voir les résultats.",
-    analyzeBtn: "Analyser la conformité",
+    emptyPromptCompare: "Saisissez une description d'activité et cliquez sur Évaluer les critères d'activité pour voir les résultats.",
+    analyzeBtn: "Évaluer les critères d'activité",
+    screeningNotice: "Une détermination d'alignement sur la taxonomie suppose que tous les niveaux de critères soient satisfaits : non seulement les critères d'activité, mais aussi les critères techniques de sélection, les critères d'exclusion garantissant l'absence de préjudice important (DNSH) aux autres objectifs environnementaux, et les garanties minimales relatives aux droits humains, au travail et au patrimoine culturel. Cette évaluation doit donc être comprise comme une première vérification au regard des seuls critères d'activité, et pour une détermination formelle nous recommandons de faire appel à un organisme professionnel qualifié.",
     docs: ["Rapport d'évaluation technique", "Déclaration de conformité DNSH", "Déclaration relative aux garanties minimales / diligence raisonnable en matière de droits humains", "Vérification indépendante par un tiers (lorsque requise par le régulateur)"],
     coversTemplate: 'Couvre "{sector}" en vertu de {taxonomy}{year}.',
     resemblesTemplate: "L'activité ressemble à une catégorie \"{category}\" généralement couverte par les taxonomies, mais la couverture sectorielle explicite n'est pas confirmée dans notre ensemble de données pour {taxonomy}.",
@@ -14881,7 +14909,7 @@ const I18N = {
     pdfCriteria: "Critères", pdfMet: "Conforme", pdfNotConfirmedShort: "Non confirmé",
     deepMatchTemplate: "Correspond à une activité spécifique répertoriée — « {activity} » selon {taxonomy} : {criteria}",
     portfolioTabLabel: "Comparaison de portefeuille", selectActivitiesHeading: "Sélectionnez les activités économiques dans lesquelles vous investissez",
-    analyzeBtnPortfolio: "Analyser le portefeuille", deepMatchBadge: "Correspondance explicite d'activité", sectorOnlyBadge: "Correspondance au niveau sectoriel uniquement", noDataBadge: "Pas encore de données détaillées",
+    analyzeBtnPortfolio: "Évaluer les activités du portefeuille", deepMatchBadge: "Correspondance explicite d'activité", sectorOnlyBadge: "Correspondance au niveau sectoriel uniquement", noDataBadge: "Pas encore de données détaillées",
     noDetailedDataTemplate: "Des données détaillées au niveau de l'activité ne sont pas encore disponibles pour {taxonomy} dans notre ensemble de données — vérifiez la source officielle pour connaître l'étendue exacte de la couverture.",
     portfolioSummaryTemplate: "Sur {total} juridictions examinées, {meets} disposent de critères documentés correspondant à au moins une de vos {n} activités sélectionnées, {partial} présentent une couverture uniquement sectorielle ou partielle, et {none} n'ont actuellement aucune taxonomie.",
     selectActivitiesPrompt: "Sélectionnez au moins une activité avant d'analyser.", pdfTitlePortfolio: "Conseiller IA en Taxonomies — Comparaison de portefeuille",
@@ -14915,8 +14943,9 @@ const I18N = {
     additionalDocsHeading: "Voraussichtlich zusätzlich erforderliche Dokumentation", viewFullProfile: "Vollständiges Länderprofil ansehen",
     illustrativeNote: "Dies ist eine illustrative Demonstration und kein Ersatz für professionelle oder rechtliche Compliance-Beratung.",
     promptBeforeAnalyze: "Bitte beschreiben Sie eine Aktivität, bevor Sie die Analyse starten.",
-    emptyPromptCompare: "Geben Sie eine Aktivitätsbeschreibung ein und klicken Sie auf „Konformität analysieren“, um Ergebnisse zu sehen.",
-    analyzeBtn: "Konformität analysieren",
+    emptyPromptCompare: "Geben Sie eine Aktivitätsbeschreibung ein und klicken Sie auf „Aktivitätskriterien prüfen“, um Ergebnisse zu sehen.",
+    analyzeBtn: "Aktivitätskriterien prüfen",
+    screeningNotice: "Eine Feststellung der Taxonomiekonformität setzt voraus, dass sämtliche Kriterienebenen erfüllt sind: nicht nur die Tätigkeitskriterien, sondern auch die technischen Bewertungskriterien, die Ausschlusskriterien, die sicherstellen, dass die Tätigkeit den übrigen Umweltzielen keinen erheblichen Schaden zufügt (DNSH), sowie die Mindestschutzmaßnahmen für Menschenrechte, Arbeit und Kulturgüter. Diese Prüfung ist daher nur als erste Kontrolle anhand der Tätigkeitskriterien zu verstehen, und für eine förmliche Feststellung empfehlen wir die Beauftragung einer qualifizierten Fachstelle.",
     docs: ["Technischer Bewertungsbericht", "DNSH-Konformitätserklärung", "Erklärung zu Mindestschutzvorkehrungen / Sorgfaltspflicht in Bezug auf Menschenrechte", "Unabhängige Drittverifizierung (sofern von der Aufsichtsbehörde gefordert)"],
     coversTemplate: 'Umfasst „{sector}" gemäß {taxonomy}{year}.',
     resemblesTemplate: 'Die Aktivität ähnelt einer Kategorie „{category}", die häufig von Taxonomien abgedeckt wird, eine explizite Sektorabdeckung ist für {taxonomy} in unserem Datensatz jedoch nicht bestätigt.',
@@ -14929,7 +14958,7 @@ const I18N = {
     pdfCriteria: "Kriterien", pdfMet: "Erfüllt", pdfNotConfirmedShort: "Nicht bestätigt",
     deepMatchTemplate: "Entspricht einer konkret aufgeführten Tätigkeit — \"{activity}\" gemäß {taxonomy}: {criteria}",
     portfolioTabLabel: "Portfoliovergleich", selectActivitiesHeading: "Wählen Sie die wirtschaftlichen Tätigkeiten aus, in die Sie investieren",
-    analyzeBtnPortfolio: "Portfolio analysieren", deepMatchBadge: "Explizite Aktivitätsübereinstimmung", sectorOnlyBadge: "Nur Übereinstimmung auf Sektorebene", noDataBadge: "Noch keine detaillierten Daten",
+    analyzeBtnPortfolio: "Portfolio-Aktivitäten prüfen", deepMatchBadge: "Explizite Aktivitätsübereinstimmung", sectorOnlyBadge: "Nur Übereinstimmung auf Sektorebene", noDataBadge: "Noch keine detaillierten Daten",
     noDetailedDataTemplate: "Detaillierte Daten auf Aktivitätsebene sind für {taxonomy} in unserem Datensatz noch nicht verfügbar — prüfen Sie die offizielle Quelle für den genauen Umfang der Abdeckung.",
     portfolioSummaryTemplate: "Von {total} geprüften Jurisdiktionen verfügen {meets} über dokumentierte Kriterien, die mit mindestens einer Ihrer {n} ausgewählten Aktivitäten übereinstimmen, {partial} zeigen nur eine Abdeckung auf Sektorebene oder teilweise, und {none} haben derzeit keine Taxonomie.",
     selectActivitiesPrompt: "Wählen Sie mindestens eine Aktivität aus, bevor Sie analysieren.", pdfTitlePortfolio: "KI-Taxonomie-Berater — Portfoliovergleich",
@@ -14963,8 +14992,9 @@ const I18N = {
     additionalDocsHeading: "追加で必要となる可能性のある文書", viewFullProfile: "国の詳細プロフィールを見る",
     illustrativeNote: "これは例示的なデモンストレーションであり、専門的または法的なコンプライアンス助言に代わるものではありません。",
     promptBeforeAnalyze: "分析する前に活動内容を入力してください。",
-    emptyPromptCompare: "活動内容を入力し、「コンプライアンス分析」をクリックして結果を確認してください。",
-    analyzeBtn: "コンプライアンス分析",
+    emptyPromptCompare: "活動内容を入力し、「活動基準の判別」をクリックして結果を確認してください。",
+    analyzeBtn: "活動基準の判別",
+    screeningNotice: "タクソノミー適合の判定は、すべての判断基準を満たしてはじめて成立します。活動基準だけでなく、技術的な認定基準に適合し、さらに他の環境目標に重大な害を与えない(DNSH)という除外基準、および人権・労働・文化財などの保護基準も満たす必要があります。したがって本判別は一次的な活動基準スクリーニングの水準として理解されるべきであり、正式なタクソノミー適合判定は専門機関へのご依頼を推奨します。",
     docs: ["技術審査評価報告書", "DNSH遵守宣言書", "最低限のセーフガード／人権デューデリジェンス声明", "独立した第三者による検証（規制当局が求める場合）"],
     coversTemplate: '{taxonomy}{year}のもとで「{sector}」を対象としています。',
     resemblesTemplate: 'この活動はタクソノミーで一般的に対象とされる「{category}」カテゴリーに類似していますが、{taxonomy}における明示的な分野カバレッジは当データセットでは確認されていません。',
@@ -14977,7 +15007,7 @@ const I18N = {
     pdfCriteria: "基準", pdfMet: "適合", pdfNotConfirmedShort: "未確認",
     deepMatchTemplate: "具体的に記載された活動と一致します — 「{activity}」（{taxonomy}に基づく）：{criteria}",
     portfolioTabLabel: "ポートフォリオ比較", selectActivitiesHeading: "投資している経済活動を選択してください",
-    analyzeBtnPortfolio: "ポートフォリオを分析", deepMatchBadge: "明示的な活動一致", sectorOnlyBadge: "分野レベルの一致のみ", noDataBadge: "詳細データはまだありません",
+    analyzeBtnPortfolio: "ポートフォリオ活動の判別", deepMatchBadge: "明示的な活動一致", sectorOnlyBadge: "分野レベルの一致のみ", noDataBadge: "詳細データはまだありません",
     noDetailedDataTemplate: "{taxonomy}の詳細な活動レベルのデータは当データセットにまだありません — 正確な適用範囲は公式情報源をご確認ください。",
     portfolioSummaryTemplate: "検討対象の{total}法域のうち、{meets}法域は選択された{n}件の活動の少なくとも1つと一致する文書化された基準を有しており、{partial}法域は分野レベルまたは部分的な適用範囲のみを示し、{none}法域には現在タクソノミーがありません。",
     selectActivitiesPrompt: "分析する前に少なくとも1つの活動を選択してください。", pdfTitlePortfolio: "AIタクソノミー・アドバイザー — ポートフォリオ比較",
@@ -15011,8 +15041,9 @@ const I18N = {
     additionalDocsHeading: "可能需要的其他文件", viewFullProfile: "查看完整国家概况",
     illustrativeNote: "这是一个示例性演示，不能替代专业或法律合规建议。",
     promptBeforeAnalyze: "请在分析前描述一项活动。",
-    emptyPromptCompare: "输入活动描述并点击「分析合规性」以查看结果。",
-    analyzeBtn: "分析合规性",
+    emptyPromptCompare: "输入活动描述并点击「活动标准判别」以查看结果。",
+    analyzeBtn: "活动标准判别",
+    screeningNotice: "分类标准符合性判定需要同时满足全部判断标准：不仅是活动标准，还须符合技术性的认定标准，以及确保不对其他环境目标造成重大损害（DNSH）的排除标准，和涵盖人权、劳工、文化遗产等的保护标准。因此本判别应理解为仅针对活动标准的初步筛查，正式的分类标准符合性判定建议委托专业机构进行。",
     docs: ["技术筛选评估报告", "DNSH 合规声明", "最低限度保障措施／人权尽职调查声明", "独立第三方核查（如监管机构要求）"],
     coversTemplate: '根据{taxonomy}{year}，涵盖"{sector}"。',
     resemblesTemplate: '该活动类似于分类标准通常涵盖的"{category}"类别，但我们的数据集中尚未确认{taxonomy}对该行业的明确覆盖。',
@@ -15025,7 +15056,7 @@ const I18N = {
     pdfCriteria: "标准", pdfMet: "符合", pdfNotConfirmedShort: "未确认",
     deepMatchTemplate: "与具体列出的活动相匹配 — “{activity}”（依据{taxonomy}）：{criteria}",
     portfolioTabLabel: "投资组合比较", selectActivitiesHeading: "选择您所投资的经济活动",
-    analyzeBtnPortfolio: "分析投资组合", deepMatchBadge: "明确活动匹配", sectorOnlyBadge: "仅行业层面匹配", noDataBadge: "尚无详细数据",
+    analyzeBtnPortfolio: "投资组合活动判别", deepMatchBadge: "明确活动匹配", sectorOnlyBadge: "仅行业层面匹配", noDataBadge: "尚无详细数据",
     noDetailedDataTemplate: "我们的数据集中尚无{taxonomy}的详细活动层面数据 — 请查阅官方来源以了解确切的覆盖范围。",
     portfolioSummaryTemplate: "在审查的{total}个司法辖区中，{meets}个拥有与您所选{n}项活动中至少一项相匹配的书面标准，{partial}个仅显示行业层面或部分覆盖，{none}个目前尚无分类标准。",
     selectActivitiesPrompt: "请至少选择一项活动后再进行分析。", pdfTitlePortfolio: "AI 分类标准顾问 — 投资组合比较",
@@ -15059,8 +15090,9 @@ const I18N = {
     additionalDocsHeading: "وثائق إضافية قد تكون مطلوبة", viewFullProfile: "عرض الملف الكامل للبلد",
     illustrativeNote: "هذا عرض توضيحي، وليس بديلاً عن الاستشارة المهنية أو القانونية بشأن الامتثال.",
     promptBeforeAnalyze: "يُرجى وصف نشاط قبل التحليل.",
-    emptyPromptCompare: "أدخل وصف النشاط وانقر على تحليل الامتثال لعرض النتائج.",
-    analyzeBtn: "تحليل الامتثال",
+    emptyPromptCompare: "أدخل وصف النشاط وانقر على فحص معايير النشاط لعرض النتائج.",
+    analyzeBtn: "فحص معايير النشاط",
+    screeningNotice: "يتطلب تحديد التوافق مع التصنيف استيفاء جميع مستويات المعايير: ليس معايير النشاط فحسب، بل أيضاً معايير الفحص التقني، ومعايير الاستبعاد التي تضمن عدم إلحاق ضرر جسيم (DNSH) بالأهداف البيئية الأخرى، والضمانات الدنيا المتعلقة بحقوق الإنسان والعمل والتراث الثقافي. لذا ينبغي فهم هذا الفحص على أنه تدقيق أولي مقابل معايير النشاط وحدها، ونوصي بالاستعانة بجهة مهنية مؤهلة للحصول على تحديد رسمي.",
     docs: ["تقرير التقييم الفني", "إقرار الامتثال لمبدأ عدم الإضرار الجسيم (DNSH)", "إقرار الضمانات الدنيا / العناية الواجبة بحقوق الإنسان", "تحقق مستقل من طرف ثالث (عند طلب الجهة الرقابية ذلك)"],
     coversTemplate: 'يغطي "{sector}" بموجب {taxonomy}{year}.',
     resemblesTemplate: 'يشبه هذا النشاط فئة "{category}" التي تغطيها التصنيفات عادةً، لكن التغطية القطاعية الصريحة غير مؤكدة في مجموعة بياناتنا لـ {taxonomy}.',
@@ -15073,7 +15105,7 @@ const I18N = {
     pdfCriteria: "المعايير", pdfMet: "مستوفٍ", pdfNotConfirmedShort: "غير مؤكد",
     deepMatchTemplate: "يطابق نشاطًا محددًا مدرجًا — \"{activity}\" بموجب {taxonomy}: {criteria}",
     portfolioTabLabel: "مقارنة المحفظة", selectActivitiesHeading: "اختر الأنشطة الاقتصادية التي تستثمر فيها",
-    analyzeBtnPortfolio: "تحليل المحفظة", deepMatchBadge: "تطابق صريح للنشاط", sectorOnlyBadge: "تطابق على مستوى القطاع فقط", noDataBadge: "لا توجد بيانات تفصيلية بعد",
+    analyzeBtnPortfolio: "فحص أنشطة المحفظة", deepMatchBadge: "تطابق صريح للنشاط", sectorOnlyBadge: "تطابق على مستوى القطاع فقط", noDataBadge: "لا توجد بيانات تفصيلية بعد",
     noDetailedDataTemplate: "لا تتوفر بيانات تفصيلية على مستوى النشاط لـ {taxonomy} في مجموعة بياناتنا بعد — يُرجى مراجعة المصدر الرسمي لمعرفة نطاق التغطية بدقة.",
     portfolioSummaryTemplate: "من بين {total} ولاية قضائية تمت مراجعتها، لدى {meets} معايير موثقة تطابق واحدًا على الأقل من أنشطتك المختارة البالغ عددها {n}، بينما تُظهر {partial} تغطية على مستوى القطاع أو جزئية فقط، ولا تملك {none} حاليًا أي تصنيف.",
     selectActivitiesPrompt: "اختر نشاطًا واحدًا على الأقل قبل التحليل.", pdfTitlePortfolio: "مستشار التصنيف بالذكاء الاصطناعي — مقارنة المحفظة",
@@ -15107,8 +15139,9 @@ const I18N = {
     additionalDocsHeading: "Documentação Adicional Provavelmente Necessária", viewFullProfile: "Ver Perfil Completo do País",
     illustrativeNote: "Esta é uma demonstração ilustrativa, não um substituto para aconselhamento profissional ou jurídico sobre conformidade.",
     promptBeforeAnalyze: "Descreva uma atividade antes de analisar.",
-    emptyPromptCompare: "Insira uma descrição da atividade e clique em Analisar Conformidade para ver os resultados.",
-    analyzeBtn: "Analisar Conformidade",
+    emptyPromptCompare: "Insira uma descrição da atividade e clique em Avaliar critérios de atividade para ver os resultados.",
+    analyzeBtn: "Avaliar critérios de atividade",
+    screeningNotice: "Uma determinação de alinhamento com a taxonomia exige o cumprimento de todos os níveis de critérios: não apenas os critérios de atividade, mas também os critérios técnicos de seleção, os critérios de exclusão que asseguram que a atividade não causa dano significativo (DNSH) aos demais objetivos ambientais, e as salvaguardas mínimas relativas a direitos humanos, trabalho e património cultural. Esta avaliação deve, portanto, ser entendida como uma primeira verificação apenas face aos critérios de atividade, e para uma determinação formal recomendamos recorrer a um organismo profissional qualificado.",
     docs: ["Relatório de avaliação técnica", "Declaração de conformidade DNSH", "Declaração de salvaguardas mínimas / diligência em direitos humanos", "Verificação independente por terceiros (quando exigido pelo regulador)"],
     coversTemplate: 'Cobre "{sector}" sob {taxonomy}{year}.',
     resemblesTemplate: 'A atividade se assemelha a uma categoria "{category}" comumente coberta por taxonomias, mas a cobertura setorial explícita não está confirmada em nosso conjunto de dados para {taxonomy}.',
@@ -15121,7 +15154,7 @@ const I18N = {
     pdfCriteria: "Critérios", pdfMet: "Atendido", pdfNotConfirmedShort: "Não confirmado",
     deepMatchTemplate: "Corresponde a uma atividade específica listada — \"{activity}\" sob {taxonomy}: {criteria}",
     portfolioTabLabel: "Comparação de Portfólio", selectActivitiesHeading: "Selecione as atividades econômicas em que você investe",
-    analyzeBtnPortfolio: "Analisar Portfólio", deepMatchBadge: "Correspondência explícita de atividade", sectorOnlyBadge: "Correspondência apenas no nível setorial", noDataBadge: "Ainda sem dados detalhados",
+    analyzeBtnPortfolio: "Avaliar atividades da carteira", deepMatchBadge: "Correspondência explícita de atividade", sectorOnlyBadge: "Correspondência apenas no nível setorial", noDataBadge: "Ainda sem dados detalhados",
     noDetailedDataTemplate: "Dados detalhados em nível de atividade ainda não estão disponíveis para {taxonomy} em nosso conjunto de dados — verifique a fonte oficial para o escopo exato da cobertura.",
     portfolioSummaryTemplate: "Entre {total} jurisdições revisadas, {meets} têm critérios documentados que correspondem a pelo menos uma de suas {n} atividades selecionadas, {partial} mostram apenas cobertura setorial ou parcial, e {none} atualmente não têm taxonomia.",
     selectActivitiesPrompt: "Selecione pelo menos uma atividade antes de analisar.", pdfTitlePortfolio: "Consultor de IA em Taxonomias — Comparação de Portfólio",
@@ -15210,6 +15243,7 @@ function applyStaticI18n() {
   const chatSendBtn = byId("chatSendBtn");
   if (chatSendBtn) chatSendBtn.textContent = t("sendBtn");
 
+  if (byId("advisorScopeNote")) byId("advisorScopeNote").textContent = t("screeningNotice");
   document.getElementById("analyzeBtn").textContent = currentMode === "portfolio" ? t("analyzeBtnPortfolio") : t("analyzeBtn");
 }
 
@@ -15419,7 +15453,11 @@ const BUCKET_ORDER = { meets: 0, partial: 1, none: 2 };
 
 function renderExampleCards() {
   const wrap = document.getElementById("exampleCards");
-  const list = EXAMPLES[currentMode];
+  /* Portfolio mode has no example queries (its input is a checklist), so
+     EXAMPLES has no entry for it. Without this fallback the function threw,
+     which aborted setMode() before resetResults() and left the previous
+     mode's results on screen under the new tab. */
+  const list = EXAMPLES[currentMode] || [];
   wrap.innerHTML = "";
   list.forEach(q => {
     const btn = document.createElement("button");
@@ -15589,13 +15627,12 @@ function runPortfolioAnalysis() {
     html += `</div>`;
   });
 
-  html += `<div class="results-actions" style="margin-top:16px;"><button class="btn-secondary" id="exportBtn">${t("exportBtn")}</button><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;
+  html += `<div class="results-actions" style="margin-top:16px;"><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;
 
   resultsEl.innerHTML = html;
   resultsEl.style.display = "block";
   emptyEl.style.display = "none";
 
-  document.getElementById("exportBtn").addEventListener("click", () => exportPortfolioPdf(perCountry, activities, summaryText));
   document.getElementById("shareBtn").addEventListener("click", () => shareResults());
 }
 
@@ -15691,13 +15728,12 @@ function runCompareAnalysis() {
   });
 
   html += `<div class="ai-summary-box"><h3>${t("aiSummaryHeading")}</h3><p>${summaryText}</p></div>`;
-  html += `<div class="results-actions"><button class="btn-secondary" id="exportBtn">${t("exportBtn")}</button><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;
+  html += `<div class="results-actions"><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;
 
   resultsEl.innerHTML = html;
   resultsEl.style.display = "block";
   emptyEl.style.display = "none";
 
-  document.getElementById("exportBtn").addEventListener("click", () => exportComparePdf(rows, text, sector, summaryText));
   document.getElementById("shareBtn").addEventListener("click", () => shareResults());
 }
 
@@ -15757,197 +15793,19 @@ function runCountryAnalysis() {
   html += `<a class="btn-secondary" href="country.html?iso=${iso}&from=advisor&amode=${currentMode}${backQ}" target="_blank" rel="noopener">${t("viewFullProfile")}</a>`;
   html += `</div>`;
 
-  html += `<div class="results-actions" style="margin-top:16px;"><button class="btn-secondary" id="exportBtn">${t("exportBtn")}</button><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;
+  html += `<div class="results-actions" style="margin-top:16px;"><button class="btn-secondary" id="shareBtn">${t("shareBtn")}</button></div>`;
 
   resultsEl.innerHTML = html;
   resultsEl.style.display = "block";
   emptyEl.style.display = "none";
 
-  document.getElementById("exportBtn").addEventListener("click", () => exportCountryPdf(name, result, criteria, docs));
   document.getElementById("shareBtn").addEventListener("click", () => shareResults());
 }
 
-/* ---------- PDF export (jsPDF, loaded via CDN in advisor.template.html) ---------- */
-
-function getJsPdf() {
-  return (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : null;
-}
-
-function addWrappedText(doc, text, x, y, maxWidth, lineHeight) {
-  const lines = doc.splitTextToSize(text, maxWidth);
-  const pageHeight = doc.internal.pageSize.getHeight();
-  lines.forEach(line => {
-    if (y > pageHeight - 20) {
-      doc.addPage();
-      y = 20;
-    }
-    doc.text(line, x, y);
-    y += lineHeight;
-  });
-  return y;
-}
-
-function exportComparePdf(rows, text, sector, summaryText) {
-  const JsPDF = getJsPdf();
-  if (!JsPDF) { alert("PDF export library failed to load — check your internet connection and try again."); return; }
-  const doc = new JsPDF({ unit: "pt", format: "a4" });
-  const marginX = 40;
-  let y = 50;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.text(t("pdfTitleCompare"), marginX, y);
-  y += 26;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  y = addWrappedText(doc, `${t("pdfActivity")}: ${text}`, marginX, y, 515, 14);
-  if (sector) y = addWrappedText(doc, `${t("pdfSector")}: ${sectorLabel(sector)}`, marginX, y, 515, 14);
-  y = addWrappedText(doc, `${t("pdfRegionFilter")}: ${currentRegionFilter}`, marginX, y, 515, 14);
-  y += 8;
-
-  doc.setFontSize(9);
-  doc.setTextColor(120);
-  y = addWrappedText(doc, t("compareDisclaimer"), marginX, y, 515, 12);
-  doc.setTextColor(0);
-  y += 10;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text(t("colJurisdiction"), marginX, y);
-  doc.text(t("colStatus"), marginX + 140, y);
-  doc.text(t("colKeyCriterion"), marginX + 220, y);
-  y += 6;
-  doc.setLineWidth(0.5);
-  doc.line(marginX, y, 555, y);
-  y += 14;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(9);
-  rows.forEach(r => {
-    const startY = y;
-    const nameLines = doc.splitTextToSize(r.entry.name, 130);
-    const critLines = doc.splitTextToSize(r.criterion, 300);
-    const rowHeight = Math.max(nameLines.length, critLines.length, 1) * 12;
-    if (y + rowHeight > doc.internal.pageSize.getHeight() - 30) { doc.addPage(); y = 40; }
-    doc.text(nameLines, marginX, y);
-    doc.text(bucketLabel(r.bucket), marginX + 140, y);
-    doc.text(critLines, marginX + 220, y);
-    y += rowHeight + 6;
-  });
-
-  y += 10;
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  if (y > doc.internal.pageSize.getHeight() - 60) { doc.addPage(); y = 40; }
-  doc.text(t("aiSummaryHeading"), marginX, y);
-  y += 16;
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  addWrappedText(doc, summaryText, marginX, y, 515, 14);
-
-  doc.save("taxonomy-advisor-comparison.pdf");
-}
-
-function exportCountryPdf(name, result, criteria, docs) {
-  const JsPDF = getJsPdf();
-  if (!JsPDF) { alert("PDF export library failed to load — check your internet connection and try again."); return; }
-  const doc = new JsPDF({ unit: "pt", format: "a4" });
-  const marginX = 40;
-  let y = 50;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.text(t("pdfTitleCountry"), marginX, y);
-  y += 26;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  y = addWrappedText(doc, `${t("pdfCountry")}: ${name}`, marginX, y, 515, 14);
-  y = addWrappedText(doc, `${t("pdfResult")}: ${bucketLabel(result.bucket)}`, marginX, y, 515, 14);
-  y = addWrappedText(doc, result.criterion, marginX, y, 515, 14);
-  y += 8;
-
-  doc.setFontSize(9);
-  doc.setTextColor(120);
-  y = addWrappedText(doc, t("countryDisclaimer"), marginX, y, 515, 12);
-  doc.setTextColor(0);
-  y += 10;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  doc.text(t("pdfCriteria"), marginX, y);
-  y += 16;
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  criteria.forEach(c => {
-    const statusWord = c.met ? t("pdfMet") : t("pdfNotConfirmedShort");
-    y = addWrappedText(doc, `• ${c.label} — ${statusWord}: ${c.note}`, marginX, y, 515, 13);
-    y += 4;
-  });
-
-  y += 8;
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  if (y > doc.internal.pageSize.getHeight() - 60) { doc.addPage(); y = 40; }
-  doc.text(t("additionalDocsHeading"), marginX, y);
-  y += 16;
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  docs.forEach(d => { y = addWrappedText(doc, `• ${d}`, marginX, y, 515, 13); });
-
-  doc.save("taxonomy-advisor-assessment.pdf");
-}
-
-function exportPortfolioPdf(perCountry, activities, summaryText) {
-  const JsPDF = getJsPdf();
-  if (!JsPDF) { alert("PDF export library failed to load — check your internet connection and try again."); return; }
-  const doc = new JsPDF({ unit: "pt", format: "a4" });
-  const marginX = 40;
-  let y = 50;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.text(t("pdfTitlePortfolio"), marginX, y);
-  y += 26;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  y = addWrappedText(doc, `${t("pdfActivities")}: ${activities.map(a => a.label).join(", ")}`, marginX, y, 515, 14);
-  y = addWrappedText(doc, `${t("pdfRegionFilter")}: ${currentRegionFilter}`, marginX, y, 515, 14);
-  y += 8;
-
-  doc.setFontSize(9);
-  doc.setTextColor(120);
-  y = addWrappedText(doc, t("compareDisclaimer"), marginX, y, 515, 12);
-  doc.setTextColor(0);
-  y += 10;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  doc.text(t("aiSummaryHeading"), marginX, y);
-  y += 16;
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  y = addWrappedText(doc, summaryText, marginX, y, 515, 14);
-  y += 10;
-
-  perCountry.forEach(c => {
-    if (y > doc.internal.pageSize.getHeight() - 80) { doc.addPage(); y = 40; }
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    y = addWrappedText(doc, `${c.entry.name} — ${bucketLabel(c.bestBucket)}`, marginX, y, 515, 14);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    c.activityResults.forEach(r => {
-      const statusWord = r.deep ? t("deepMatchBadge") : r.thinData ? t("noDataBadge") : r.bucket === "none" ? t("doesNotMeet") : t("sectorOnlyBadge");
-      y = addWrappedText(doc, `• ${r.activity.label} (${statusWord}): ${r.criterion}`, marginX, y, 515, 12);
-    });
-    y += 8;
-  });
-
-  doc.save("taxonomy-advisor-portfolio.pdf");
-}
+/* PDF export removed 2026-09: a "Country-Specific Assessment" PDF read as a
+   formal determination, but the underlying analysis is a keyword screen of
+   the activity criteria only. Sharing a link (below) keeps the on-screen
+   caveats attached to the result. */
 
 function shareResults() {
   const params = new URLSearchParams(window.location.search);
