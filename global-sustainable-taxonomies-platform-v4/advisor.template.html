@@ -60,6 +60,13 @@
     <p class="lede" id="advisorPageLede">Describe an economic activity to see how it may align with sustainable finance taxonomies worldwide. Simulated, illustrative analysis — not a substitute for professional or legal compliance advice.</p>
   </div>
 
+  <!-- Scope of this tool. Filled from advisor.js (screeningNotice, 10 languages)
+       so it stays in the reader's language. It states plainly that a taxonomy
+       alignment determination needs all four layers of criteria and that this
+       page screens only the first — added after the SB본부 review flagged that
+       the results read as a formal determination. -->
+  <p class="advisor-scope-note" id="advisorScopeNote"></p>
+
   <div class="advisor-tabs" id="advisorTabs">
     <button class="advisor-tab active" data-mode="compare" type="button">Multi-Country Comparison</button>
     <button class="advisor-tab" data-mode="country" type="button">Country-Specific Advisor</button>
@@ -120,12 +127,12 @@
         <div class="example-cards" id="exampleCards"></div>
       </div>
 
-      <button class="btn-analyze" id="analyzeBtn" type="button">Analyze Compliance</button>
+      <button class="btn-analyze" id="analyzeBtn" type="button">Screen Activity Criteria</button>
     </section>
 
     <section class="advisor-panel advisor-results">
       <div id="resultsEmpty" class="results-empty">
-        <p>Enter an activity description and click <strong>Analyze Compliance</strong> to see results.</p>
+        <p>Enter an activity description and click <strong>Screen Activity Criteria</strong> to see results.</p>
       </div>
       <div id="resultsContent" style="display:none;"></div>
     </section>
@@ -155,7 +162,6 @@
   <span class="footer-references"><a href="about.html#key-resources" data-i18n="footer.references">References</a></span>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="theme.js"></script>
 <script src="data.js"></script>
 <script src="global.js"></script>

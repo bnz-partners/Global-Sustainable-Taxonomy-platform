@@ -982,6 +982,23 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .advisor-header h1 { font-size: 2rem; margin: 0 0 8px; }
 .advisor-header .lede { max-width: 760px; }
 
+/* Scope-of-the-tool notice. Deliberately a calm bordered note rather than a
+   red warning: it explains the four layers of taxonomy criteria and that this
+   page screens only the first, so it should read as guidance, not an alarm. */
+.advisor-scope-note {
+  max-width: 900px;
+  margin: 14px 0 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+.advisor-scope-note:empty { display: none; }
+
 .advisor-tabs { display: flex; gap: 8px; margin: 18px 0 20px; border-bottom: 1px solid var(--border); }
 .advisor-tab {
   background: none; border: none; border-bottom: 2px solid transparent;

@@ -117,7 +117,10 @@ function buildPopupHtml(feature) {
   }
   html += `<div class="taxo-actions">`;
   html += `<a class="btn-primary" href="country.html?iso=${iso}">View Full Taxonomy</a>`;
-  html += `<a class="btn-secondary-sm" href="advisor.html?mode=country&amp;iso=${iso}">AI Compliance Check</a>`;
+  /* Renamed from "AI Compliance Check" (2026-09): the tool screens the
+     activity criteria only, so "Compliance Check" overstated what it does. */
+  const screenLabel = (typeof gstT === "function" && gstT("home.popupScreening")) || "Activity Criteria Screening";
+  html += `<a class="btn-secondary-sm" href="advisor.html?mode=country&amp;iso=${iso}">${screenLabel}</a>`;
   html += `</div></div>`;
   return html;
 }
@@ -459,7 +462,13 @@ async function init() {
        and fitting it wasted about a third of the height on empty polar ocean,
        shrinking every country. The southernmost country in the dataset is
        around -55°, so -58° keeps them all. */
-    map.fitBounds(L.latLngBounds([[-58, -180], [84, 180]]), { padding: [6, 6] });
+    /* animate:false matters. With the default animated path this initial
+       fitBounds silently did nothing — the map stayed on the setView() zoom
+       above and the world kept rendering at 512px. Verified on the live site:
+       the identical call with animate:false applies the fitted zoom. It is
+       also the right behaviour for a first paint — there is nothing to
+       animate from. */
+    map.fitBounds(L.latLngBounds([[-58, -180], [84, 180]]), { padding: [6, 6], animate: false });
   } else {
     document.getElementById("map").innerHTML =
       '<p style="padding:20px;color:#B8433F;">Could not load world map data (check your internet connection) — please reload the page.</p>';
