@@ -516,8 +516,15 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   display: flex;
   gap: 20px;
   align-items: flex-start;
-  max-width: 1240px;
-  margin: 28px auto 0;
+  /* 2026-09: the map was capped by .page (1080px), not by the 1240px below,
+     so raising #map's height alone only added empty ocean — Leaflet fits the
+     world to the narrower side. The row now breaks out of .page and centres
+     itself on the viewport, which is what actually makes the continents
+     bigger. Only this row breaks out; everything else on the page keeps its
+     1080px column. */
+  width: calc(100vw - 56px);
+  max-width: 1340px;
+  margin: 28px 0 0 calc((100% - min(1340px, 100vw - 56px)) / 2);
   padding: 0 4px;
 }
 .map-frame {
@@ -530,7 +537,10 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .map-frame-main { flex: 0 0 70%; }
 #map {
   width: 100%;
-  height: 560px;
+  /* 2026-09: enlarged ~30% at the user's request (was 560px). The width is
+     set by .map-frame-main's 70% share, so height is the lever that grows
+     the map without squeezing the Global Stats sidebar beside it. */
+  height: 730px;
   border-radius: 14px;
   background: var(--bg-soft);
 }
@@ -1435,7 +1445,8 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 @media (max-width: 900px) {
   .topnav-links { display: none; }
   .hero-dark h1 { font-size: 1.7rem; }
-  .map-layout { flex-direction: column; }
+  /* Narrow screens: no room to break out, so stay inside the page column. */
+  .map-layout { flex-direction: column; width: 100%; max-width: none; margin-left: 0; }
   .map-frame-main { flex: 1 1 auto; width: 100%; }
   .stats-sidebar { width: 100%; }
   .summary-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1447,7 +1458,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   .featured-card { grid-template-columns: 1fr; }
   .media-grid { grid-template-columns: 1fr; }
   .charts-section { grid-template-columns: 1fr; }
-  #map { height: 360px; }
+  #map { height: 470px; }   /* mobile/tablet — same ~30% increase as desktop */
   .team-grid { grid-template-columns: 1fr; }
   .bnz-section { flex-direction: column; align-items: center; text-align: center; }
   .contact-cta-inner { flex-direction: column; text-align: center; }
