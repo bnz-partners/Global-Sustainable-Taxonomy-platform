@@ -378,6 +378,18 @@ function setupSearch() {
       const name = entry ? entry.name : layer.feature.properties.name;
       if (matchesQuery(entry, name, q, iso)) matches.push({ name, iso, layer, entry });
     });
+    /* Search the whole dataset, not only what the map can draw. The world
+       GeoJSON has no polygon for 29 of the 196 jurisdictions — Singapore,
+       Hong Kong, Bahrain, Mauritius, Maldives, the microstates and the small
+       island states — so they were unfindable here in every language. They
+       have no shape to highlight, so their result opens the country page. */
+    Object.keys(window.TAXONOMY_DATA || {}).forEach(iso => {
+      if (layerByIso[iso]) return;
+      const entry = getEntry(iso);
+      if (!entry) return;
+      const name = entry.name || iso;
+      if (matchesQuery(entry, name, q, iso)) matches.push({ name, iso, layer: null, entry });
+    });
 
     if (!matches.length) {
       const msg = (typeof gstT === "function" && gstT("search.noMatches")) || "No matches";
@@ -393,6 +405,7 @@ function setupSearch() {
           ? gstCountryDisplayName(m.iso, m.name) : m.name;
         div.innerHTML = `<span class="sr-name">${label}</span><span class="sr-sub">${sub}</span>`;
         div.addEventListener("click", () => {
+          if (!m.layer) { window.location.href = `country.html?iso=${m.iso}`; return; }
           highlightLayer(m.layer);
           results.classList.remove("show");
           input.value = label;
