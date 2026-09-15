@@ -853,6 +853,16 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
+/* "Alternative approach" tag: a neutral outline, not a status colour — it sits
+   next to the grey No-Taxonomy badge and qualifies it rather than replacing it. */
+.badge-alt {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-muted);
+  margin-left: 6px;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+}
 [data-theme="dark"] .badge-established,
 [data-theme="dark"] .badge-national { color: #4ADE80; }
 [data-theme="dark"] .badge-regional { color: #8FE0B4; }

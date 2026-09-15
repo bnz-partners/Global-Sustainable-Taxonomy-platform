@@ -33,6 +33,36 @@ const BUCKET_COLOR = {
   none: "#B8C0CC"
 };
 
+/* Jurisdictions with no taxonomy that have deliberately chosen a different
+   instrument to do the same steering job. They stay grey — no new bucket —
+   but carry a tag so the map does not read them as simply doing nothing.
+   Kept deliberately narrow: every entry below says so in its own data note.
+   Countries that merely lack a taxonomy, or that have a green-bond issuance
+   framework which does not classify activities, are NOT listed. */
+const ALT_APPROACH_ISOS = {
+  JPN: true,   /* Basic Guidelines on Climate Transition Finance (METI) */
+  GBR: true,   /* taxonomy dropped Jul 2025 in favour of transition-plan rules */
+  CHE: true,   /* EU-Taxonomy interoperability + industry self-regulation */
+  USA: true    /* disclosure-based approach instead of a classification */
+};
+
+function hasAltApproach(iso) {
+  return !!ALT_APPROACH_ISOS[iso] && getBucket(iso) === "none";
+}
+
+function altApproachTag(iso) {
+  if (!hasAltApproach(iso)) return "";
+  const entry = getEntry(iso);
+  const label = (typeof gstT === "function" && gstT("home.altApproach")) || "Alternative approach";
+  const tip = entry && entry.note ? ` title="${escapeAttrApp(entry.note)}"` : "";
+  return `<span class="badge badge-sm badge-alt"${tip}>${escapeHtml(label)}</span>`;
+}
+
+function escapeAttrApp(v) {
+  return String(v || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 function bucketLabel(bucket) {
   const key = BUCKET_I18N[bucket];
   return (typeof gstT === "function" && key && gstT(key)) || BUCKET_LABEL[bucket] || bucket;
@@ -140,6 +170,7 @@ function buildPopupHtml(feature) {
   let html = `<div class="taxo-popup">`;
   html += `<h3>${name}</h3>`;
   html += `<span class="badge badge-${bucket}">${escapeHtml(bucketLabel(bucket))}</span>`;
+  html += altApproachTag(iso);
   if (entry && entry.taxonomy) {
     html += `<div class="taxo-name">${entry.taxonomy}${entry.year ? " (" + entry.year + ")" : ""}</div>`;
     html += overlayPopupTags(entry);
@@ -304,7 +335,7 @@ function renderFilteredList() {
     <li>
       <a href="country.html?iso=${iso}" data-iso="${iso}">
         <div class="recent-top"><strong>${entry.name}</strong></div>
-        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${getBucket(iso)}">${escapeHtml(bucketLabel(getBucket(iso)))}</span></div>
+        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${getBucket(iso)}">${escapeHtml(bucketLabel(getBucket(iso)))}</span>${altApproachTag(iso)}</div>
       </a>
     </li>`;
   }).join("");

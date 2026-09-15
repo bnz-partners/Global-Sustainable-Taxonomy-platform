@@ -17,6 +17,17 @@ function getStatusLabel(status) {
    not load app.js. */
 const REGIONAL_TAXONOMY_LABELS = ["EU Taxonomy", "ASEAN Taxonomy", "UMOA"];
 
+/* Mirrors ALT_APPROACH_ISOS in app.js — jurisdictions with no taxonomy that
+   deliberately run a different instrument in its place. They keep the grey
+   "No Taxonomy" badge; this only adds a tag beside it. */
+const ALT_APPROACH_ISOS = { JPN: true, GBR: true, CHE: true, USA: true };
+
+function altApproachTag(iso, status) {
+  if (!ALT_APPROACH_ISOS[iso] || status !== "none") return "";
+  const t = (typeof gstT === "function") ? gstT : (k => k);
+  return `<span class="badge badge-alt">${escapeHtml(t("home.altApproach"))}</span>`;
+}
+
 function bucketStatus(entry) {
   const raw = entry ? entry.status : "none";
   if (raw === "developing") return "developing";
@@ -54,8 +65,9 @@ function overlayHeaderTags(entry) {
   return names.map(n => `<span class="header-overlay-tag">+ ${escapeHtml(n)}</span>`).join("");
 }
 
-function renderHeader(entry, status, label, name) {
+function renderHeader(entry, status, label, name, iso) {
   const t = (typeof gstT === "function") ? gstT : (k => k);
+  const altTag = altApproachTag(iso, status);
   const taxonomyName = entry && entry.taxonomy ? entry.taxonomy : t("country.noTaxonomyEstablished");
   const overlayTags = overlayHeaderTags(entry);
   return `
@@ -63,7 +75,7 @@ function renderHeader(entry, status, label, name) {
       <div class="country-header-inner">
         <div class="country-header-row">
           <div class="country-header-titles">
-            <span class="badge badge-${status}">${label}</span>
+            <span class="badge badge-${status}">${label}</span>${altTag}
             <h1>${name}</h1>
             <p class="country-header-sub">${taxonomyName}${entry && entry.year ? " · " + t("country.publishedPrefix") + " " + entry.year : ""}${overlayTags}</p>
           </div>
@@ -610,7 +622,7 @@ function renderCountry(entryOverride) {
   const status = bucketStatus(entry);
   const label = getStatusLabel(status);
 
-  headerEl.innerHTML = renderHeader(entry, status, label, name);
+  headerEl.innerHTML = renderHeader(entry, status, label, name, iso);
 
   let left = "";
 
