@@ -870,6 +870,16 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
+/* "Alternative approach" tag: a neutral outline, not a status colour — it sits
+   next to the grey No-Taxonomy badge and qualifies it rather than replacing it. */
+.badge-alt {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-muted);
+  margin-left: 6px;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+}
 [data-theme="dark"] .badge-established,
 [data-theme="dark"] .badge-national { color: #4ADE80; }
 [data-theme="dark"] .badge-regional { color: #8FE0B4; }
@@ -12531,7 +12541,7 @@ const GST_I18N = {
     "home.heroSub": "Select a country on the map, or use the search bar below.",
     "home.chipAllRegions": "All Regions", "home.chipEurope": "Europe", "home.chipAsiaPacific": "Asia-Pacific",
     "home.chipAmericas": "Americas", "home.chipAfrica": "Africa", "home.chipMiddleEast": "Middle East",
-    "home.chipAllStatuses": "All Statuses", "home.chipDeveloped": "Developed", "home.chipNational": "National taxonomy", "home.chipRegional": "Regional framework",
+    "home.chipAllStatuses": "All Statuses", "home.chipDeveloped": "Developed", "home.chipNational": "National taxonomy", "home.chipRegional": "Regional framework", "home.altApproach": "Alternative approach",
     "home.chipUnderDevelopment": "Under Development", "home.chipNoTaxonomy": "No Taxonomy",
     "home.globalStats": "Global Stats", "home.totalCountriesTracked": "Total Countries Tracked",
     "home.recentlyUpdated": "Recently Updated", "home.askAi": "Ask AI",
@@ -12684,7 +12694,7 @@ const GST_I18N = {
     "home.heroSub": "Välj ett land på kartan, eller använd sökfältet nedan.",
     "home.chipAllRegions": "Alla regioner", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asien-Stillahavsregionen",
     "home.chipAmericas": "Amerika", "home.chipAfrica": "Afrika", "home.chipMiddleEast": "Mellanöstern",
-    "home.chipAllStatuses": "Alla statusar", "home.chipDeveloped": "Utvecklad", "home.chipNational": "Nationell taxonomi", "home.chipRegional": "Regionalt ramverk",
+    "home.chipAllStatuses": "Alla statusar", "home.chipDeveloped": "Utvecklad", "home.chipNational": "Nationell taxonomi", "home.chipRegional": "Regionalt ramverk", "home.altApproach": "Alternativ ansats",
     "home.chipUnderDevelopment": "Under utveckling", "home.chipNoTaxonomy": "Ingen taxonomi",
     "home.globalStats": "Global statistik", "home.totalCountriesTracked": "Totalt antal länder som bevakas",
     "home.recentlyUpdated": "Senast uppdaterat", "home.askAi": "Fråga AI",
@@ -12837,7 +12847,7 @@ const GST_I18N = {
     "home.heroSub": "지도에서 국가를 선택하거나 아래 검색창을 이용하세요.",
     "home.chipAllRegions": "전체 지역", "home.chipEurope": "유럽", "home.chipAsiaPacific": "아시아·태평양",
     "home.chipAmericas": "아메리카", "home.chipAfrica": "아프리카", "home.chipMiddleEast": "중동",
-    "home.chipAllStatuses": "전체 상태", "home.chipDeveloped": "구축 완료", "home.chipNational": "자국 제도", "home.chipRegional": "지역 프레임워크 적용",
+    "home.chipAllStatuses": "전체 상태", "home.chipDeveloped": "구축 완료", "home.chipNational": "자국 제도", "home.chipRegional": "지역 프레임워크 적용", "home.altApproach": "대체 수단 운용",
     "home.chipUnderDevelopment": "개발 중", "home.chipNoTaxonomy": "택소노미 없음",
     "home.globalStats": "글로벌 통계", "home.totalCountriesTracked": "추적 중인 총 국가 수",
     "home.recentlyUpdated": "최근 업데이트", "home.askAi": "AI에게 질문",
@@ -12990,7 +13000,7 @@ const GST_I18N = {
     "home.heroSub": "Seleccione un país en el mapa, o use la barra de búsqueda a continuación.",
     "home.chipAllRegions": "Todas las regiones", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asia-Pacífico",
     "home.chipAmericas": "América", "home.chipAfrica": "África", "home.chipMiddleEast": "Oriente Medio",
-    "home.chipAllStatuses": "Todos los estados", "home.chipDeveloped": "Desarrollada", "home.chipNational": "Taxonomía nacional", "home.chipRegional": "Marco regional",
+    "home.chipAllStatuses": "Todos los estados", "home.chipDeveloped": "Desarrollada", "home.chipNational": "Taxonomía nacional", "home.chipRegional": "Marco regional", "home.altApproach": "Enfoque alternativo",
     "home.chipUnderDevelopment": "En desarrollo", "home.chipNoTaxonomy": "Sin taxonomía",
     "home.globalStats": "Estadísticas globales", "home.totalCountriesTracked": "Total de países monitoreados",
     "home.recentlyUpdated": "Actualizado recientemente", "home.askAi": "Preguntar a la IA",
@@ -13143,7 +13153,7 @@ const GST_I18N = {
     "home.heroSub": "Sélectionnez un pays sur la carte, ou utilisez la barre de recherche ci-dessous.",
     "home.chipAllRegions": "Toutes les régions", "home.chipEurope": "Europe", "home.chipAsiaPacific": "Asie-Pacifique",
     "home.chipAmericas": "Amériques", "home.chipAfrica": "Afrique", "home.chipMiddleEast": "Moyen-Orient",
-    "home.chipAllStatuses": "Tous les statuts", "home.chipDeveloped": "Développée", "home.chipNational": "Taxonomie nationale", "home.chipRegional": "Cadre régional",
+    "home.chipAllStatuses": "Tous les statuts", "home.chipDeveloped": "Développée", "home.chipNational": "Taxonomie nationale", "home.chipRegional": "Cadre régional", "home.altApproach": "Approche alternative",
     "home.chipUnderDevelopment": "En développement", "home.chipNoTaxonomy": "Aucune taxonomie",
     "home.globalStats": "Statistiques globales", "home.totalCountriesTracked": "Total des pays suivis",
     "home.recentlyUpdated": "Récemment mis à jour", "home.askAi": "Demander à l'IA",
@@ -13296,7 +13306,7 @@ const GST_I18N = {
     "home.heroSub": "Wählen Sie ein Land auf der Karte, oder nutzen Sie die Suchleiste unten.",
     "home.chipAllRegions": "Alle Regionen", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asien-Pazifik",
     "home.chipAmericas": "Amerika", "home.chipAfrica": "Afrika", "home.chipMiddleEast": "Naher Osten",
-    "home.chipAllStatuses": "Alle Status", "home.chipDeveloped": "Etabliert", "home.chipNational": "Nationale Taxonomie", "home.chipRegional": "Regionaler Rahmen",
+    "home.chipAllStatuses": "Alle Status", "home.chipDeveloped": "Etabliert", "home.chipNational": "Nationale Taxonomie", "home.chipRegional": "Regionaler Rahmen", "home.altApproach": "Alternativer Ansatz",
     "home.chipUnderDevelopment": "In Entwicklung", "home.chipNoTaxonomy": "Keine Taxonomie",
     "home.globalStats": "Globale Statistiken", "home.totalCountriesTracked": "Erfasste Länder insgesamt",
     "home.recentlyUpdated": "Kürzlich aktualisiert", "home.askAi": "KI fragen",
@@ -13449,7 +13459,7 @@ const GST_I18N = {
     "home.heroSub": "地図から国を選択するか、下の検索バーをご利用ください。",
     "home.chipAllRegions": "すべての地域", "home.chipEurope": "ヨーロッパ", "home.chipAsiaPacific": "アジア太平洋",
     "home.chipAmericas": "南北アメリカ", "home.chipAfrica": "アフリカ", "home.chipMiddleEast": "中東",
-    "home.chipAllStatuses": "すべてのステータス", "home.chipDeveloped": "整備済み", "home.chipNational": "自国の制度", "home.chipRegional": "地域枠組みの適用",
+    "home.chipAllStatuses": "すべてのステータス", "home.chipDeveloped": "整備済み", "home.chipNational": "自国の制度", "home.chipRegional": "地域枠組みの適用", "home.altApproach": "代替手段を運用",
     "home.chipUnderDevelopment": "開発中", "home.chipNoTaxonomy": "タクソノミーなし",
     "home.globalStats": "グローバル統計", "home.totalCountriesTracked": "追跡対象の総国数",
     "home.recentlyUpdated": "最近の更新", "home.askAi": "AIに質問",
@@ -13602,7 +13612,7 @@ const GST_I18N = {
     "home.heroSub": "在地图上选择一个国家，或使用下方的搜索栏。",
     "home.chipAllRegions": "所有地区", "home.chipEurope": "欧洲", "home.chipAsiaPacific": "亚太地区",
     "home.chipAmericas": "美洲", "home.chipAfrica": "非洲", "home.chipMiddleEast": "中东",
-    "home.chipAllStatuses": "所有状态", "home.chipDeveloped": "已建立", "home.chipNational": "本国制度", "home.chipRegional": "适用区域框架",
+    "home.chipAllStatuses": "所有状态", "home.chipDeveloped": "已建立", "home.chipNational": "本国制度", "home.chipRegional": "适用区域框架", "home.altApproach": "采用替代方案",
     "home.chipUnderDevelopment": "开发中", "home.chipNoTaxonomy": "无分类标准",
     "home.globalStats": "全球统计", "home.totalCountriesTracked": "追踪国家总数",
     "home.recentlyUpdated": "最近更新", "home.askAi": "咨询 AI",
@@ -13755,7 +13765,7 @@ const GST_I18N = {
     "home.heroSub": "اختر بلدًا على الخريطة، أو استخدم شريط البحث أدناه.",
     "home.chipAllRegions": "جميع المناطق", "home.chipEurope": "أوروبا", "home.chipAsiaPacific": "آسيا والمحيط الهادئ",
     "home.chipAmericas": "الأمريكتان", "home.chipAfrica": "أفريقيا", "home.chipMiddleEast": "الشرق الأوسط",
-    "home.chipAllStatuses": "جميع الحالات", "home.chipDeveloped": "مكتمل", "home.chipNational": "تصنيف وطني", "home.chipRegional": "إطار إقليمي",
+    "home.chipAllStatuses": "جميع الحالات", "home.chipDeveloped": "مكتمل", "home.chipNational": "تصنيف وطني", "home.chipRegional": "إطار إقليمي", "home.altApproach": "نهج بديل",
     "home.chipUnderDevelopment": "قيد التطوير", "home.chipNoTaxonomy": "لا يوجد تصنيف",
     "home.globalStats": "إحصاءات عالمية", "home.totalCountriesTracked": "إجمالي عدد البلدان المتابَعة",
     "home.recentlyUpdated": "آخر التحديثات", "home.askAi": "اسأل الذكاء الاصطناعي",
@@ -13908,7 +13918,7 @@ const GST_I18N = {
     "home.heroSub": "Selecione um país no mapa, ou use a barra de pesquisa abaixo.",
     "home.chipAllRegions": "Todas as Regiões", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Ásia-Pacífico",
     "home.chipAmericas": "Américas", "home.chipAfrica": "África", "home.chipMiddleEast": "Oriente Médio",
-    "home.chipAllStatuses": "Todos os Status", "home.chipDeveloped": "Desenvolvida", "home.chipNational": "Taxonomia nacional", "home.chipRegional": "Quadro regional",
+    "home.chipAllStatuses": "Todos os Status", "home.chipDeveloped": "Desenvolvida", "home.chipNational": "Taxonomia nacional", "home.chipRegional": "Quadro regional", "home.altApproach": "Abordagem alternativa",
     "home.chipUnderDevelopment": "Em Desenvolvimento", "home.chipNoTaxonomy": "Sem Taxonomia",
     "home.globalStats": "Estatísticas Globais", "home.totalCountriesTracked": "Total de Países Monitorados",
     "home.recentlyUpdated": "Atualizado Recentemente", "home.askAi": "Perguntar à IA",
@@ -14665,6 +14675,36 @@ const BUCKET_COLOR = {
   none: "#B8C0CC"
 };
 
+/* Jurisdictions with no taxonomy that have deliberately chosen a different
+   instrument to do the same steering job. They stay grey — no new bucket —
+   but carry a tag so the map does not read them as simply doing nothing.
+   Kept deliberately narrow: every entry below says so in its own data note.
+   Countries that merely lack a taxonomy, or that have a green-bond issuance
+   framework which does not classify activities, are NOT listed. */
+const ALT_APPROACH_ISOS = {
+  JPN: true,   /* Basic Guidelines on Climate Transition Finance (METI) */
+  GBR: true,   /* taxonomy dropped Jul 2025 in favour of transition-plan rules */
+  CHE: true,   /* EU-Taxonomy interoperability + industry self-regulation */
+  USA: true    /* disclosure-based approach instead of a classification */
+};
+
+function hasAltApproach(iso) {
+  return !!ALT_APPROACH_ISOS[iso] && getBucket(iso) === "none";
+}
+
+function altApproachTag(iso) {
+  if (!hasAltApproach(iso)) return "";
+  const entry = getEntry(iso);
+  const label = (typeof gstT === "function" && gstT("home.altApproach")) || "Alternative approach";
+  const tip = entry && entry.note ? ` title="${escapeAttrApp(entry.note)}"` : "";
+  return `<span class="badge badge-sm badge-alt"${tip}>${escapeHtml(label)}</span>`;
+}
+
+function escapeAttrApp(v) {
+  return String(v || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 function bucketLabel(bucket) {
   const key = BUCKET_I18N[bucket];
   return (typeof gstT === "function" && key && gstT(key)) || BUCKET_LABEL[bucket] || bucket;
@@ -14772,6 +14812,7 @@ function buildPopupHtml(feature) {
   let html = `<div class="taxo-popup">`;
   html += `<h3>${name}</h3>`;
   html += `<span class="badge badge-${bucket}">${escapeHtml(bucketLabel(bucket))}</span>`;
+  html += altApproachTag(iso);
   if (entry && entry.taxonomy) {
     html += `<div class="taxo-name">${entry.taxonomy}${entry.year ? " (" + entry.year + ")" : ""}</div>`;
     html += overlayPopupTags(entry);
@@ -14936,7 +14977,7 @@ function renderFilteredList() {
     <li>
       <a href="country.html?iso=${iso}" data-iso="${iso}">
         <div class="recent-top"><strong>${entry.name}</strong></div>
-        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${getBucket(iso)}">${escapeHtml(bucketLabel(getBucket(iso)))}</span></div>
+        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${getBucket(iso)}">${escapeHtml(bucketLabel(getBucket(iso)))}</span>${altApproachTag(iso)}</div>
       </a>
     </li>`;
   }).join("");
