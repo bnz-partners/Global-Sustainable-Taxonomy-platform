@@ -140,14 +140,14 @@
 
   <section class="advisor-panel advisor-chat" id="chatPanel" style="display:none;">
     <div class="chat-log" id="chatLog">
-      <div class="chat-welcome">Ask anything about the taxonomies in our dataset — compare countries, ask what a term means, or ask which jurisdictions cover a given sector. Powered by a live AI model once this site is deployed with an API key (see <code>DEPLOY_INSTRUCTIONS.md</code>).</div>
+      <div class="chat-welcome">Ask anything about the taxonomies in our dataset — compare countries, ask what a term means, or ask which jurisdictions cover a given sector.</div>
     </div>
     <div class="chat-examples" id="chatExamples"></div>
     <form class="chat-input-row" id="chatForm">
       <textarea id="chatInput" rows="2" placeholder="Ask about any taxonomy… e.g. Compare the EU and South Korea taxonomies"></textarea>
       <button class="btn-primary" type="submit" id="chatSendBtn">Send</button>
     </form>
-    <p class="sample-note" id="askDisclaimerNoteId">This tab calls a real AI model through a secure backend (your API key is never in this webpage). If it doesn't respond, this site may not be deployed to Vercel with an API key yet.</p>
+    <p class="sample-note" id="askDisclaimerNoteId">AI answers are for reference only — verify anything important against the official taxonomy documents.</p>
   </section>
 </main>
 
