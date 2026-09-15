@@ -1,6 +1,11 @@
 :root {
   --navy: #0F172A;
   --green: #15803D;
+  /* Countries covered only by a regional framework — same hue, clearly lighter
+     so the map reads as "green, but not its own taxonomy". The -text variant is
+     darkened for legibility on white where the fill colour would be too pale. */
+  --green-light: #7CC49B;
+  --green-light-text: #2E8B61;
   --amber: #D97706;
   --grey-status: #B8C0CC;
   --bg: #FFFFFF;
@@ -18,6 +23,8 @@
 [data-theme="dark"] {
   --navy: #E2E8F0;
   --green: #22C55E;
+  --green-light: #7CC49B;
+  --green-light-text: #8FE0B4;
   --bg: #0B1220;
   --bg-soft: #10192E;
   --card-bg: #121B2E;
@@ -507,7 +514,11 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border-radius: 50%;
   display: inline-block;
 }
-.dot.established { background: var(--green); }
+/* Four-tier map key (2026-09). --green-light marks countries covered only by
+   a regional framework; .established stays for any older markup. */
+.dot.established,
+.dot.national { background: var(--green); }
+.dot.regional { background: var(--green-light); }
 .dot.developing { background: var(--amber); }
 .dot.none { background: var(--grey-status); }
 
@@ -627,7 +638,9 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .stat-row:last-of-type { border-bottom: none; }
 .stat-row-num { font-family: "Playfair Display", serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); }
 .stat-row-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
-.accent-established { color: var(--green); }
+.accent-established,
+.accent-national { color: var(--green); }
+.accent-regional { color: var(--green-light-text); }
 .accent-developing { color: var(--amber); }
 .accent-none { color: var(--text-muted); }
 
@@ -834,11 +847,15 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   font-size: 0.76rem;
   font-weight: 600;
 }
-.badge-established { background: rgba(21, 128, 61, 0.14); color: #14532D; }
+.badge-established,
+.badge-national { background: rgba(21, 128, 61, 0.14); color: #14532D; }
+.badge-regional { background: rgba(124, 196, 155, 0.22); color: #256B45; }
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
-[data-theme="dark"] .badge-established { color: #4ADE80; }
+[data-theme="dark"] .badge-established,
+[data-theme="dark"] .badge-national { color: #4ADE80; }
+[data-theme="dark"] .badge-regional { color: #8FE0B4; }
 [data-theme="dark"] .badge-developing { color: #FBBF24; }
 
 /* ---------- Country report page ---------- */

@@ -1,16 +1,42 @@
 /* Global Sustainable Taxonomies — Home / Interactive Map */
 
-const STATUS_LABEL = {
-  established: "Developed",
+/* Four buckets, not three (2026-09, SB본부 review).
+   36 of the 76 countries counted as "Developed" do not have a taxonomy of
+   their own — they are covered by a regional framework (EU 27, UMOA 7, ASEAN
+   2). Showing them in the same green made the spread of taxonomies look wider
+   than it is. `national` and `regional` are therefore separate buckets
+   everywhere: map colour, legend, statistics and the status filter.
+
+   The split is derived from the taxonomy's own name rather than a new data
+   field, so data.js needs no edits. Checked against the dataset: these three
+   labels cover exactly the 36 regional countries and no national one. */
+const REGIONAL_TAXONOMY_LABELS = ["EU Taxonomy", "ASEAN Taxonomy", "UMOA"];
+
+const BUCKET_LABEL = {
+  national: "National taxonomy",
+  regional: "Regional framework",
   developing: "Under Development",
   none: "No Taxonomy"
 };
 
-const STATUS_COLOR = {
-  established: "#15803D",
+const BUCKET_I18N = {
+  national: "home.chipNational",
+  regional: "home.chipRegional",
+  developing: "home.chipUnderDevelopment",
+  none: "home.chipNoTaxonomy"
+};
+
+const BUCKET_COLOR = {
+  national: "#15803D",   /* own taxonomy in force */
+  regional: "#7CC49B",   /* covered by a regional framework only */
   developing: "#D97706",
   none: "#B8C0CC"
 };
+
+function bucketLabel(bucket) {
+  const key = BUCKET_I18N[bucket];
+  return (typeof gstT === "function" && key && gstT(key)) || BUCKET_LABEL[bucket] || bucket;
+}
 
 const GEOJSON_URL = "https://cdn.jsdelivr.net/gh/johan/world.geo.json@master/countries.geo.json";
 const GEOJSON_FALLBACK_URL = "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json";
@@ -30,6 +56,16 @@ function getStatus(iso) {
   const entry = getEntry(iso);
   const raw = entry ? entry.status : "none";
   return (raw === "established" || raw === "developing") ? raw : "none";
+}
+
+/* The bucket the map, legend, statistics and filter all work from. Splits
+   `established` into `national` / `regional`; the other two pass through. */
+function getBucket(iso) {
+  const status = getStatus(iso);
+  if (status !== "established") return status === "developing" ? "developing" : "none";
+  const entry = getEntry(iso);
+  const name = (entry && entry.taxonomy) || "";
+  return REGIONAL_TAXONOMY_LABELS.some(l => name.indexOf(l) !== -1) ? "regional" : "national";
 }
 
 // Environmental objective labels are free text and vary a lot between
@@ -58,9 +94,9 @@ function entryMatchesSector(entry, sector) {
 
 function matchesFilters(iso) {
   const entry = getEntry(iso);
-  const status = getStatus(iso);
+  const bucket = getBucket(iso);
   const region = entry ? entry.region : null;
-  if (currentStatus !== "All" && status !== currentStatus) return false;
+  if (currentStatus !== "All" && bucket !== currentStatus) return false;
   if (currentRegion !== "All" && region !== currentRegion) return false;
   if (currentObjective !== "All" && !entryMatchesObjective(entry, currentObjective)) return false;
   if (currentSector !== "All" && !entryMatchesSector(entry, currentSector)) return false;
@@ -68,10 +104,10 @@ function matchesFilters(iso) {
 }
 
 function styleFeature(feature) {
-  const status = getStatus(feature.id);
+  const bucket = getBucket(feature.id);
   const match = matchesFilters(feature.id);
   return {
-    fillColor: STATUS_COLOR[status],
+    fillColor: BUCKET_COLOR[bucket],
     weight: 0.7,
     color: "#ffffff",
     fillOpacity: match ? 0.9 : 0.12,
@@ -99,12 +135,11 @@ function buildPopupHtml(feature) {
   const iso = feature.id;
   const entry = getEntry(iso);
   const name = entry ? entry.name : feature.properties.name;
-  const status = getStatus(iso);
-  const label = STATUS_LABEL[status];
+  const bucket = getBucket(iso);
 
   let html = `<div class="taxo-popup">`;
   html += `<h3>${name}</h3>`;
-  html += `<span class="badge badge-${status}">${label}</span>`;
+  html += `<span class="badge badge-${bucket}">${escapeHtml(bucketLabel(bucket))}</span>`;
   if (entry && entry.taxonomy) {
     html += `<div class="taxo-name">${entry.taxonomy}${entry.year ? " (" + entry.year + ")" : ""}</div>`;
     html += overlayPopupTags(entry);
@@ -143,7 +178,7 @@ function onEachFeature(feature, layer) {
 }
 
 function renderStats() {
-  const counts = { established: 0, developing: 0, none: 0 };
+  const counts = { national: 0, regional: 0, developing: 0, none: 0 };
   // Count only countries we actually have a compiled research entry for.
   // The map background (GeoJSON) renders ~180 country shapes total, but most
   // of those have no entry in data.js at all — they're just gray/"No Taxonomy"
@@ -152,20 +187,15 @@ function renderStats() {
   // "Total Countries Tracked" with countries we've never actually looked at,
   // which misrepresents how much of the world this site actually covers.
   const isoList = Object.keys(window.TAXONOMY_DATA);
-  isoList.forEach(iso => {
-    const bucket = getStatus(iso);
-    counts[bucket] += 1;
-  });
-  const total = counts.established + counts.developing + counts.none;
+  isoList.forEach(iso => { counts[getBucket(iso)] += 1; });
+  const total = counts.national + counts.regional + counts.developing + counts.none;
 
-  const totalEl = document.getElementById("statTotal");
-  const estEl = document.getElementById("statEstablished");
-  const devEl = document.getElementById("statDeveloping");
-  const noneEl = document.getElementById("statNone");
-  if (totalEl) totalEl.textContent = total;
-  if (estEl) estEl.textContent = counts.established;
-  if (devEl) devEl.textContent = counts.developing;
-  if (noneEl) noneEl.textContent = counts.none;
+  const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  set("statTotal", total);
+  set("statNational", counts.national);
+  set("statRegional", counts.regional);
+  set("statDeveloping", counts.developing);
+  set("statNone", counts.none);
 }
 
 function renderRecentUpdates() {
@@ -225,11 +255,6 @@ function renderActiveFilters() {
     return opt ? opt.textContent : value;
   };
 
-  const statusKey = {
-    established: "home.chipDeveloped",
-    developing: "home.chipUnderDevelopment",
-    none: "home.chipNoTaxonomy"
-  };
   const regionKey = {
     "Europe": "home.chipEurope", "Asia-Pacific": "home.chipAsiaPacific",
     "Americas": "home.chipAmericas", "Africa": "home.chipAfrica",
@@ -238,7 +263,7 @@ function renderActiveFilters() {
 
   const parts = [];
   if (currentRegion !== "All") parts.push(regionKey[currentRegion] ? t(regionKey[currentRegion]) : currentRegion);
-  if (currentStatus !== "All") parts.push(statusKey[currentStatus] ? t(statusKey[currentStatus]) : (STATUS_LABEL[currentStatus] || currentStatus));
+  if (currentStatus !== "All") parts.push(bucketLabel(currentStatus));
   if (currentObjective !== "All") parts.push(selectedLabel("homeObjectiveSelect", currentObjective));
   if (currentSector !== "All") parts.push(selectedLabel("homeSectorSelect", currentSector));
 
@@ -279,7 +304,7 @@ function renderFilteredList() {
     <li>
       <a href="country.html?iso=${iso}" data-iso="${iso}">
         <div class="recent-top"><strong>${entry.name}</strong></div>
-        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${status}">${STATUS_LABEL[status]}</span></div>
+        <div class="recent-sub"><span>${entry.taxonomy || ""}</span><span class="badge badge-sm badge-${getBucket(iso)}">${escapeHtml(bucketLabel(getBucket(iso)))}</span></div>
       </a>
     </li>`;
   }).join("");

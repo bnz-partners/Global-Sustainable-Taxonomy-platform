@@ -76,13 +76,15 @@
     </div>
     <div class="chip-row" id="statusChips">
       <button class="chip active" data-status="All" data-i18n="home.chipAllStatuses">All Statuses</button>
-      <button class="chip" data-status="established" data-i18n="home.chipDeveloped">Developed</button>
+      <button class="chip" data-status="national" data-i18n="home.chipNational">National taxonomy</button>
+      <button class="chip" data-status="regional" data-i18n="home.chipRegional">Regional framework</button>
       <button class="chip" data-status="developing" data-i18n="home.chipUnderDevelopment">Under Development</button>
       <button class="chip" data-status="none" data-i18n="home.chipNoTaxonomy">No Taxonomy</button>
     </div>
 
     <div class="legend legend-dark">
-      <span class="legend-item"><i class="dot established"></i><span data-i18n="home.chipDeveloped">Developed</span></span>
+      <span class="legend-item"><i class="dot national"></i><span data-i18n="home.chipNational">National taxonomy</span></span>
+      <span class="legend-item"><i class="dot regional"></i><span data-i18n="home.chipRegional">Regional framework</span></span>
       <span class="legend-item"><i class="dot developing"></i><span data-i18n="home.chipUnderDevelopment">Under Development</span></span>
       <span class="legend-item"><i class="dot none"></i><span data-i18n="home.chipNoTaxonomy">No Taxonomy</span></span>
     </div>
@@ -97,7 +99,8 @@
     <aside class="stats-sidebar">
       <h2 data-i18n="home.globalStats">Global Stats</h2>
       <div class="stat-row"><span class="stat-row-num" id="statTotal">–</span><span class="stat-row-label" data-i18n="home.totalCountriesTracked">Total Countries Tracked</span></div>
-      <div class="stat-row"><span class="stat-row-num accent-established" id="statEstablished">–</span><span class="stat-row-label" data-i18n="home.chipDeveloped">Developed</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-national" id="statNational">–</span><span class="stat-row-label" data-i18n="home.chipNational">National taxonomy</span></div>
+      <div class="stat-row"><span class="stat-row-num accent-regional" id="statRegional">–</span><span class="stat-row-label" data-i18n="home.chipRegional">Regional framework</span></div>
       <div class="stat-row"><span class="stat-row-num accent-developing" id="statDeveloping">–</span><span class="stat-row-label" data-i18n="home.chipUnderDevelopment">Under Development</span></div>
       <div class="stat-row"><span class="stat-row-num accent-none" id="statNone">–</span><span class="stat-row-label" data-i18n="home.chipNoTaxonomy">No Taxonomy</span></div>
 

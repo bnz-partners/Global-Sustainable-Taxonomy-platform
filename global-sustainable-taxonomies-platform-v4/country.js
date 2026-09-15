@@ -2,12 +2,27 @@
 
 function getStatusLabel(status) {
   const t = (typeof gstT === "function") ? gstT : (k => k);
-  const keys = { established: "home.chipDeveloped", developing: "home.chipUnderDevelopment", none: "home.chipNoTaxonomy" };
+  const keys = {
+    national: "home.chipNational",
+    regional: "home.chipRegional",
+    developing: "home.chipUnderDevelopment",
+    none: "home.chipNoTaxonomy"
+  };
   return t(keys[status] || keys.none);
 }
 
-function bucketStatus(raw) {
-  return (raw === "established" || raw === "developing") ? raw : "none";
+/* Mirrors getBucket() on the map page: a country whose only coverage is a
+   regional framework (EU, UMOA, ASEAN) is shown as such rather than as having
+   a taxonomy of its own. Kept as its own copy because the country page does
+   not load app.js. */
+const REGIONAL_TAXONOMY_LABELS = ["EU Taxonomy", "ASEAN Taxonomy", "UMOA"];
+
+function bucketStatus(entry) {
+  const raw = entry ? entry.status : "none";
+  if (raw === "developing") return "developing";
+  if (raw !== "established") return "none";
+  const name = (entry && entry.taxonomy) || "";
+  return REGIONAL_TAXONOMY_LABELS.some(l => name.indexOf(l) !== -1) ? "regional" : "national";
 }
 
 const ICONS = {
@@ -378,7 +393,7 @@ function compareValues(entry) {
   const f = (entry && entry.facts) || {};
   return {
     taxonomy: entry && entry.taxonomy ? entry.taxonomy : t("country.noTaxonomyEstablished"),
-    status: getStatusLabel(bucketStatus(entry ? entry.status : "none")),
+    status: getStatusLabel(bucketStatus(entry)),
     year: entry && entry.year ? entry.year : t("country.notSpecified"),
     regulator: entry && entry.regulator ? entry.regulator : t("country.notPubliclySpecified"),
     region: entry && entry.region ? entry.region : t("country.notSpecified"),
@@ -592,7 +607,7 @@ function renderCountry(entryOverride) {
   }
 
   const name = entry ? entry.name : iso;
-  const status = bucketStatus(entry ? entry.status : "none");
+  const status = bucketStatus(entry);
   const label = getStatusLabel(status);
 
   headerEl.innerHTML = renderHeader(entry, status, label, name);
