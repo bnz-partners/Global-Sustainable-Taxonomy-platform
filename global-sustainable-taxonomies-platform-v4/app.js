@@ -425,7 +425,16 @@ function setupSearch() {
 async function init() {
   map = L.map("map", {
     worldCopyJump: false,
-    minZoom: 1,
+    /* Leaflet only uses whole zoom levels by default, so fitBounds() rounded
+       the world DOWN to zoom 1 — a fixed 512px-wide drawing — no matter how
+       big the box was. Enlarging the box therefore only added empty
+       background. zoomSnap: 0 allows fractional zoom, so the world actually
+       scales to fill the box and small countries become clickable without
+       zooming in first. minZoom 0 lets the whole world still fit on a phone,
+       where the fitted zoom falls below 1. */
+    zoomSnap: 0,
+    zoomDelta: 0.5,
+    minZoom: 0,
     maxZoom: 6,
     zoomControl: true,
     attributionControl: false
@@ -445,7 +454,12 @@ async function init() {
 
   if (world) {
     geoLayer = L.geoJSON(world, { style: styleFeature, onEachFeature }).addTo(map);
-    map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] });
+    /* Fit to the inhabited latitudes rather than geoLayer.getBounds(): that
+       raw extent runs to -85.6° because the source file includes Antarctica,
+       and fitting it wasted about a third of the height on empty polar ocean,
+       shrinking every country. The southernmost country in the dataset is
+       around -55°, so -58° keeps them all. */
+    map.fitBounds(L.latLngBounds([[-58, -180], [84, 180]]), { padding: [6, 6] });
   } else {
     document.getElementById("map").innerHTML =
       '<p style="padding:20px;color:#B8433F;">Could not load world map data (check your internet connection) — please reload the page.</p>';

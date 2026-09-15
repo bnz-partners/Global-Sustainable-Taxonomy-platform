@@ -537,10 +537,12 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .map-frame-main { flex: 0 0 70%; }
 #map {
   width: 100%;
-  /* 2026-09: enlarged ~30% at the user's request (was 560px). The width is
-     set by .map-frame-main's 70% share, so height is the lever that grows
-     the map without squeezing the Global Stats sidebar beside it. */
-  height: 730px;
+  /* 2026-09: what makes the drawn world bigger is WIDTH (see .map-layout's
+     break-out above) plus fractional zoom in app.js — the world is roughly
+     square in Mercator, so height beyond ~0.68 × width is dead space. At the
+     ~900px width this now gets, 620px is just enough to show every inhabited
+     latitude; more only added empty background. (was 560px) */
+  height: 620px;
   border-radius: 14px;
   background: var(--bg-soft);
 }
@@ -1458,7 +1460,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   .featured-card { grid-template-columns: 1fr; }
   .media-grid { grid-template-columns: 1fr; }
   .charts-section { grid-template-columns: 1fr; }
-  #map { height: 470px; }   /* mobile/tablet — same ~30% increase as desktop */
+  #map { height: 380px; }   /* phone/tablet: width-limited, so extra height is dead space */
   .team-grid { grid-template-columns: 1fr; }
   .bnz-section { flex-direction: column; align-items: center; text-align: center; }
   .contact-cta-inner { flex-direction: column; text-align: center; }
