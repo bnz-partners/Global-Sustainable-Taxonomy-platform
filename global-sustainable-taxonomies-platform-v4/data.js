@@ -5034,7 +5034,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Indonesia Taxonomy for Sustainable Finance (TKBI v3)",
-    "year": 2026,
+    "year": 2024,
     "note": "National taxonomy (TKBI), version 3, 2026.",
     "source": "https://www.ojk.go.id/id/Publikasi/Roadmap-dan-Pedoman/Sektor-Jasa-Keuangan/Keuangan-Berkelanjutan/Pages/TKBI-Versi-3-2026.aspx",
     "officialDocuments": [
@@ -5630,7 +5630,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Green Finance Project Catalogue (2025) — formerly the Green Bond Endorsed Project Catalogue (2021)",
-    "year": 2025,
+    "year": 2021,
     "note": "Unified national catalogue jointly issued by the PBOC, National Financial Regulatory Administration and CSRC, merging the former green bond and green loan catalogues into one standard, effective 1 Oct 2025. Supersedes the 2021 Green Bond Endorsed Project Catalogue (6 categories, 21 subcategories, 204 project types).",
     "source": "https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/5779612/2025071418513641380.pdf",
     "officialDocuments": [
@@ -6381,7 +6381,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Hong Kong Taxonomy for Sustainable Finance (Phase 2A)",
-    "year": 2026,
+    "year": 2024,
     "note": null,
     "source": "https://brdr.hkma.gov.hk/eng/doc-ldg/docId/getPdf/20260122-5-EN/Hong%20Kong%20Taxonomy%20for%20Sustainable%20Finance%20(Phase%202A).pdf",
     "officialDocuments": [
