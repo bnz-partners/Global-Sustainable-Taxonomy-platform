@@ -12,11 +12,23 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<!-- Noto Sans KR / Noto Serif KR: Inter and Playfair Display carry no Korean
+     glyphs, so Korean headings fell back to whatever serif the OS had
+     (Windows: 바탕/궁서). Google Fonts subsets these by unicode-range, so a
+     page with no Korean on it downloads none of it. -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root {
   --navy: #0F172A;
+  /* --navy does double duty: it is the heading TEXT colour, and it was also the
+     background of every dark band (hero, footer, CTA strips, primary buttons,
+     the user's own chat bubble). In dark mode --navy flips to a light grey so
+     headings stay readable — which silently turned all those dark bands light
+     grey with white text on them, i.e. invisible. --surface-deep is the
+     background role, split out so it can stay dark in BOTH themes. */
+  --surface-deep: #0F172A;
+  --surface-deep-2: #1E293B;
   --green: #15803D;
   /* Countries covered only by a regional framework — same hue, clearly lighter
      so the map reads as "green, but not its own taxonomy". The -text variant is
@@ -39,6 +51,10 @@
 
 [data-theme="dark"] {
   --navy: #E2E8F0;
+  /* Slightly lighter than --bg (#0B1220) so a dark band still reads as a band
+     rather than dissolving into the page, while white text on it stays at ~13:1. */
+  --surface-deep: #1B2740;
+  --surface-deep-2: #243247;
   --green: #22C55E;
   --green-light: #7CC49B;
   --green-light-text: #8FE0B4;
@@ -55,13 +71,13 @@
 
 body {
   margin: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg-soft);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 { font-family: "Playfair Display", Georgia, serif; color: var(--navy); }
+h1, h2, h3 { font-family: "Playfair Display", "Noto Serif KR", Georgia, "Apple SD Gothic Neo", "Malgun Gothic", serif; color: var(--navy); }
 
 a { color: inherit; }
 
@@ -92,7 +108,7 @@ a { color: inherit; }
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--navy), #334155);
+  background: linear-gradient(135deg, var(--surface-deep), #334155);
   position: relative;
 }
 .brand-mark::after {
@@ -421,7 +437,7 @@ a { color: inherit; }
 
 /* ---------- Dark hero (search + filters + legend) ---------- */
 .hero-dark {
-  background: linear-gradient(180deg, var(--navy) 0%, #1E293B 100%);
+  background: linear-gradient(180deg, var(--surface-deep) 0%, var(--surface-deep-2) 100%);
   padding: 44px 24px 34px;
 }
 .hero-dark-inner { max-width: 760px; margin: 0 auto; text-align: center; position: relative; }
@@ -508,6 +524,18 @@ button.chip {
 }
 button.chip:hover { background: rgba(255, 255, 255, 0.14); }
 button.chip.active { background: var(--green); border-color: var(--green); color: #fff; }
+/* Dark mode brightens --green from #15803D (white text 5.0:1) to #22C55E, where
+   white text drops to 2.3:1. Near-black text on that same bright green reads at
+   ~8:1, so every filled-green control gets it — chips, the Ask AI button, the
+   analyse/subscribe buttons and the chat Send button. */
+[data-theme="dark"] button.chip.active,
+[data-theme="dark"] .filter-bar button.chip.active,
+[data-theme="dark"] .ask-ai-fab,
+[data-theme="dark"] .btn-analyze,
+[data-theme="dark"] .btn-subscribe-large,
+[data-theme="dark"] .gst-chat-toggle.open,
+[data-theme="dark"] .gst-chat-toggle:hover,
+[data-theme="dark"] .gst-chat-input-row button { color: #06240F; }
 
 /* ---------- Legend ---------- */
 .legend {
@@ -577,6 +605,19 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .leaflet-container { background: var(--bg-soft); }
 .leaflet-interactive { cursor: pointer; }
 .leaflet-popup-content-wrapper { border-radius: 12px; }
+
+/* Leaflet ships its own light styling for the +/− buttons and the popup. In dark
+   mode that left pale grey "+" and "−" on a white box floating over the dark
+   map — legible only if you knew where to look. */
+[data-theme="dark"] .leaflet-control-zoom a,
+[data-theme="dark"] .leaflet-bar a {
+  background: var(--card-bg); color: var(--text); border-bottom-color: var(--border);
+}
+[data-theme="dark"] .leaflet-control-zoom a:hover,
+[data-theme="dark"] .leaflet-bar a:hover { background: var(--bg-soft); color: var(--text); }
+[data-theme="dark"] .leaflet-bar { border-color: var(--border); }
+[data-theme="dark"] .leaflet-popup-content-wrapper,
+[data-theme="dark"] .leaflet-popup-tip { background: var(--card-bg); color: var(--text); }
 
 /* ---------- Advanced Search & Filtering (collapsible, below the map) ---------- */
 .advanced-filter-section { margin-top: 18px; }
@@ -653,7 +694,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border-bottom: 1px solid var(--border);
 }
 .stat-row:last-of-type { border-bottom: none; }
-.stat-row-num { font-family: "Playfair Display", serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); }
+.stat-row-num { font-family: "Playfair Display", "Noto Serif KR", serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); }
 .stat-row-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
 .accent-established,
 .accent-national { color: var(--green); }
@@ -692,7 +733,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 
 /* ---------- Map popup card ---------- */
 .taxo-popup { font-size: 0.85rem; min-width: 230px; max-width: 280px; }
-.taxo-popup h3 { margin: 0 0 6px; font-size: 1.05rem; font-family: "Playfair Display", serif; }
+.taxo-popup h3 { margin: 0 0 6px; font-size: 1.05rem; font-family: "Playfair Display", "Noto Serif KR", serif; }
 .taxo-name { font-weight: 600; margin: 8px 0 2px; font-size: 0.92rem; }
 .taxo-meta { font-size: 0.8rem; color: var(--text-muted); margin: 2px 0; }
 .popup-overlay-tag {
@@ -718,18 +759,18 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border: none;
   cursor: pointer;
 }
-.taxo-actions .btn-primary { background: var(--navy); color: #fff; }
-.taxo-actions .btn-primary:hover { background: #1E293B; }
+.taxo-actions .btn-primary { background: var(--surface-deep); color: #fff; }
+.taxo-actions .btn-primary:hover { background: var(--surface-deep-2); }
 .btn-disabled { background: #E9EDF3; color: #9AA5B5; border: none; border-radius: 7px; cursor: not-allowed; font-weight: 600; }
 [data-theme="dark"] .btn-disabled { background: #1E293B; color: #64748B; }
 
 /* ---------- Global buttons ---------- */
 .btn-primary {
-  background: var(--navy); color: #fff; border: none; border-radius: 8px;
+  background: var(--surface-deep); color: #fff; border: none; border-radius: 8px;
   padding: 11px 20px; font-weight: 600; font-size: 0.88rem; cursor: pointer;
   text-decoration: none; display: inline-block; font-family: inherit;
 }
-.btn-primary:hover { background: #1E293B; }
+.btn-primary:hover { background: var(--surface-deep-2); }
 .btn-secondary {
   background: var(--card-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px;
   padding: 10px 19px; font-weight: 600; font-size: 0.88rem; cursor: pointer;
@@ -737,12 +778,12 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 }
 .btn-secondary:hover { border-color: var(--green); color: var(--green); }
 .btn-primary-sm, .btn-secondary-sm { font-size: 0.76rem; text-decoration: none; text-align: center; cursor: pointer; font-family: inherit; }
-.btn-primary-sm { background: var(--navy); color: #fff; border: none; }
+.btn-primary-sm { background: var(--surface-deep); color: #fff; border: none; }
 .taxo-actions .btn-secondary-sm { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
 
 /* ---------- Country header (dark banner) ---------- */
 .country-header-dark {
-  background: linear-gradient(180deg, var(--navy) 0%, #1E293B 100%);
+  background: linear-gradient(180deg, var(--surface-deep) 0%, var(--surface-deep-2) 100%);
   padding: 34px 28px;
 }
 .country-header-inner { max-width: 1240px; margin: 0 auto; }
@@ -769,6 +810,15 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   margin-top: 24px;
   align-items: start;
 }
+/* A grid item defaults to min-width:auto, i.e. it refuses to shrink below its
+   widest unbreakable content — one long source URL was holding the column at
+   523px inside a 334px grid, so the whole country page scrolled sideways on a
+   phone. min-width:0 lets it shrink; the wrapping rules below let the long
+   strings break instead of sticking out. */
+.country-columns > * { min-width: 0; }
+.country-col-left a, .country-col-right a,
+.overview-table th, .overview-table td,
+.citations-list li, .doc-item { overflow-wrap: anywhere; }
 .card-block {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -803,9 +853,12 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .objective-pills { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .objective-pills li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--border); font-size: 0.88rem; font-weight: 600; }
 .objective-pills li svg { color: var(--green); flex-shrink: 0; }
-.pill-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; }
+.pill-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-deep); color: #fff; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; }
 .data-not-available { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
 
+/* Horizontal scroll box for tables too wide to squeeze onto a phone. */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+.table-scroll .criteria-table { min-width: 560px; margin-bottom: 0; }
 .criteria-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
 .criteria-table th, .criteria-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
 .criteria-table th { color: var(--text-muted); font-weight: 600; }
@@ -1085,7 +1138,15 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 }
 .advisor-scope-note:empty { display: none; }
 
-.advisor-tabs { display: flex; gap: 8px; margin: 18px 0 20px; border-bottom: 1px solid var(--border); }
+/* On a phone the four tab labels are wider than the screen and pushed 38px past
+   the right edge, giving the whole page a sideways scroll. Scrolling the tab
+   strip itself keeps the page fixed. */
+.advisor-tabs {
+  display: flex; gap: 8px; margin: 18px 0 20px; border-bottom: 1px solid var(--border);
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.advisor-tabs::-webkit-scrollbar { display: none; }
+.advisor-tab { white-space: nowrap; }
 .advisor-tab {
   background: none; border: none; border-bottom: 2px solid transparent;
   padding: 10px 6px; margin-right: 20px; font-family: inherit; font-size: 0.95rem;
@@ -1132,7 +1193,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .summary-pill {
   flex: 1; min-width: 120px; border-radius: var(--radius-md); padding: 14px 16px; border: 1px solid var(--border);
 }
-.summary-pill .num { font-family: "Playfair Display", serif; font-size: 1.6rem; font-weight: 700; display: block; }
+.summary-pill .num { font-family: "Playfair Display", "Noto Serif KR", serif; font-size: 1.6rem; font-weight: 700; display: block; }
 .summary-pill .lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
 .summary-pill.meets { background: rgba(21, 128, 61, 0.08); }
 .summary-pill.partial { background: rgba(217, 119, 6, 0.08); }
@@ -1173,7 +1234,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   max-width: 75%; padding: 11px 15px; border-radius: 14px; font-size: 0.9rem; line-height: 1.55;
   background: var(--bg-soft); border: 1px solid var(--border); color: var(--text);
 }
-.chat-msg-user .chat-bubble { background: var(--navy); color: #fff; border: none; }
+.chat-msg-user .chat-bubble { background: var(--surface-deep); color: #fff; border: none; }
 .chat-bubble-pending { color: var(--text-muted); font-style: italic; }
 .chat-bubble-error { background: rgba(217, 119, 6, 0.1); border-color: rgba(217, 119, 6, 0.3); color: #92400E; }
 [data-theme="dark"] .chat-bubble-error { color: #FBBF24; }
@@ -1181,13 +1242,17 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .chat-examples { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 .chat-examples .example-card { flex: 0 1 auto; }
 
-.chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
+/* stretch, not flex-end: the textarea is 58px tall and the Send button 39px, so
+   bottom-aligning them left a visible 19px step — the misalignment reported on
+   the country page. max-height keeps the button sane if the user drags the
+   advisor's textarea taller. */
+.chat-input-row { display: flex; gap: 10px; align-items: stretch; }
 .chat-input-row textarea {
   flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px;
   font-family: inherit; font-size: 0.9rem; background: var(--bg-soft); color: var(--text); resize: none;
 }
 .chat-input-row textarea:focus { outline: none; border-color: var(--green); }
-.chat-input-row button { flex-shrink: 0; }
+.chat-input-row button { flex-shrink: 0; max-height: 120px; }
 .disclaimer-banner {
   background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.3); color: #92400E;
   border-radius: 10px; padding: 10px 14px; font-size: 0.8rem; margin-bottom: 16px;
@@ -1239,7 +1304,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .trend-banner-label { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
 .trend-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .trend-card {
-  background: linear-gradient(160deg, var(--navy) 0%, #1E293B 100%); color: #fff;
+  background: linear-gradient(160deg, var(--surface-deep) 0%, var(--surface-deep-2) 100%); color: #fff;
   border-radius: var(--radius-md); padding: 16px 18px; cursor: pointer;
 }
 .trend-card h3 { color: #fff; font-size: 1rem; margin: 0 0 8px; }
@@ -1329,7 +1394,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .thematic-value { width: 36px; text-align: right; font-size: 0.78rem; color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
 
 .subscribe-cta {
-  background: linear-gradient(135deg, var(--navy) 0%, #1E293B 100%); color: #fff;
+  background: linear-gradient(135deg, var(--surface-deep) 0%, var(--surface-deep-2) 100%); color: #fff;
   border-radius: var(--radius-lg); padding: 34px; text-align: center; margin-bottom: 40px;
 }
 .subscribe-cta h2 { color: #fff; font-size: 1.5rem; margin: 0 0 8px; }
@@ -1403,7 +1468,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 16px 10px;
 }
 .community-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; flex: 1; }
-.community-stat-num { font-size: 1.3rem; font-weight: 800; color: var(--green); font-family: 'Playfair Display', serif; }
+.community-stat-num { font-size: 1.3rem; font-weight: 800; color: var(--green); font-family: 'Playfair Display', 'Noto Serif KR', serif; }
 .community-stat-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
 
 .testimonial-block {
@@ -1510,7 +1575,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .team-photo-placeholder {
   width: 84px; height: 84px; border-radius: 50%; background: var(--bg-soft); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
-  font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-muted);
+  font-family: 'Playfair Display', 'Noto Serif KR', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-muted);
 }
 .team-role-badge { margin-bottom: 8px; }
 .team-card h3 { font-size: 1.1rem; margin: 0 0 8px; }
@@ -1524,7 +1589,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 26px; margin-bottom: 44px;
 }
 .bnz-logo-placeholder {
-  flex-shrink: 0; width: 100px; height: 100px; border-radius: var(--radius-md); background: var(--navy); color: #fff;
+  flex-shrink: 0; width: 100px; height: 100px; border-radius: var(--radius-md); background: var(--surface-deep); color: #fff;
   display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 800; font-size: 0.78rem;
   line-height: 1.3; letter-spacing: 0.03em;
 }
@@ -1534,7 +1599,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .bnz-link:hover { text-decoration: underline; }
 
 .contact-cta-bar {
-  background: linear-gradient(135deg, var(--navy) 0%, #1E293B 100%); padding: 40px 24px; margin-top: 20px;
+  background: linear-gradient(135deg, var(--surface-deep) 0%, var(--surface-deep-2) 100%); padding: 40px 24px; margin-top: 20px;
 }
 .contact-cta-inner {
   max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;
@@ -1580,7 +1645,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   height: 56px;
   border-radius: 50%;
   border: none;
-  background: var(--navy);
+  background: var(--surface-deep);
   color: #fff;
   display: flex;
   align-items: center;
@@ -1617,7 +1682,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  background: var(--navy);
+  background: var(--surface-deep);
   color: #fff;
   font-weight: 700;
   font-size: 0.92rem;
@@ -1792,8 +1857,8 @@ button.chip.active { background: var(--green); border-color: var(--green); color
        local("Arial"), local("Segoe UI"), local("Roboto"), local("Noto Sans");
   unicode-range: U+0026;
 }
-h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", Georgia, serif; }
-.stat-row-num, .taxo-popup h3 { font-family: "Plain Ampersand", "Playfair Display", serif; }
+h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", "Noto Serif KR", Georgia, "Apple SD Gothic Neo", "Malgun Gothic", serif; }
+.stat-row-num, .taxo-popup h3 { font-family: "Plain Ampersand", "Playfair Display", "Noto Serif KR", serif; }
 
 /* 2. "Matching Countries" sat directly under Global Stats in the same navy
       numerals, so it read as another global figure rather than a filter
