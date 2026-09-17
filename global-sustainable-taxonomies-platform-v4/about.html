@@ -869,6 +869,48 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
+
+/* ---------- Markdown inside chat answers ----------
+   The assistant replies in Markdown; gstMarkdown() in global.js turns a small
+   subset into these elements. Everything is scoped to .chat-bubble so it can't
+   leak into the rest of the page, and the table gets its own scroll container
+   so a wide comparison never pushes the chat panel sideways. */
+.chat-bubble > *:first-child { margin-top: 0; }
+.chat-bubble > *:last-child { margin-bottom: 0; }
+.chat-bubble p { margin: 0 0 8px; }
+.chat-bubble h3, .chat-bubble h4, .chat-bubble h5, .chat-bubble h6 {
+  font-family: inherit; font-size: 0.95em; font-weight: 700;
+  margin: 12px 0 6px; line-height: 1.4;
+}
+.chat-bubble ul, .chat-bubble ol { margin: 0 0 8px; padding-left: 1.25em; }
+.chat-bubble li { margin: 2px 0; }
+.chat-bubble code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em; padding: 1px 5px; border-radius: 5px;
+  background: rgba(127, 137, 150, 0.16);
+}
+/* A source URL can be longer than a phone's screen — without this it pushes the
+   whole bubble sideways instead of wrapping. */
+.chat-bubble a {
+  color: inherit; text-decoration: underline; text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+.chat-bubble hr { border: 0; border-top: 1px solid currentColor; opacity: 0.18; margin: 12px 0; }
+
+.chat-table-wrap { overflow-x: auto; margin: 8px 0 10px; }
+.chat-table {
+  border-collapse: collapse; width: 100%; font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+/* word-break: keep-all stops Korean from breaking mid-word ("한/국") in a narrow
+   column — the cell grows instead, and .chat-table-wrap scrolls if it has to. */
+.chat-table th, .chat-table td {
+  border: 1px solid rgba(127, 137, 150, 0.32);
+  padding: 5px 9px; text-align: left; vertical-align: top;
+  word-break: keep-all;
+}
+.chat-table th { font-weight: 700; background: rgba(127, 137, 150, 0.12); }
+
 /* "Alternative approach" tag: a neutral outline, not a status colour — it sits
    next to the grey No-Taxonomy badge and qualifies it rather than replacing it. */
 .badge-alt {
@@ -14538,10 +14580,108 @@ function gstChatWidgetHtml() {
   `;
 }
 
+/* ---- Markdown in chat answers -------------------------------------------
+
+   The assistant replies in Markdown — tables, headings, bold, lists — but all
+   three chat panels used to print `escapeHtml(text)` with <br>, so a comparison
+   table arrived as a wall of "| … |" pipes. Two reviewers reported that.
+
+   This renders a deliberately small subset. The source is escaped FIRST and
+   only tags written here are inserted, so nothing the model returns can inject
+   markup; links are limited to http(s). */
+function gstMarkdown(src) {
+  const esc = gstEscapeHtml(String(src == null ? "" : src));
+
+  /* A bare URL in the answer is a Reference — the reviewers asked for sources,
+     so it has to be clickable, not a string to copy by hand. Markdown links are
+     parked as placeholders first so the autolinker below can't run inside the
+     href it just produced. */
+  const link = s => {
+    const parked = [];
+    let t = s.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, txt, url) => {
+      parked.push('<a href="' + url + '" target="_blank" rel="noopener">' + txt + "</a>");
+      return " " + (parked.length - 1) + " ";
+    });
+    t = t.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, (_, pre, url) => {
+      let tail = "";
+      const trim = url.match(/[.,;:!?]+$/);
+      if (trim) { tail = trim[0]; url = url.slice(0, -tail.length); }
+      return pre + '<a href="' + url + '" target="_blank" rel="noopener">' + url + "</a>" + tail;
+    });
+    return t.replace(/ (\d+) /g, (_, n) => parked[Number(n)]);
+  };
+
+  const inline = s => link(s
+    .replace(/`([^`\n]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*\w])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>"));
+
+  const cells = line => line.replace(/^\s*\|/, "").replace(/\|\s*$/, "").split("|").map(c => c.trim());
+  const isRow = l => /^\s*\|.*\|\s*$/.test(l);
+  const isDivider = l => /^\s*\|[\s:|-]+\|\s*$/.test(l) && l.indexOf("-") !== -1;
+
+  const lines = esc.split("\n");
+  const out = [];
+  let para = [];
+  const flushPara = () => {
+    if (!para.length) return;
+    out.push("<p>" + inline(para.join("<br>")) + "</p>");
+    para = [];
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (isRow(line) && isDivider(lines[i + 1] || "")) {
+      flushPara();
+      const head = cells(line);
+      i += 2;
+      const body = [];
+      while (i < lines.length && isRow(lines[i])) { body.push(cells(lines[i])); i++; }
+      i--;
+      out.push(
+        '<div class="chat-table-wrap"><table class="chat-table"><thead><tr>' +
+        head.map(c => "<th>" + inline(c) + "</th>").join("") +
+        "</tr></thead><tbody>" +
+        body.map(r => "<tr>" + r.map(c => "<td>" + inline(c) + "</td>").join("") + "</tr>").join("") +
+        "</tbody></table></div>");
+      continue;
+    }
+
+    const h = line.match(/^\s{0,3}(#{1,4})\s+(.*)$/);
+    if (h) { flushPara(); const lv = Math.min(h[1].length + 2, 6); out.push("<h" + lv + ">" + inline(h[2]) + "</h" + lv + ">"); continue; }
+
+    if (/^\s{0,3}(---+|\*\*\*+|___+)\s*$/.test(line)) { flushPara(); out.push("<hr>"); continue; }
+
+    if (/^\s*([-*+]|\d{1,2}[.)])\s+/.test(line)) {
+      flushPara();
+      const ordered = /^\s*\d/.test(line);
+      const items = [];
+      while (i < lines.length && /^\s*([-*+]|\d{1,2}[.)])\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*([-*+]|\d{1,2}[.)])\s+/, ""));
+        i++;
+      }
+      i--;
+      const tag = ordered ? "ol" : "ul";
+      out.push("<" + tag + ">" + items.map(t => "<li>" + inline(t) + "</li>").join("") + "</" + tag + ">");
+      continue;
+    }
+
+    if (!line.trim()) { flushPara(); continue; }
+    para.push(line);
+  }
+  flushPara();
+  return out.join("");
+}
+
 function gstChatBubbleHtml(m) {
   const cls = m.role === "user" ? "chat-msg-user" : "chat-msg-assistant";
   const bubbleCls = "chat-bubble" + (m.pending ? " chat-bubble-pending" : "") + (m.error ? " chat-bubble-error" : "");
-  return `<div class="chat-msg ${cls}"><div class="${bubbleCls}">${gstEscapeHtml(m.content).replace(/\n/g, "<br>")}</div></div>`;
+  /* Only the assistant writes Markdown; a user's own text stays literal. */
+  const body = (m.role === "user" || m.pending || m.error)
+    ? gstEscapeHtml(m.content).replace(/\n/g, "<br>")
+    : gstMarkdown(m.content);
+  return `<div class="chat-msg ${cls}"><div class="${bubbleCls}">${body}</div></div>`;
 }
 
 function gstRenderChatLog() {
