@@ -5368,11 +5368,16 @@
   "region": "Asia-Pacific",
   "taxonomy": "ASEAN Taxonomy (regional)",
   "year": 2021,
-  "note": "ASEAN member state covered by the ASEAN Taxonomy for Sustainable Finance (traffic-light system: Green/Amber/Red; Foundation Framework + Plus Standard).",
+  "note": "ASEAN member state covered by the ASEAN Taxonomy for Sustainable Finance, Version 4 (6 Nov 2025) — traffic-light system (Green/Amber/Red), Foundation Framework + Plus Standard. Not a national taxonomy: the ASEAN Taxonomy is a non-binding regional reference.",
   "source": "https://www.theacmf.org/sustainable-finance/publications/asean-taxonomy-for-sustainable-finance-version-4",
   "officialDocuments": [
+    {
+     "title": "ASEAN Taxonomy for Sustainable Finance — Version 4 (current)",
+     "date": "6 Nov 2025",
+     "url": "https://asean.org/wp-content/uploads/2025/11/ASEAN-Taxonomy-Sustainable-Finance-V4_06Nov25.pdf"
+    },
    {
-    "title": "ASEAN Taxonomy for Sustainable Finance — Version 3 (finalised)",
+    "title": "ASEAN Taxonomy for Sustainable Finance — Version 3 (superseded by Version 4, Nov 2025)",
     "date": "20 Dec 2024",
     "url": "https://asean.org/wp-content/uploads/2024/12/ASEAN-Taxonomy-Finalised-Version-3-4.pdf"
    },
@@ -5824,7 +5829,7 @@
     ]
    }
   ],
-  "regulator": "Securities Commission Malaysia",
+  "regulator": "Bank Negara Malaysia (CCPT) — with Securities Commission Malaysia for the SRI Taxonomy",
   "fullDescription": [
    "On 30 April 2021, Bank Negara Malaysia (BNM) published the Climate Change and Principle-based Taxonomy (CCPT), Malaysia's national climate-focused sustainability taxonomy for the financial sector, following a Discussion Paper issued for consultation on 27 December 2019. [1][2]",
    "The CCPT sets out five Guiding Principles intended to help financial institutions assess and classify economic activities according to how far they meet climate objectives and support the transition to a low-carbon economy. Rather than a binary green/non-green test, it uses a traffic-light-style approach, classifying activities as climate supporting, transitioning, or watchlist. [2]",
@@ -5869,11 +5874,16 @@
   "region": "Asia-Pacific",
   "taxonomy": "ASEAN Taxonomy (regional)",
   "year": 2021,
-  "note": "ASEAN member state covered by the ASEAN Taxonomy for Sustainable Finance (traffic-light system: Green/Amber/Red; Foundation Framework + Plus Standard).",
+  "note": "ASEAN member state covered by the ASEAN Taxonomy for Sustainable Finance, Version 4 (6 Nov 2025) — traffic-light system (Green/Amber/Red), Foundation Framework + Plus Standard. Not a national taxonomy: the ASEAN Taxonomy is a non-binding regional reference.",
   "source": "https://www.theacmf.org/sustainable-finance/publications/asean-taxonomy-for-sustainable-finance-version-4",
   "officialDocuments": [
+    {
+     "title": "ASEAN Taxonomy for Sustainable Finance — Version 4 (current)",
+     "date": "6 Nov 2025",
+     "url": "https://asean.org/wp-content/uploads/2025/11/ASEAN-Taxonomy-Sustainable-Finance-V4_06Nov25.pdf"
+    },
    {
-    "title": "ASEAN Taxonomy for Sustainable Finance — Version 3 (finalised)",
+    "title": "ASEAN Taxonomy for Sustainable Finance — Version 3 (superseded by Version 4, Nov 2025)",
     "date": "20 Dec 2024",
     "url": "https://asean.org/wp-content/uploads/2024/12/ASEAN-Taxonomy-Finalised-Version-3-4.pdf"
    }
@@ -6572,8 +6582,8 @@
    },
    {
     "id": 2,
-    "label": "People's Bank of China, notice on issuing the Green Bond Endorsed Projects Catalogue (2021 Edition)",
-    "url": "https://www.pbc.gov.cn/en/3688006/3995557/4239595/index.html"
+    "label": "People's Bank of China — Green Finance section (publishes the Endorsed Project Catalogue notices; the 2021 Edition notice page was retired in a site reorganisation)",
+    "url": "https://www.pbc.gov.cn/en/3688006/3995557/index.html"
    },
    {
     "id": 3,
@@ -6774,9 +6784,9 @@
     "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12705.htm"
    },
    {
-    "title": "Ministério da Fazenda — official announcement of Decree establishing the Brazilian Sustainable Taxonomy",
+    "title": "Ministério da Fazenda — Taxonomia Sustentável Brasileira, official programme page",
     "date": "Nov 2025",
-    "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/2025/novembro/governo-publica-decreto-que-institui-a-taxonomia-sustentavel-brasileira"
+    "url": "https://www.gov.br/fazenda/pt-br/orgaos/spe/taxonomia-sustentavel-brasileira"
    }
   ],
   "overlays": [
@@ -7725,9 +7735,9 @@
     "url": "https://brdr.hkma.gov.hk/eng/doc-ldg/docId/getPdf/20260122-5-EN/Hong%20Kong%20Taxonomy%20for%20Sustainable%20Finance%20(Phase%202A).pdf"
    },
    {
-    "title": "HKMA — press release announcing Phase 2A publication",
+    "title": "HKMA — Phase 2A document page (Banking Regulatory Disclosure Register)",
     "date": "22 Jan 2026",
-    "url": "https://www.hkma.gov.hk/eng/news-and-media/press-releases/2026/01/20260122-3/"
+    "url": "https://brdr.hkma.gov.hk/eng/doc-ldg/docId/20260122-5-EN"
    }
   ],
   "overlays": [],
@@ -7755,8 +7765,8 @@
    },
    {
     "id": 2,
-    "label": "Hong Kong Monetary Authority, \"HKMA publishes Hong Kong Taxonomy for Sustainable Finance Phase 2A\" (22 Jan 2026)",
-    "url": "https://www.hkma.gov.hk/eng/news-and-media/press-releases/2026/01/20260122-3/"
+    "label": "Hong Kong Monetary Authority, Hong Kong Taxonomy for Sustainable Finance (Phase 2A), document page (22 Jan 2026)",
+    "url": "https://brdr.hkma.gov.hk/eng/doc-ldg/docId/20260122-5-EN"
    }
   ],
   "activityList": [
@@ -10935,12 +10945,12 @@
   "taxonomy": "Green Taxonomy Roadmap",
   "year": 2025,
   "note": "The Ministry of Economy and Finance, Ministry of Environment and the National Planning Secretariat formalised a Sustainable Finance Table (Mesa de Finanzas Sostenibles) in October 2024, tasked with developing a green/social/sustainable taxonomy. In December 2025 Ecuador published its Roadmap for the Green Taxonomy (Hoja de Ruta), developed with the Global Green Growth Institute, setting out the conceptual and institutional guidelines for building the taxonomy. A full national taxonomy is not yet in force.",
-  "source": "https://www.finanzas.gob.ec/wp-content/uploads/2025/12/REVISTA-TAXONOMI%CC%81A.pdf",
+  "source": "https://www.economicoproductivo.gob.ec/wp-content/uploads/2025/12/REVISTA-TAXONOMI%CC%81A.pdf",
   "officialDocuments": [
    {
     "title": "Ministerio de Economía y Finanzas — Hoja de Ruta para una Taxonomía Verde",
     "date": "Dic 2025",
-    "url": "https://www.finanzas.gob.ec/wp-content/uploads/2025/12/REVISTA-TAXONOMI%CC%81A.pdf"
+    "url": "https://www.economicoproductivo.gob.ec/wp-content/uploads/2025/12/REVISTA-TAXONOMI%CC%81A.pdf"
    },
    {
     "title": "Global Green Growth Institute — Ecuador and GGGI advance the Roadmap for the Green Taxonomy",
@@ -10965,7 +10975,7 @@
    {
     "id": 1,
     "label": "Ministerio de Economía y Finanzas (Ecuador), \"Hoja de Ruta para una Taxonomía Verde\" (Dic 2025)",
-    "url": "https://www.finanzas.gob.ec/wp-content/uploads/2025/12/REVISTA-TAXONOMI%CC%81A.pdf"
+    "url": "https://www.economicoproductivo.gob.ec/wp-content/uploads/2025/12/REVISTA-TAXONOMI%CC%81A.pdf"
    },
    {
     "id": 2,
