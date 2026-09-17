@@ -138,11 +138,14 @@ function criteriaTable(entry) {
   let html = "";
 
   if (real) {
-    html += `<table class="criteria-table"><thead><tr><th>${t("country.colActivity")}</th><th>${t("country.colScreeningCriteria")}</th><th>${t("country.colThreshold")}</th><th>${t("country.colDnsh")}</th></tr></thead><tbody>`;
+    /* Four columns of criteria text cannot be squeezed into a phone screen, so
+       the table scrolls inside its own box rather than pushing the whole page
+       sideways. */
+    html += `<div class="table-scroll"><table class="criteria-table"><thead><tr><th>${t("country.colActivity")}</th><th>${t("country.colScreeningCriteria")}</th><th>${t("country.colThreshold")}</th><th>${t("country.colDnsh")}</th></tr></thead><tbody>`;
     entry.activityList.forEach(a => {
       html += `<tr><td>${a.activity}</td><td>${a.criteria || t("country.seeOfficialDocumentation")}</td><td>${a.threshold || t("country.seeOfficialDocumentation")}</td><td>${a.dnsh || t("country.dnshAppliesDefault")}</td></tr>`;
     });
-    html += `</tbody></table>`;
+    html += `</tbody></table></div>`;
   } else {
     html += `<p class="data-not-available">${t("country.notYetDocumented")}</p>`;
   }
