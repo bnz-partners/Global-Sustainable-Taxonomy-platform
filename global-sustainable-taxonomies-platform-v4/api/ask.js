@@ -87,8 +87,50 @@ const STOP = new Set([
   "the", "and", "for", "are", "is", "of", "in", "on", "to", "a", "an", "or",
   "does", "do", "what", "which", "how", "can", "under", "with", "my", "our",
   "this", "that", "it", "be", "i", "we", "taxonomy", "korea", "korean",
-  "activity", "activities", "criteria", "green"
+  "activity", "activities", "criteria", "green",
+  /* Added 2026-09: the Korean branch drops its generic nouns (설비·공장·해당)
+     but the English branch did not, so words that sit in dozens of activity
+     names — "facility", "plant", "production" — drowned out the one word that
+     actually identified the activity. Same answer, different language, was the
+     reviewer-reported symptom. */
+  "facility", "facilities", "plant", "plants", "equipment", "installation",
+  "installations", "system", "systems", "operation", "operations", "project",
+  "projects", "process", "processes", "sector", "sectors", "area", "areas",
+  "covered", "cover", "include", "included", "includes", "eligible",
+  "eligibility", "threshold", "thresholds", "requirement", "requirements",
+  "standard", "standards", "rule", "rules", "new", "use", "used", "using",
+  "would", "should", "could", "about", "any", "there", "from", "into",
+  "qualify", "qualifies", "count", "counts", "classified", "classification",
+  "sustainable", "finance", "financing"
 ]);
+
+/* A question asked in one language must reach the other language's fields —
+   the dataset carries both, but a Korean word never matches an English name.
+   Small and hand-picked: only terms that identify an activity. */
+const CROSS_LANG = {
+  "태양광": "solar", "태양열": "solar", "풍력": "wind", "해상풍력": "offshore wind",
+  "수소": "hydrogen", "암모니아": "ammonia", "원자력": "nuclear", "원전": "nuclear",
+  "폐열": "waste heat", "폐기물": "waste", "재활용": "recycling", "바이오": "bio",
+  "바이오매스": "biomass", "지열": "geothermal", "수력": "hydro", "조력": "tidal",
+  "연료전지": "fuel cell", "전기차": "electric vehicle", "이차전지": "battery",
+  "배터리": "battery", "철강": "steel", "시멘트": "cement", "반도체": "semiconductor",
+  "석유화학": "petrochemical", "정유": "refining", "제지": "paper", "조선": "shipbuilding",
+  "해운": "shipping", "항공": "aviation", "철도": "railway", "물류": "logistics",
+  "건축": "building", "건물": "building", "냉난방": "heating cooling",
+  "열병합": "cogeneration", "송배전": "transmission distribution", "에너지저장": "storage",
+  "탄소포집": "carbon capture", "산림": "forest", "농업": "agriculture",
+  "어업": "fishing", "양식": "aquaculture", "상수도": "water supply",
+  "하수": "sewage", "대기오염": "air pollution", "생물다양성": "biodiversity"
+};
+const CROSS_LANG_REV = (() => {
+  const out = {};
+  Object.keys(CROSS_LANG).forEach(k => {
+    const v = CROSS_LANG[k];
+    if (!out[v]) out[v] = [];
+    out[v].push(k);
+  });
+  return out;
+})();
 
 /* Korean questions are dense with words that appear in almost every activity
    name ("설비", "구축", "해당") — left in, they drown out the one term that
@@ -149,8 +191,12 @@ function krActivityDetail(a) {
    how many of the question's keywords appear in each activity's text. */
 function pickKrActivities(acts, question) {
   const low = question.toLowerCase();
-  const words = low.match(/[a-z0-9][a-z0-9-]{2,}/g) || [];
-  const terms = Array.from(new Set(words.filter(w => !STOP.has(w))));
+  /* Hyphens are treated as spaces: a user writes "waste-heat recovery" while
+     the guideline says "Waste Heat". Keeping the hyphenated form as a single
+     token would make it match nothing at all. */
+  const words = low.replace(/[-‐-―]/g, " ").match(/[a-z0-9]{3,}/g) || [];
+  const seq = words.filter(w => !STOP.has(w));   // question order, stop words dropped
+  const terms = Array.from(new Set(seq));
 
   /* Korean compounds don't split on spaces — a user types "해상풍력" while the
      guideline says "풍력 기반 에너지 생산". Matching whole words alone would
@@ -169,19 +215,46 @@ function pickKrActivities(acts, question) {
   });
   koreanRaw.forEach(w => koParts.delete(w));
 
+  /* Cross-language reach: a Korean term contributes its English counterpart to
+     the English term list and vice versa, so the same question scores the same
+     way whichever language it was typed in. */
+  const extraEn = [];
+  koreanRaw.forEach(w => {
+    Object.keys(CROSS_LANG).forEach(k => { if (w.includes(k)) extraEn.push(CROSS_LANG[k]); });
+  });
+  const extraKo = [];
+  terms.forEach(t => {
+    Object.keys(CROSS_LANG_REV).forEach(en => {
+      if (en.split(" ").indexOf(t) !== -1) CROSS_LANG_REV[en].forEach(k => extraKo.push(k));
+    });
+  });
+  const enTerms = Array.from(new Set(terms.concat(extraEn.join(" ").split(" ").filter(Boolean))));
+  const koTerms = Array.from(new Set(korean.concat(extraKo)));
+
+  /* The English analogue of the Korean fragment bonus: an adjacent pair of
+     surviving words that appears in the activity's NAME as a phrase ("waste
+     heat") is a far stronger signal than the two words scoring separately. */
+  const phrases = [];
+  for (let i = 0; i + 1 < seq.length; i++) phrases.push(seq[i] + " " + seq[i + 1]);
+  extraEn.forEach(p => { if (p.indexOf(" ") !== -1) phrases.push(p); });
+
   const scored = acts.map(a => {
     const hayEn = (a.name_en + " " + a.field_en + " " + a.activity_en + " " +
       (a.recognition_en || []).join(" ")).toLowerCase();
     const hayKo = a.name_ko + " " + a.field_ko + " " + a.activity_ko + " " +
       (a.recognition_ko || []).join(" ");
     let score = 0;
-    terms.forEach(term => {
+    enTerms.forEach(term => {
       if (a.name_en.toLowerCase().includes(term)) score += 3;
       else if (hayEn.includes(term)) score += 1;
     });
-    korean.forEach(term => {
+    koTerms.forEach(term => {
       if (a.name_ko.includes(term)) score += 3;
       else if (hayKo.includes(term)) score += 1;
+    });
+    phrases.forEach(ph => {
+      if (a.name_en.toLowerCase().includes(ph)) score += 4;
+      else if (hayEn.includes(ph)) score += 1;
     });
     /* A fragment that lands in the activity's own NAME is a strong signal —
        "폐열" out of "폐열회수" pointing at 폐열·냉열 기반 에너지 생산 — so it
@@ -193,6 +266,32 @@ function pickKrActivities(acts, question) {
   }).filter(x => x.score > 0);
 
   scored.sort((x, y) => y.score - x.score);
+
+  /* Fallback for a question whose wording shares no whole word with the
+     guideline — "afforestation" never equals "forest", so an English question
+     that a Korean one would have answered came back with no criteria at all.
+     Only runs when the normal pass found almost nothing, so it cannot dilute a
+     good match: a long question word that CONTAINS an activity-name word is
+     treated as a weak hit. */
+  if (scored.length < 2) {
+    const longTerms = enTerms.filter(t => t.length >= 7);
+    if (longTerms.length) {
+      const already = new Set(scored.map(x => x.a));
+      const extra = [];
+      acts.forEach(a => {
+        if (already.has(a)) return;
+        const nameWords = (a.name_en || "").toLowerCase().match(/[a-z]{5,}/g) || [];
+        let s = 0;
+        nameWords.forEach(w => {
+          longTerms.forEach(t => { if (t !== w && t.indexOf(w) !== -1) s += 2; });
+        });
+        if (s > 0) extra.push({ a, score: s });
+      });
+      extra.sort((x, y) => y.score - x.score);
+      scored.push.apply(scored, extra);
+    }
+  }
+
   return scored.slice(0, MAX_DETAIL).map(x => x.a);
 }
 
@@ -452,3 +551,7 @@ module.exports = async function handler(req, res) {
     res.status(500).json({ error: "Failed to reach the AI provider: " + err.message });
   }
 };
+
+/* Offline verification hook — lets the retrieval be checked without calling the
+   model. Not referenced by the HTTP handler. */
+module.exports.__test = { pickKrActivities, mentionsKorea, loadKrActivities };
