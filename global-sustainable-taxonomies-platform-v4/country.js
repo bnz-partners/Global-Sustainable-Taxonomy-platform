@@ -273,6 +273,14 @@ function aiChatBoxHtml() {
   `;
 }
 
+/* Same as the advisor panel: Markdown from the assistant, literal user text. */
+function countryChatBody(m) {
+  if (m.role !== "user" && !m.pending && !m.error && typeof gstMarkdown === "function") {
+    return gstMarkdown(m.content);
+  }
+  return escapeHtml(m.content).replace(/\n/g, "<br>");
+}
+
 let countryChatHistory = [];
 let countryChatBusy = false;
 let countryChatWelcome = (typeof gstT === "function") ? gstT("country.chatWelcomeDefault") : "Ask anything about this taxonomy.";
@@ -287,7 +295,7 @@ function renderCountryChatLog() {
   const welcome = `<div class="chat-welcome">${countryChatWelcome}</div>`;
   const msgs = countryChatHistory.map(m => `
     <div class="chat-msg chat-msg-${m.role}">
-      <div class="chat-bubble${m.pending ? " chat-bubble-pending" : ""}${m.error ? " chat-bubble-error" : ""}">${escapeHtml(m.content).replace(/\n/g, "<br>")}</div>
+      <div class="chat-bubble${m.pending ? " chat-bubble-pending" : ""}${m.error ? " chat-bubble-error" : ""}">${countryChatBody(m)}</div>
     </div>
   `).join("");
   log.innerHTML = countryChatHistory.length ? msgs : welcome;

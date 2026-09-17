@@ -1255,12 +1255,21 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+/* Assistant answers arrive as Markdown (tables, headings, lists); render them
+   through the shared renderer in global.js. User text stays literal. */
+function chatBody(m) {
+  if (m.role !== "user" && !m.pending && !m.error && typeof gstMarkdown === "function") {
+    return gstMarkdown(m.content);
+  }
+  return escapeHtml(m.content).replace(/\n/g, "<br>");
+}
+
 function renderChatLog() {
   const log = document.getElementById("chatLog");
   const welcome = `<div class="chat-welcome">${escapeHtml(t("chatWelcomeAdvisor"))}</div>`;
   const msgs = chatHistory.map(m => `
     <div class="chat-msg chat-msg-${m.role}">
-      <div class="chat-bubble${m.pending ? " chat-bubble-pending" : ""}${m.error ? " chat-bubble-error" : ""}">${escapeHtml(m.content).replace(/\n/g, "<br>")}</div>
+      <div class="chat-bubble${m.pending ? " chat-bubble-pending" : ""}${m.error ? " chat-bubble-error" : ""}">${chatBody(m)}</div>
     </div>
   `).join("");
   log.innerHTML = chatHistory.length ? msgs : welcome;

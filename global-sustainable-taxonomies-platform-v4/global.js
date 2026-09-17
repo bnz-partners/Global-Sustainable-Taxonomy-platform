@@ -2089,10 +2089,108 @@ function gstChatWidgetHtml() {
   `;
 }
 
+/* ---- Markdown in chat answers -------------------------------------------
+
+   The assistant replies in Markdown — tables, headings, bold, lists — but all
+   three chat panels used to print `escapeHtml(text)` with <br>, so a comparison
+   table arrived as a wall of "| … |" pipes. Two reviewers reported that.
+
+   This renders a deliberately small subset. The source is escaped FIRST and
+   only tags written here are inserted, so nothing the model returns can inject
+   markup; links are limited to http(s). */
+function gstMarkdown(src) {
+  const esc = gstEscapeHtml(String(src == null ? "" : src));
+
+  /* A bare URL in the answer is a Reference — the reviewers asked for sources,
+     so it has to be clickable, not a string to copy by hand. Markdown links are
+     parked as placeholders first so the autolinker below can't run inside the
+     href it just produced. */
+  const link = s => {
+    const parked = [];
+    let t = s.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, txt, url) => {
+      parked.push('<a href="' + url + '" target="_blank" rel="noopener">' + txt + "</a>");
+      return " " + (parked.length - 1) + " ";
+    });
+    t = t.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, (_, pre, url) => {
+      let tail = "";
+      const trim = url.match(/[.,;:!?]+$/);
+      if (trim) { tail = trim[0]; url = url.slice(0, -tail.length); }
+      return pre + '<a href="' + url + '" target="_blank" rel="noopener">' + url + "</a>" + tail;
+    });
+    return t.replace(/ (\d+) /g, (_, n) => parked[Number(n)]);
+  };
+
+  const inline = s => link(s
+    .replace(/`([^`\n]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*\w])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>"));
+
+  const cells = line => line.replace(/^\s*\|/, "").replace(/\|\s*$/, "").split("|").map(c => c.trim());
+  const isRow = l => /^\s*\|.*\|\s*$/.test(l);
+  const isDivider = l => /^\s*\|[\s:|-]+\|\s*$/.test(l) && l.indexOf("-") !== -1;
+
+  const lines = esc.split("\n");
+  const out = [];
+  let para = [];
+  const flushPara = () => {
+    if (!para.length) return;
+    out.push("<p>" + inline(para.join("<br>")) + "</p>");
+    para = [];
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (isRow(line) && isDivider(lines[i + 1] || "")) {
+      flushPara();
+      const head = cells(line);
+      i += 2;
+      const body = [];
+      while (i < lines.length && isRow(lines[i])) { body.push(cells(lines[i])); i++; }
+      i--;
+      out.push(
+        '<div class="chat-table-wrap"><table class="chat-table"><thead><tr>' +
+        head.map(c => "<th>" + inline(c) + "</th>").join("") +
+        "</tr></thead><tbody>" +
+        body.map(r => "<tr>" + r.map(c => "<td>" + inline(c) + "</td>").join("") + "</tr>").join("") +
+        "</tbody></table></div>");
+      continue;
+    }
+
+    const h = line.match(/^\s{0,3}(#{1,4})\s+(.*)$/);
+    if (h) { flushPara(); const lv = Math.min(h[1].length + 2, 6); out.push("<h" + lv + ">" + inline(h[2]) + "</h" + lv + ">"); continue; }
+
+    if (/^\s{0,3}(---+|\*\*\*+|___+)\s*$/.test(line)) { flushPara(); out.push("<hr>"); continue; }
+
+    if (/^\s*([-*+]|\d{1,2}[.)])\s+/.test(line)) {
+      flushPara();
+      const ordered = /^\s*\d/.test(line);
+      const items = [];
+      while (i < lines.length && /^\s*([-*+]|\d{1,2}[.)])\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*([-*+]|\d{1,2}[.)])\s+/, ""));
+        i++;
+      }
+      i--;
+      const tag = ordered ? "ol" : "ul";
+      out.push("<" + tag + ">" + items.map(t => "<li>" + inline(t) + "</li>").join("") + "</" + tag + ">");
+      continue;
+    }
+
+    if (!line.trim()) { flushPara(); continue; }
+    para.push(line);
+  }
+  flushPara();
+  return out.join("");
+}
+
 function gstChatBubbleHtml(m) {
   const cls = m.role === "user" ? "chat-msg-user" : "chat-msg-assistant";
   const bubbleCls = "chat-bubble" + (m.pending ? " chat-bubble-pending" : "") + (m.error ? " chat-bubble-error" : "");
-  return `<div class="chat-msg ${cls}"><div class="${bubbleCls}">${gstEscapeHtml(m.content).replace(/\n/g, "<br>")}</div></div>`;
+  /* Only the assistant writes Markdown; a user's own text stays literal. */
+  const body = (m.role === "user" || m.pending || m.error)
+    ? gstEscapeHtml(m.content).replace(/\n/g, "<br>")
+    : gstMarkdown(m.content);
+  return `<div class="chat-msg ${cls}"><div class="${bubbleCls}">${body}</div></div>`;
 }
 
 function gstRenderChatLog() {

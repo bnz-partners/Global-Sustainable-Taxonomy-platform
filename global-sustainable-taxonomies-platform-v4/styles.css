@@ -853,6 +853,48 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
+
+/* ---------- Markdown inside chat answers ----------
+   The assistant replies in Markdown; gstMarkdown() in global.js turns a small
+   subset into these elements. Everything is scoped to .chat-bubble so it can't
+   leak into the rest of the page, and the table gets its own scroll container
+   so a wide comparison never pushes the chat panel sideways. */
+.chat-bubble > *:first-child { margin-top: 0; }
+.chat-bubble > *:last-child { margin-bottom: 0; }
+.chat-bubble p { margin: 0 0 8px; }
+.chat-bubble h3, .chat-bubble h4, .chat-bubble h5, .chat-bubble h6 {
+  font-family: inherit; font-size: 0.95em; font-weight: 700;
+  margin: 12px 0 6px; line-height: 1.4;
+}
+.chat-bubble ul, .chat-bubble ol { margin: 0 0 8px; padding-left: 1.25em; }
+.chat-bubble li { margin: 2px 0; }
+.chat-bubble code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em; padding: 1px 5px; border-radius: 5px;
+  background: rgba(127, 137, 150, 0.16);
+}
+/* A source URL can be longer than a phone's screen — without this it pushes the
+   whole bubble sideways instead of wrapping. */
+.chat-bubble a {
+  color: inherit; text-decoration: underline; text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+.chat-bubble hr { border: 0; border-top: 1px solid currentColor; opacity: 0.18; margin: 12px 0; }
+
+.chat-table-wrap { overflow-x: auto; margin: 8px 0 10px; }
+.chat-table {
+  border-collapse: collapse; width: 100%; font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+/* word-break: keep-all stops Korean from breaking mid-word ("한/국") in a narrow
+   column — the cell grows instead, and .chat-table-wrap scrolls if it has to. */
+.chat-table th, .chat-table td {
+  border: 1px solid rgba(127, 137, 150, 0.32);
+  padding: 5px 9px; text-align: left; vertical-align: top;
+  word-break: keep-all;
+}
+.chat-table th { font-weight: 700; background: rgba(127, 137, 150, 0.12); }
+
 /* "Alternative approach" tag: a neutral outline, not a status colour — it sits
    next to the grey No-Taxonomy badge and qualifies it rather than replacing it. */
 .badge-alt {
