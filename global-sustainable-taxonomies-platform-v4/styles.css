@@ -808,6 +808,18 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 }
 .card-block h2 { font-size: 1.15rem; margin: 0 0 14px; }
 .sample-note { font-size: 0.78rem; color: var(--text-muted); font-style: italic; margin: -4px 0 12px; }
+/* Sits above the country write-up in non-English mode: informational, not a
+   warning, so it borrows the soft green rather than the amber alert styling. */
+.translation-scope-note {
+  font-size: 0.8rem; line-height: 1.6; color: var(--text-muted);
+  background: rgba(21, 128, 61, 0.07);
+  border: 1px solid rgba(21, 128, 61, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px; margin: 0 0 4px;
+}
+[data-theme="dark"] .translation-scope-note {
+  background: rgba(34, 197, 94, 0.09); border-color: rgba(34, 197, 94, 0.26);
+}
 
 .sources-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); line-height: 1.5; }
 .sources-note .sources-reviewed { display: block; margin-top: 2px; opacity: 0.85; }
@@ -1335,6 +1347,12 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .chart-block .sample-note { margin: 0 0 12px; }
 .hub-chart { width: 100%; height: 200px; }
 .timeline-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+/* How the chart is counted — smaller and quieter than the chart's own caption,
+   but present, because the count is not what a reader would assume. */
+.chart-basis-note {
+  font-size: 0.72rem; line-height: 1.6; color: var(--text-muted);
+  margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--border);
+}
 
 .thematic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .thematic-label { width: 150px; font-size: 0.82rem; font-weight: 600; flex-shrink: 0; }

@@ -5159,7 +5159,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Malaysia Climate Change and Principle-based Taxonomy (CCPT)",
-    "year": null,
+    "year": 2021,
     "note": "National taxonomy for the financial sector.",
     "source": "https://repoemc.ukm.my/server/api/core/bitstreams/91f1c401-3ccd-4134-90e0-32b9c4979e01/content",
     "officialDocuments": [
@@ -5397,7 +5397,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Singapore-Asia Taxonomy for Sustainable Finance",
-    "year": null,
+    "year": 2023,
     "note": "National taxonomy developed by the Monetary Authority of Singapore (MAS).",
     "source": "https://www.mas.gov.sg/development/sustainable-finance/taxonomy",
     "officialDocuments": [
@@ -5795,7 +5795,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Australian Sustainable Finance Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": "Voluntary classification (Green/Transition) focused on climate change mitigation and transition finance.",
     "source": "https://www.asfi.org.au/australian-taxonomy",
     "officialDocuments": [
@@ -6014,7 +6014,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Sostenible de México",
-    "year": null,
+    "year": 2023,
     "note": null,
     "source": "https://www.gob.mx/shcp/documentos/taxonomia-sostenible-de-mexico?state=published",
     "officialDocuments": [
@@ -6063,7 +6063,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Verde de El Salvador",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://ssf.gob.sv/taxonomiaverdeelsalvador/",
     "officialDocuments": [
@@ -6147,7 +6147,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Verde RD",
-    "year": null,
+    "year": 2024,
     "note": null,
     "source": "https://ambiente.gob.do/app/uploads/2024/06/Taxonomia-Verde_RD_V2-OK.pdf",
     "officialDocuments": [
@@ -6197,7 +6197,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Verde de Colombia",
-    "year": null,
+    "year": 2022,
     "note": null,
     "source": "https://www.taxonomiaverde.gov.co/",
     "officialDocuments": [
@@ -6298,7 +6298,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía de Finanzas Sostenibles de Costa Rica",
-    "year": null,
+    "year": 2024,
     "note": null,
     "source": "https://www.unepfi.org/wordpress/wp-content/uploads/2024/08/Taxonomia-de-Finanzas-Sostenibles-de-Costa-Rica.pdf",
     "officialDocuments": [
@@ -6346,7 +6346,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía de Finanzas Sostenibles de Panamá",
-    "year": null,
+    "year": 2024,
     "note": null,
     "source": "https://www.unepfi.org/publications/la-taxonomia-de-finanzas-sostenibles-de-panama/",
     "officialDocuments": [
@@ -6435,7 +6435,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía para Actividades Económicas Medioambientalmente Sostenibles",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://www.hacienda.cl/areas-de-trabajo/finanzas-internacionales/finanzas-sostenibles/taxonomia-para-actividades-economicas-medioambientalmente-sostenibles",
     "officialDocuments": [
@@ -6533,7 +6533,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Mongolia Green Taxonomy",
-    "year": null,
+    "year": 2019,
     "note": null,
     "source": "https://www.toc.mn/en/publication/mongol-ulsyn-nogoon-taksonomi",
     "officialDocuments": [
@@ -6574,7 +6574,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Africa",
     "taxonomy": "Rwanda Green Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://www.minecofin.gov.rw/rwandagreentaxonomy-1",
     "officialDocuments": [
@@ -6615,7 +6615,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Sri Lanka Green Finance Taxonomy",
-    "year": null,
+    "year": 2022,
     "note": null,
     "source": "https://www.cbsl.gov.lk/en/sl-green-finance-taxonomy",
     "officialDocuments": [
@@ -6907,7 +6907,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Uzbekistan Green Taxonomy",
-    "year": null,
+    "year": 2023,
     "note": null,
     "source": "https://lex.uz/ru/docs/6644013",
     "officialDocuments": [
@@ -6941,7 +6941,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Kyrgyz Republic Green Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://mineconom.gov.kg/froala/uploads/file/8f3849028e81dcb2de6c72dd29527eed9ee97e43.pdf",
     "officialDocuments": [
@@ -8023,7 +8023,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Honduras Green Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": "Launched by the National Banking and Insurance Commission (CNBS) with technical assistance from IFC, establishing sustainability criteria, do-no-significant-harm (DNSH) requirements, social safeguards and verifiable indicators for renewable energy, agroindustry, efficient manufacturing and green infrastructure. Honduras is also part of a regional Central American green taxonomy presented via CCSBSO.",
     "source": "https://www.cnbs.gob.hn/taxonomia-verde/",
     "officialDocuments": [

@@ -242,11 +242,19 @@ function setupFilterChips() {
 }
 
 /* ---------- Real data chart: taxonomy development timeline ---------- */
+/* Only countries with a taxonomy actually in force are plotted. Four entries
+   (Pakistan, India, Ecuador, Guatemala) carry a 2025 year on a draft or
+   roadmap; counting those in a chart titled "Taxonomy Development Timeline"
+   overstated 2025 by four, so they are left out. */
+function timelineCountsEntry(e) {
+  return e.status === "established" && !isNaN(parseInt(e.year, 10));
+}
+
 function renderTimelineChart() {
   const counts = {};
   Object.values(window.TAXONOMY_DATA || {}).forEach(e => {
-    const y = parseInt(e.year, 10);
-    if (!isNaN(y)) counts[y] = (counts[y] || 0) + 1;
+    if (!timelineCountsEntry(e)) return;
+    counts[parseInt(e.year, 10)] = (counts[parseInt(e.year, 10)] || 0) + 1;
   });
   const years = Object.keys(counts).map(Number).sort((a, b) => a - b);
   if (!years.length) {
@@ -271,6 +279,31 @@ function renderTimelineChart() {
   const labelStep = Math.ceil(years.length / 8);
   const labels = years.filter((_, i) => i % labelStep === 0);
   document.getElementById("timelineLabels").innerHTML = labels.map(y => `<span>${y}</span>`).join("");
+
+  renderTimelineBasis();
+}
+
+/* The chart counts COUNTRIES, not taxonomies, so the 27 EU member states that
+   share the single EU Taxonomy each add to 2020 — which is why that year towers
+   over the rest. Countries with no taxonomy in force, or with no confirmed
+   adoption year, drop out. None of that was stated anywhere, so the figures are
+   computed here and spelled out under the chart rather than being left for the
+   reader to infer. */
+function renderTimelineBasis() {
+  const el = document.getElementById("timelineBasis");
+  if (!el) return;
+  const entries = Object.values(window.TAXONOMY_DATA || {});
+  const hasYear = e => !isNaN(parseInt(e.year, 10));
+  const counts = {
+    eu: entries.filter(e => timelineCountsEntry(e) && /^EU Taxonomy$/i.test((e.taxonomy || "").trim())).length,
+    excluded: entries.filter(e => !timelineCountsEntry(e)).length,
+    draft: entries.filter(e => hasYear(e) && e.status !== "established").length
+  };
+  const t = (typeof gstT === "function") ? gstT : (k => k);
+  el.textContent = t("media.timelineBasis")
+    .replace("{eu}", counts.eu)
+    .replace("{excluded}", counts.excluded)
+    .replace("{draft}", counts.draft);
 }
 
 /* ---------- Media card detail modal (real items, embeds + link out) ---------- */
@@ -326,3 +359,7 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+/* The basis line carries computed counts, so gstApplyI18n's plain data-i18n
+   swap can't rebuild it — re-render it whenever the language changes. */
+document.addEventListener("gst-lang-changed", renderTimelineBasis);
