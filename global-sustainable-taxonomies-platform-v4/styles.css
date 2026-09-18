@@ -9,12 +9,17 @@
   --surface-deep: #0F172A;
   --surface-deep-2: #1E293B;
   --green: #15803D;
-  /* Countries covered only by a regional framework — same hue, clearly lighter
-     so the map reads as "green, but not its own taxonomy". The -text variant is
-     darkened for legibility on white where the fill colour would be too pale. */
-  --green-light: #7CC49B;
-  --green-light-text: #2E8B61;
+  /* Countries covered only by a regional framework. Deliberately a different
+     HUE from the national green, not a lighter shade of it: two greens read as
+     one category at map scale. The -text variant is darkened for legibility on
+     white, where the fill colour alone would be too pale. */
+  --regional: #3B82F6;
+  --regional-text: #1D4ED8;
   --amber: #D97706;
+  /* Map/legend FILL for "under development". Lighter than --amber so it does
+     not collide with the national green for red-green colour blindness; the
+     darker --amber stays for text, where this would be too pale. */
+  --amber-fill: #F59E0B;
   --grey-status: #B8C0CC;
   --bg: #FFFFFF;
   --bg-soft: #F8FAFC;
@@ -35,8 +40,8 @@
   --surface-deep: #1B2740;
   --surface-deep-2: #243247;
   --green: #22C55E;
-  --green-light: #7CC49B;
-  --green-light-text: #8FE0B4;
+  --regional: #3B82F6;
+  --regional-text: #7DB1FB;
   --bg: #0B1220;
   --bg-soft: #10192E;
   --card-bg: #121B2E;
@@ -538,12 +543,12 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   border-radius: 50%;
   display: inline-block;
 }
-/* Four-tier map key (2026-09). --green-light marks countries covered only by
-   a regional framework; .established stays for any older markup. */
+/* Four-tier map key (2026-09). --regional marks countries covered only by a
+   regional framework; .established stays for any older markup. */
 .dot.established,
 .dot.national { background: var(--green); }
-.dot.regional { background: var(--green-light); }
-.dot.developing { background: var(--amber); }
+.dot.regional { background: var(--regional); }
+.dot.developing { background: var(--amber-fill); }
 .dot.none { background: var(--grey-status); }
 
 /* ---------- Map + sidebar layout ---------- */
@@ -677,7 +682,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .stat-row-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
 .accent-established,
 .accent-national { color: var(--green); }
-.accent-regional { color: var(--green-light-text); }
+.accent-regional { color: var(--regional-text); }
 .accent-developing { color: var(--amber); }
 .accent-none { color: var(--text-muted); }
 
@@ -910,7 +915,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 }
 .badge-established,
 .badge-national { background: rgba(21, 128, 61, 0.14); color: #14532D; }
-.badge-regional { background: rgba(124, 196, 155, 0.22); color: #256B45; }
+.badge-regional { background: rgba(59, 130, 246, 0.16); color: #1D4ED8; }
 .badge-developing { background: rgba(217, 119, 6, 0.12); color: #B45309; }
 .badge-none { background: rgba(184, 192, 204, 0.25); color: var(--text-muted); }
 .badge-sm { font-size: 0.7rem; padding: 3px 10px; }
@@ -987,7 +992,7 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 }
 [data-theme="dark"] .badge-established,
 [data-theme="dark"] .badge-national { color: #4ADE80; }
-[data-theme="dark"] .badge-regional { color: #8FE0B4; }
+[data-theme="dark"] .badge-regional { color: #93C0FC; }
 [data-theme="dark"] .badge-developing { color: #FBBF24; }
 
 /* ---------- Country report page ---------- */

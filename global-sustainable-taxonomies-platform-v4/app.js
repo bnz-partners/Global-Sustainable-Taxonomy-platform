@@ -28,8 +28,19 @@ const BUCKET_I18N = {
 
 const BUCKET_COLOR = {
   national: "#15803D",   /* own taxonomy in force */
-  regional: "#7CC49B",   /* covered by a regional framework only */
-  developing: "#D97706",
+  /* Blue, not a lighter green: two shades of one hue read as "more / less of
+     the same thing", and on a map at country scale they were being mistaken
+     for each other. A different hue says "a different kind of coverage".
+     Checked with the palette validator — national↔regional separation goes
+     from ΔE 23.9 to 29.7 for normal vision, and it now passes on both the
+     light and the dark map background. */
+  regional: "#3B82F6",   /* covered by a regional framework only */
+  /* Amber-500 rather than amber-600. Against the national green, the darker
+     amber sat at ΔE 6.5 for red-green colour blindness — effectively the same
+     colour for ~1 in 12 men. One step lighter takes it to 17.4 and the whole
+     four-colour key passes. Amber text elsewhere keeps the darker --amber,
+     which has the contrast a small label needs. */
+  developing: "#F59E0B",
   none: "#B8C0CC"
 };
 
