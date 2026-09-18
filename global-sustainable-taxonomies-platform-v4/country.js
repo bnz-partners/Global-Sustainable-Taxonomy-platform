@@ -28,6 +28,16 @@ function altApproachTag(iso, status) {
   return `<span class="badge badge-alt">${escapeHtml(t("home.altApproach"))}</span>`;
 }
 
+/* Mirrors unverifiedTag() in app.js — see the note there. The test is that this
+   country has no official document attached, which is the same (empty) Official
+   Documents section further down this page. */
+function unverifiedTag(entry) {
+  if (!entry || entry.status === "established") return "";
+  if (entry.officialDocuments && entry.officialDocuments.length) return "";
+  const t = (typeof gstT === "function") ? gstT : (k => k);
+  return `<span class="badge badge-unverified" title="${escapeAttr(t("home.tagUnverifiedNote"))}">${escapeHtml(t("home.tagUnverified"))}</span>`;
+}
+
 function bucketStatus(entry) {
   const raw = entry ? entry.status : "none";
   if (raw === "developing") return "developing";
@@ -67,7 +77,7 @@ function overlayHeaderTags(entry) {
 
 function renderHeader(entry, status, label, name, iso) {
   const t = (typeof gstT === "function") ? gstT : (k => k);
-  const altTag = altApproachTag(iso, status);
+  const altTag = altApproachTag(iso, status) + unverifiedTag(entry);
   const taxonomyName = entry && entry.taxonomy ? entry.taxonomy : t("country.noTaxonomyEstablished");
   const overlayTags = overlayHeaderTags(entry);
   return `

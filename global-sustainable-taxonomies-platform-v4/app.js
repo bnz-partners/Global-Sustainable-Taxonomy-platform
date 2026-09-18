@@ -63,6 +63,29 @@ function escapeAttrApp(v) {
     .replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+/* "No taxonomy" and "we could not find one" look identical on the map, which
+   overstates how much of the world has been checked. A country with no official
+   document attached is flagged rather than given a fifth colour — the legend
+   stays at four, as with the "alternative approach" tag.
+
+   The test is deliberately mechanical and visible: the entry has no entry in
+   officialDocuments, which is exactly the (empty) Official Documents section a
+   reader sees on that country's page. No judgement call, reproducible by
+   anyone, and it stops being true the moment a document is added. */
+function lacksOfficialDocs(iso) {
+  const entry = getEntry(iso);
+  if (!entry || entry.status === "established") return false;
+  return !(entry.officialDocuments && entry.officialDocuments.length);
+}
+
+function unverifiedTag(iso) {
+  if (!lacksOfficialDocs(iso)) return "";
+  const t = (typeof gstT === "function") ? gstT : (k => k);
+  const label = t("home.tagUnverified");
+  const tip = escapeAttrApp(t("home.tagUnverifiedNote"));
+  return `<span class="badge badge-sm badge-unverified" title="${tip}">${escapeHtml(label)}</span>`;
+}
+
 function bucketLabel(bucket) {
   const key = BUCKET_I18N[bucket];
   return (typeof gstT === "function" && key && gstT(key)) || BUCKET_LABEL[bucket] || bucket;
@@ -171,6 +194,7 @@ function buildPopupHtml(feature) {
   html += `<h3>${name}</h3>`;
   html += `<span class="badge badge-${bucket}">${escapeHtml(bucketLabel(bucket))}</span>`;
   html += altApproachTag(iso);
+  html += unverifiedTag(iso);
   if (entry && entry.taxonomy) {
     html += `<div class="taxo-name">${entry.taxonomy}${entry.year ? " (" + entry.year + ")" : ""}</div>`;
     html += overlayPopupTags(entry);

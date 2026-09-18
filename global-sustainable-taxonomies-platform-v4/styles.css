@@ -966,6 +966,25 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   font-size: 0.7rem;
   padding: 3px 9px;
 }
+
+/* "Official source unverified" — a caveat on the status beside it, not a status
+   of its own, so it borrows the dashed outline of .badge-alt and adds a faint
+   amber tint to read as "check this" rather than as another category. Hovering
+   gives the full criterion. */
+.badge-unverified {
+  background: rgba(217, 119, 6, 0.08);
+  border: 1px dashed rgba(217, 119, 6, 0.45);
+  color: var(--amber);
+  margin-left: 6px;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  cursor: help;
+}
+[data-theme="dark"] .badge-unverified {
+  background: rgba(217, 119, 6, 0.14);
+  border-color: rgba(217, 119, 6, 0.5);
+  color: #F0A952;
+}
 [data-theme="dark"] .badge-established,
 [data-theme="dark"] .badge-national { color: #4ADE80; }
 [data-theme="dark"] .badge-regional { color: #8FE0B4; }
