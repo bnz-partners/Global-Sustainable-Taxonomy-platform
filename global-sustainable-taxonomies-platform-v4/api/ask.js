@@ -317,6 +317,299 @@ function krDetailBlock(question) {
   return block;
 }
 
+/* ---------------------------------------------------------------------------
+   Activity-level detail — EU Taxonomy (EU-27 + the three EEA EFTA states)
+
+   Same two-tier shape as the Korean block above, for the same reason: sending
+   all 241 objective-activity records in full would add ~1.3M characters to the
+   prompt. Tier 1 is a one-line index of every record (~18k characters), tier 2
+   the full criteria for up to EU_MAX_DETAIL records that match the question,
+   plus the common Appendix text those records point at (a DNSH entry that just
+   says "complies with Appendix A" is useless without it).
+
+   The copy read here is produced by build.py from the root
+   eu-taxonomy-activities.json, so the two can never drift apart.
+   --------------------------------------------------------------------------- */
+
+let EU_ACTIVITIES = null;
+function loadEuActivities() {
+  if (EU_ACTIVITIES === null) {
+    try {
+      const raw = fs.readFileSync(path.join(__dirname, "eu-taxonomy-activities.json"), "utf8");
+      EU_ACTIVITIES = JSON.parse(raw);
+    } catch (e) {
+      console.warn("EU Taxonomy activity data unavailable:", e.message);
+      EU_ACTIVITIES = { activities: [], appendices: {}, appendix_set: {}, meta: {} };
+    }
+  }
+  return EU_ACTIVITIES;
+}
+
+const EU_ISOS = new Set([
+  "AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA",
+  "DEU", "GRC", "HUN", "IRL", "ITA", "LVA", "LTU", "LUX", "MLT", "NLD",
+  "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE", "NOR", "ISL", "LIE"
+]);
+
+/* As with Korea, naming the jurisdiction is not the only way a question is
+   about it: "위임규정에서 원자력은 어떻게 다루나요?" uses the EU's own
+   vocabulary without ever saying EU. */
+const EU_TRIGGERS = [
+  "eu taxonomy", "eu-taxonomy", "european union", "european commission",
+  "eur-lex", "eurlex", "delegated act", "delegated regulation",
+  "taxonomy regulation", "2020/852", "2021/2139", "2023/2486",
+  "csrd", "sfdr", "nfrd", "do no significant harm", "dnsh",
+  "minimum safeguards", "enabling activity", "transitional activity",
+  "eu 택소노미", "eu택소노미", "유럽", "유럽연합", "이유택소노미",
+  "위임규정", "위임법", "기술선별기준", "택소노미 규정", "최소안전장치"
+];
+
+const EU_MAX_DETAIL = 4;
+/* One EU record can run to 15k characters (circular economy 1.2). Left whole,
+   four of them would dominate the prompt, so each is capped and the cut is
+   marked rather than hidden. */
+const EU_DETAIL_CHARS = 6000;
+
+const EU_OBJ_LABEL = {
+  climate_mitigation: "Climate change mitigation",
+  climate_adaptation: "Climate change adaptation",
+  water: "Water and marine resources",
+  circular_economy: "Circular economy",
+  pollution: "Pollution prevention and control",
+  biodiversity: "Biodiversity and ecosystems"
+};
+
+/* "EU" on its own has to be matched on a word boundary, not as a substring:
+   "neutral", "reuse" and "Deutschland" all contain it. */
+const EU_WORD = /(^|[^a-z])eu([^a-z]|$)/i;
+/* A record id typed directly is about the EU whatever else the sentence says. */
+const EU_ID = /\b(?:CCM|CCA|WTR|CE|PPC|BIO)-\d{1,2}\.\d{1,2}\b/i;
+
+function mentionsEu(text) {
+  const low = text.toLowerCase();
+  if (EU_TRIGGERS.some(k => low.includes(k))) return true;
+  if (EU_ID.test(text)) return true;
+  return EU_WORD.test(text);
+}
+
+/* Korean → the exact English wording the EU annexes use. CROSS_LANG above is
+   tuned to the K-Taxonomy's vocabulary and is too loose here — its "수력" →
+   "hydro" matches "hydrogen" and buried hydropower under five hydrogen
+   entries — so these take precedence and CROSS_LANG is only the fallback. */
+const EU_KO_ALIAS = {
+  "수력발전": "hydropower", "수력": "hydropower", "양수": "hydropower",
+  "태양광": "solar photovoltaic", "태양열": "solar", "집광형": "concentrated solar",
+  "풍력": "wind power", "해상풍력": "offshore wind", "육상풍력": "wind power",
+  "지열": "geothermal", "해양에너지": "ocean energy", "조력": "ocean energy",
+  "원자력": "nuclear", "원전": "nuclear", "소형모듈원자로": "nuclear",
+  "수소": "hydrogen", "암모니아": "anhydrous ammonia", "연료전지": "hydrogen",
+  "바이오매스": "bioenergy", "바이오가스": "biogas", "바이오연료": "biofuels",
+  "천연가스": "fossil gaseous fuels", "가스발전": "fossil gaseous fuels",
+  "석탄": "coal", "열병합": "cogeneration", "지역난방": "district heating",
+  "히트펌프": "heat pump", "열펌프": "heat pump", "폐열": "waste heat",
+  "송전": "transmission", "배전": "distribution", "에너지저장": "storage",
+  "배터리": "batteries", "이차전지": "batteries", "축전지": "batteries",
+  "전기차": "electric", "전기자동차": "electric",
+  "철강": "iron and steel", "시멘트": "cement", "알루미늄": "aluminium",
+  "유리": "glass", "종이": "paper", "펄프": "pulp", "비료": "fertiliser",
+  "화학": "chemicals", "석유화학": "chemicals", "플라스틱": "plastic",
+  "포장재": "plastic packaging", "포장": "packaging",
+  "반도체": "electronic", "전기전자": "electrical and electronic",
+  "데이터센터": "data processing hosting", "소프트웨어": "computer programming",
+  "건물": "buildings", "건축": "construction", "신축": "new buildings",
+  "리모델링": "renovation", "개보수": "renovation", "철거": "demolition",
+  "콘크리트": "concrete", "도로": "road", "철도": "rail",
+  "항공": "air transport", "공항": "airport", "해운": "sea", "선박": "vessels",
+  "물류": "freight", "탄소포집": "carbon capture", "직접공기포집": "direct air capture",
+  "탄소저장": "underground permanent geological storage",
+  "폐기물": "waste", "재활용": "recycling", "소각": "incineration",
+  "매립": "landfill", "하수": "waste water", "상수도": "water supply",
+  "정화": "remediation", "오염": "pollution",
+  "산림": "forest", "조림": "afforestation", "복원": "restoration",
+  "농업": "agriculture", "생물다양성": "conservation",
+  "숙박": "hotels", "호텔": "hotels", "관광": "hotels",
+  "보험": "insurance", "의약품": "medicinal", "원료의약품": "active pharmaceutical",
+  "중고": "second-hand", "수리": "repair", "재제조": "remanufacturing"
+};
+
+/* Grouped by objective rather than one self-describing line per record: the
+   objective name and the id prefix are then written once per group instead of
+   241 times, which halves the index without dropping anything from it. */
+function euIndexLines(acts) {
+  const order = [];
+  const byObj = {};
+  acts.forEach(a => {
+    if (!byObj[a.objective]) { byObj[a.objective] = []; order.push(a.objective); }
+    byObj[a.objective].push(a);
+  });
+  return order.map(obj => {
+    const prefix = (byObj[obj][0].id.split("-")[0]);
+    const head = `[${prefix}] ${EU_OBJ_LABEL[obj] || obj} — ${byObj[obj].length} records (ids are ${prefix}-<code>):`;
+    const rows = byObj[obj].map(a => {
+      const ty = a.activity_type === "own_performance" ? "" :
+        (a.activity_type === "enabling" ? " [enabling]" : " [transitional]");
+      return `  ${a.code} ${a.name}${ty}`;
+    }).join("\n");
+    return head + "\n" + rows;
+  }).join("\n");
+}
+
+function clip(s, n) {
+  const text = String(s || "");
+  return text.length <= n ? text : text.slice(0, n) + " […text truncated here — the full criteria are on the country page]";
+}
+
+function euActivityDetail(a) {
+  const dnsh = Object.keys(a.dnsh || {})
+    .map(k => `    - ${EU_OBJ_LABEL[k] || k}: ${a.dnsh[k]}`).join("\n");
+  return clip([
+    `### ${a.id} — ${a.code} ${a.name}`,
+    `  Objective: ${EU_OBJ_LABEL[a.objective] || a.objective} | Sector: ${a.sector}` +
+      (a.activity_type === "own_performance" ? "" : ` | ${a.activity_type} activity`) +
+      (a.nace && a.nace.length ? ` | NACE: ${a.nace.join(", ")}` : ""),
+    `  Legal basis: ${a.annex}`,
+    `  Description: ${a.description}`,
+    `  Substantial contribution criteria: ${a.substantial_contribution}`,
+    `  DNSH criteria:`,
+    dnsh
+  ].join("\n"), EU_DETAIL_CHARS);
+}
+
+/* Scores each record against the question. Deliberately simpler than the
+   Korean picker: the EU text is English-only, so the only cross-language work
+   needed is running the Korean question through the CROSS_LANG map that is
+   already maintained above. An activity code typed directly ("4.5", "CCM-4.5")
+   is treated as the strongest possible signal. */
+function pickEuActivities(acts, question) {
+  const low = question.toLowerCase().replace(/[-‐-―]/g, " ");
+
+  const codes = new Set((question.toUpperCase().match(/\b(?:CCM|CCA|WTR|CE|PPC|BIO)-\d{1,2}\.\d{1,2}\b/g) || []));
+  const bareCodes = new Set((question.match(/\b\d{1,2}\.\d{1,2}\b/g) || []));
+
+  const words = (low.match(/[a-z0-9]{3,}/g) || []).filter(w => !STOP.has(w));
+  const terms = new Set(words);
+  const phrases = [];
+  for (let i = 0; i + 1 < words.length; i++) phrases.push(words[i] + " " + words[i + 1]);
+
+  /* Korean question → the English words the Regulation actually uses. The
+     longest matching alias wins, so "수력발전" resolves to hydropower rather
+     than also dragging in every "수력"/"수소" near-miss. */
+  const aliasKeys = Object.keys(EU_KO_ALIAS).sort((a, b) => b.length - a.length);
+  (low.match(/[가-힣]{2,}/g) || []).forEach(w => {
+    let rest = w;
+    let hit = false;
+    aliasKeys.forEach(k => {
+      if (rest.indexOf(k) === -1) return;
+      hit = true;
+      rest = rest.split(k).join(" ");
+      const en = EU_KO_ALIAS[k];
+      en.split(" ").forEach(part => terms.add(part));
+      if (en.indexOf(" ") !== -1) phrases.push(en);
+    });
+    if (hit) return;
+    /* Nothing in the EU list — fall back to the K-Taxonomy map so a term this
+       file has not been taught still reaches something. */
+    Object.keys(CROSS_LANG).forEach(k => {
+      if (w.indexOf(k) === -1) return;
+      const en = CROSS_LANG[k];
+      en.split(" ").forEach(part => terms.add(part));
+      if (en.indexOf(" ") !== -1) phrases.push(en);
+    });
+  });
+
+  const scored = acts.map(a => {
+    const name = a.name.toLowerCase();
+    const hay = (a.name + " " + a.sector + " " + a.description + " " +
+      a.substantial_contribution).toLowerCase();
+    let score = 0;
+    if (codes.has(a.id)) score += 40;
+    if (bareCodes.has(a.code)) score += 12;
+    terms.forEach(term => {
+      if (name.includes(term)) score += 3;
+      else if (hay.includes(term)) score += 1;
+    });
+    phrases.forEach(ph => {
+      if (name.includes(ph)) score += 5;
+      else if (hay.includes(ph)) score += 1;
+    });
+    return { a, score };
+  }).filter(x => x.score > 0);
+
+  scored.sort((x, y) => y.score - x.score);
+
+  /* Same fallback as the Korean picker: "afforestation" never equals "forest",
+     so a long question word that contains an activity-name word counts as a
+     weak hit when the normal pass found next to nothing. */
+  if (scored.length < 2) {
+    const longTerms = Array.from(terms).filter(t => t.length >= 7);
+    if (longTerms.length) {
+      const already = new Set(scored.map(x => x.a));
+      const extra = [];
+      acts.forEach(a => {
+        if (already.has(a)) return;
+        const nameWords = a.name.toLowerCase().match(/[a-z]{5,}/g) || [];
+        let s = 0;
+        nameWords.forEach(w => {
+          longTerms.forEach(t => { if (t !== w && t.indexOf(w) !== -1) s += 2; });
+        });
+        if (s > 0) extra.push({ a, score: s });
+      });
+      extra.sort((x, y) => y.score - x.score);
+      scored.push.apply(scored, extra);
+    }
+  }
+
+  return scored.slice(0, EU_MAX_DETAIL).map(x => x.a);
+}
+
+function euDetailBlock(question) {
+  const data = loadEuActivities();
+  const acts = data.activities || [];
+  if (!acts.length) return "";
+
+  const matches = pickEuActivities(acts, question);
+  const counts = (data.meta && data.meta.counts) || {};
+
+  let block = [
+    "",
+    "EU TAXONOMY — TECHNICAL SCREENING CRITERIA BY ECONOMIC ACTIVITY.",
+    "Source: Commission Delegated Regulation (EU) 2021/2139 (Climate Delegated Act) Annexes I-II and Commission Delegated Regulation (EU) 2023/2486 (Environmental Delegated Act) Annexes I-IV, EUR-Lex consolidated texts as at 1 January 2026.",
+    `Coverage: ${acts.length} objective-activity records — mitigation ${counts.climate_mitigation || 0}, adaptation ${counts.climate_adaptation || 0}, water ${counts.water || 0}, circular economy ${counts.circular_economy || 0}, pollution ${counts.pollution || 0}, biodiversity ${counts.biodiversity || 0}.`,
+    "Record ids read as objective-code: CCM = mitigation, CCA = adaptation, WTR = water, CE = circular economy, PPC = pollution, BIO = biodiversity. The SAME activity number can mean different activities in different annexes, so always cite the id, not the bare number. An activity listed under two objectives has different criteria under each.",
+    "These criteria apply identically in all 27 EU Member States and, through the EEA Agreement, in Norway, Iceland and Liechtenstein — there is no national variation in the criteria themselves.",
+    euIndexLines(acts)
+  ].join("\n");
+
+  if (matches.length) {
+    block += "\n\nFULL TECHNICAL SCREENING CRITERIA for the records most relevant to this question " +
+      "(verbatim from the official English consolidated text — quote thresholds exactly, and say plainly " +
+      "when the user's case is not covered):\n" +
+      matches.map(euActivityDetail).join("\n\n");
+
+    /* The Appendices carry the generic DNSH criteria that dozens of activities
+       simply cross-refer to. Only the ones actually cited by the matched
+       records are attached. */
+    const book = data.appendices || {};
+    const wanted = [];
+    matches.forEach(a => {
+      const set = (data.appendix_set || {})[a.objective];
+      const text = Object.keys(a.dnsh || {}).map(k => a.dnsh[k]).join(" ") + " " + a.substantial_contribution;
+      (text.match(/Appendix\s+[A-E]/g) || []).forEach(m => {
+        const key = m.replace(/\s+/, " ");
+        const entry = (book[set] || {})[key];
+        if (entry && !wanted.some(w => w.key === key && w.set === set)) {
+          wanted.push({ key, set, text: entry });
+        }
+      });
+    });
+    if (wanted.length) {
+      block += "\n\nCOMMON APPENDIX CRITERIA referenced by the records above:\n" +
+        wanted.slice(0, 3).map(w => `### ${w.key} (${w.set === "climate" ? "Climate DA" : "Environmental DA"})\n${clip(w.text, 4500)}`).join("\n\n");
+    }
+  }
+  return block;
+}
+
 /* Shown instead of the old "(The model returned an empty response.)" — an
    error string told the user nothing and left them stuck. A model that returns
    nothing has almost always failed to understand the question, so invite a
@@ -401,6 +694,8 @@ function buildSystemPrompt(langCode, question, countryIso) {
     "If the data needed to answer isn't in the reference data below, say so plainly in the first sentence instead of guessing or inventing specifics — then point to the closest thing the site does have.",
     "If the question is ambiguous, too broad, or you cannot tell what is being asked, do not guess and do not produce an empty reply. Ask one short clarifying question, and offer two or three concrete options the user can pick from so they do not have to phrase it again from scratch.",
     "For South Korea the reference data goes down to individual economic activities. When you use it, cite the activity by its code and name (e.g. \"1-B-(3) Production of Hydrogen\"), quote thresholds exactly as written rather than rounding or paraphrasing them, and remind the user that the four steps — activity, recognition, exclusion and protection criteria — must all be satisfied. If an activity the user describes is not on the list under that exact name, say so in the first sentence, then name the closest activities that plausibly cover it (by code) so the user has somewhere to go — do not stretch one to fit, and do not walk them through a lookup procedure.",
+    "For the EU Taxonomy the reference data also goes down to individual economic activities, and it applies identically across the 27 EU Member States plus Norway, Iceland and Liechtenstein. Cite a record by its id and name (e.g. \"CCM-4.5 Electricity generation from hydropower\") — never by the bare number, because the same number means different activities in different annexes. Quote thresholds exactly as written. State which of the six objectives the criteria you are quoting belong to, since the same activity has different criteria under a different objective, and note when a DNSH entry simply cross-refers to an Appendix. If the activity the user describes is not on the list, say so in the first sentence and name the closest records by id.",
+    "When asked to compare the K-Taxonomy with the EU Taxonomy, compare the actual criteria you have been given for both — the activity definitions and the numeric thresholds — rather than describing the two frameworks in general terms. Name the specific activity on each side you are comparing, and say plainly where one framework has an activity the other does not, or where the structures do not line up (Korea's four-step activity/recognition/exclusion/protection criteria against the EU's substantial contribution plus DNSH).",
     "This is an informational tool, not legal, financial, or regulatory advice — if the user asks for a compliance determination for a specific transaction, remind them to confirm against official sources.",
     "",
     "SITE STRUCTURE (use this to direct users to the right place when relevant):",
@@ -423,11 +718,23 @@ function buildSystemPrompt(langCode, question, countryIso) {
      "is offshore wind covered?" still gets Korea's activity data even though
      the question itself never says "Korea". */
   const koreaContext = countryIso === "KOR" || (question && mentionsKorea(question));
+  /* The EU block works the same way. A question that mentions both — the most
+     common one on this site is "how does the K-Taxonomy differ from the EU's?"
+     — gets both blocks, which is the only way that comparison can be answered
+     from the actual criteria rather than from general knowledge. */
+  /* "EUU" is not a country code. It is what eu.html sends so that a question
+     typed on the EU framework page arrives with the EU activity data attached,
+     exactly as a country page's own ISO does. */
+  const onEuPage = countryIso === "EUU";
+  const euContext = onEuPage || EU_ISOS.has(countryIso) || (question && mentionsEu(question));
 
   const dynamic = [
     languageLine,
-    countryIso ? `The user is reading the country page for ${countryIso}. Assume questions are about that jurisdiction unless they name another one.` : "",
-    koreaContext ? krDetailBlock(question || "") : ""
+    onEuPage
+      ? "The user is reading the site's EU Taxonomy framework page. Assume questions are about the EU Taxonomy unless they name another jurisdiction. Do not describe the EU as a country."
+      : countryIso ? `The user is reading the country page for ${countryIso}. Assume questions are about that jurisdiction unless they name another one.` : "",
+    koreaContext ? krDetailBlock(question || "") : "",
+    euContext ? euDetailBlock(question || "") : ""
   ].filter(Boolean).join("\n");
 
   /* The static half is byte-identical on every question, so it is marked as a
@@ -554,4 +861,7 @@ module.exports = async function handler(req, res) {
 
 /* Offline verification hook — lets the retrieval be checked without calling the
    model. Not referenced by the HTTP handler. */
-module.exports.__test = { pickKrActivities, mentionsKorea, loadKrActivities };
+module.exports.__test = {
+  pickKrActivities, mentionsKorea, loadKrActivities,
+  pickEuActivities, mentionsEu, loadEuActivities, euDetailBlock, euIndexLines
+};
