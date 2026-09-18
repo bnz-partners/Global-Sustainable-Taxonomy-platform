@@ -986,6 +986,25 @@ button.chip.active { background: var(--green); border-color: var(--green); color
   font-size: 0.7rem;
   padding: 3px 9px;
 }
+
+/* "Official source unverified" — a caveat on the status beside it, not a status
+   of its own, so it borrows the dashed outline of .badge-alt and adds a faint
+   amber tint to read as "check this" rather than as another category. Hovering
+   gives the full criterion. */
+.badge-unverified {
+  background: rgba(217, 119, 6, 0.08);
+  border: 1px dashed rgba(217, 119, 6, 0.45);
+  color: var(--amber);
+  margin-left: 6px;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  cursor: help;
+}
+[data-theme="dark"] .badge-unverified {
+  background: rgba(217, 119, 6, 0.14);
+  border-color: rgba(217, 119, 6, 0.5);
+  color: #F0A952;
+}
 [data-theme="dark"] .badge-established,
 [data-theme="dark"] .badge-national { color: #4ADE80; }
 [data-theme="dark"] .badge-regional { color: #8FE0B4; }
@@ -6797,7 +6816,7 @@ window.TAXONOMY_DATA = {
     ],
     "overlays": [],
     "features": [
-      "Established by the Ministry of Environment in December 2021 to support Korea's 2050 carbon-neutrality goal; the ministry was reorganised as the Ministry of Climate, Energy and Environment (MCEE) in October 2025. [1][4]",
+      "Established by the Ministry of Environment in December 2021 to support Korea's 2050 carbon-neutrality goal; the ministry was reorganised as the Ministry of Climate, Energy and Environment (MCEE) in October 2025. [1]",
       "An activity qualifies only by passing all four steps in order: Activity Criteria (활동기준) → Recognition Criteria (인정기준, the technical thresholds) → Exclusion Criteria (배제기준, Korea's DNSH test) → Protection Criteria (보호기준, minimum safeguards on human rights, labour, safety, anti-corruption and cultural heritage). Failing any one step means the activity is not aligned. [1]",
       "Six environmental objectives: greenhouse gas reduction, climate change adaptation, sustainable water preservation, transition to circular economy, pollution prevention and control, and biodiversity preservation. [1]",
       "The 31 December 2025 guideline sets out 100 economic activities: 93 in the Green Area (4 common activities plus 48 GHG reduction, 11 climate adaptation, 8 water, 13 circular economy, 5 pollution and 4 biodiversity) and 7 in the Transitional Area. [1]",
@@ -6903,7 +6922,7 @@ window.TAXONOMY_DATA = {
       "The Korean Green Taxonomy (K-Taxonomy, 한국형 녹색분류체계) is the classification system that defines which economic activities count as green in Korea. It was established by the Ministry of Environment in December 2021 under the Framework Act on Carbon Neutrality and Green Growth, and has been revised repeatedly since — most recently on 31 December 2025. [1][2][3]",
       "Alignment is assessed in four sequential steps, and an activity must pass every one of them. The Activity Criteria (활동기준) place the project inside one of the listed economic activities. The Recognition Criteria (인정기준) are the technical thresholds for contributing to at least one of the six environmental objectives — for heavy industry these are quantitative benchmarks drawn from the Korea Emissions Trading Scheme, such as 0.15709 tCO2eq per tonne for crude steel semi-finished products made in a basic oxygen furnace. The Exclusion Criteria (배제기준) are Korea's do-no-significant-harm test, applied objective by objective. The Protection Criteria (보호기준) require that the activity involve no breach of law on human rights, labour, safety, anti-corruption or cultural heritage. [1]",
       "The current guideline covers 100 economic activities. The Green Area holds 93 of them — four common activities (innovative-item manufacturing, materials and components for those items, RD&D, and ICT solutions) plus 48 under greenhouse gas reduction, 11 under climate change adaptation, 8 under sustainable water preservation, 13 under transition to circular economy, 5 under pollution prevention and control, and 4 under biodiversity preservation. The Transitional Area holds the remaining 7, covering LNG and blended-gas power, new-build and continued-operation nuclear power, blue hydrogen, SME emission reduction and environment-friendly vessels; each carries an explicit sunset condition rather than open-ended recognition. [1]",
-      "In practice the K-Taxonomy underpins Korea's green bond and green loan market. K-Green Bonds have accounted for roughly 70–80% of the domestic won-denominated green bond market, with about KRW 4.7 trillion issued in 2023 and KRW 5.2 trillion in each of 2024 and 2025, alongside Green ABS aimed at smaller companies. Since December 2024 the taxonomy also underpins the Green Credit Management Guidelines applied to bank lending. [1][6]"
+      "In practice the K-Taxonomy underpins Korea's green bond and green loan market. K-Green Bonds have accounted for roughly 70–80% of the domestic won-denominated green bond market, with about KRW 4.7 trillion issued in 2023 and KRW 5.2 trillion in each of 2024 and 2025, alongside Green ABS aimed at smaller companies. Since December 2024 the taxonomy also underpins the Green Credit Management Guidelines applied to bank lending. [1][4]"
     ],
     "citations": [
       {
@@ -6923,16 +6942,6 @@ window.TAXONOMY_DATA = {
       },
       {
         "id": 4,
-        "label": "Lexology, \"The new Ministry of Climate, Energy and Environment of Korea\"",
-        "url": "https://www.lexology.com/library/detail.aspx?g=83c7592e-f02b-4276-bd3e-223a537eeb15"
-      },
-      {
-        "id": 5,
-        "label": "Lexology, \"The Korean Green Taxonomy (K-Taxonomy) Guideline and Its Implications\"",
-        "url": "https://www.lexology.com/library/detail.aspx?g=861eba8d-0fdd-44d8-af20-2dc26ce55fbc"
-      },
-      {
-        "id": 6,
         "label": "Kim & Chang, \"Amendment to K-Taxonomy and Establishment of Green Credit Management Guidelines\" (2024)",
         "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=31914"
       }
@@ -12656,6 +12665,8 @@ const GST_I18N = {
     "home.chipAllRegions": "All Regions", "home.chipEurope": "Europe", "home.chipAsiaPacific": "Asia-Pacific",
     "home.chipAmericas": "Americas", "home.chipAfrica": "Africa", "home.chipMiddleEast": "Middle East",
     "home.chipAllStatuses": "All Statuses", "home.chipDeveloped": "Developed", "home.chipNational": "National taxonomy", "home.chipRegional": "Regional framework", "home.altApproach": "Alternative approach",
+    "home.tagUnverified": "Official source unverified",
+    "home.tagUnverifiedNote": "No official document from this country's government or regulator is attached to this entry. Treat its status as not yet verified against a primary source, rather than as a confirmed finding.",
     "home.chipUnderDevelopment": "Under Development", "home.chipNoTaxonomy": "No Taxonomy",
     "home.globalStats": "Global Stats", "home.totalCountriesTracked": "Total Countries Tracked",
     "home.recentlyUpdated": "Recently Updated", "home.askAi": "Ask AI",
@@ -12811,6 +12822,8 @@ const GST_I18N = {
     "home.chipAllRegions": "Alla regioner", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asien-Stillahavsregionen",
     "home.chipAmericas": "Amerika", "home.chipAfrica": "Afrika", "home.chipMiddleEast": "Mellanöstern",
     "home.chipAllStatuses": "Alla statusar", "home.chipDeveloped": "Utvecklad", "home.chipNational": "Nationell taxonomi", "home.chipRegional": "Regionalt ramverk", "home.altApproach": "Alternativ ansats",
+    "home.tagUnverified": "Officiell källa ej bekräftad",
+    "home.tagUnverifiedNote": "Inget officiellt dokument från landets regering eller tillsynsmyndighet är bifogat denna post. Betrakta statusen som ännu inte bekräftad mot en primärkälla, inte som ett fastställt resultat.",
     "home.chipUnderDevelopment": "Under utveckling", "home.chipNoTaxonomy": "Ingen taxonomi",
     "home.globalStats": "Global statistik", "home.totalCountriesTracked": "Totalt antal länder som bevakas",
     "home.recentlyUpdated": "Senast uppdaterat", "home.askAi": "Fråga AI",
@@ -12966,6 +12979,8 @@ const GST_I18N = {
     "home.chipAllRegions": "전체 지역", "home.chipEurope": "유럽", "home.chipAsiaPacific": "아시아·태평양",
     "home.chipAmericas": "아메리카", "home.chipAfrica": "아프리카", "home.chipMiddleEast": "중동",
     "home.chipAllStatuses": "전체 상태", "home.chipDeveloped": "구축 완료", "home.chipNational": "자국 제도", "home.chipRegional": "지역 프레임워크 적용", "home.altApproach": "대체 수단 운용",
+    "home.tagUnverified": "공식 출처 미확인",
+    "home.tagUnverifiedNote": "이 국가의 정부·규제기관이 발표한 공식문서가 아직 첨부되어 있지 않습니다. 따라서 이 상태는 1차 자료로 확인된 결과가 아니라 미확인으로 이해하시기 바랍니다.",
     "home.chipUnderDevelopment": "개발 중", "home.chipNoTaxonomy": "택소노미 없음",
     "home.globalStats": "글로벌 통계", "home.totalCountriesTracked": "추적 중인 총 국가 수",
     "home.recentlyUpdated": "최근 업데이트", "home.askAi": "AI에게 질문",
@@ -13121,6 +13136,8 @@ const GST_I18N = {
     "home.chipAllRegions": "Todas las regiones", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asia-Pacífico",
     "home.chipAmericas": "América", "home.chipAfrica": "África", "home.chipMiddleEast": "Oriente Medio",
     "home.chipAllStatuses": "Todos los estados", "home.chipDeveloped": "Desarrollada", "home.chipNational": "Taxonomía nacional", "home.chipRegional": "Marco regional", "home.altApproach": "Enfoque alternativo",
+    "home.tagUnverified": "Fuente oficial no verificada",
+    "home.tagUnverifiedNote": "Esta ficha no lleva adjunto ningún documento oficial del gobierno o del regulador de este país. Considere su situación como aún no verificada frente a una fuente primaria, y no como un resultado confirmado.",
     "home.chipUnderDevelopment": "En desarrollo", "home.chipNoTaxonomy": "Sin taxonomía",
     "home.globalStats": "Estadísticas globales", "home.totalCountriesTracked": "Total de países monitoreados",
     "home.recentlyUpdated": "Actualizado recientemente", "home.askAi": "Preguntar a la IA",
@@ -13276,6 +13293,8 @@ const GST_I18N = {
     "home.chipAllRegions": "Toutes les régions", "home.chipEurope": "Europe", "home.chipAsiaPacific": "Asie-Pacifique",
     "home.chipAmericas": "Amériques", "home.chipAfrica": "Afrique", "home.chipMiddleEast": "Moyen-Orient",
     "home.chipAllStatuses": "Tous les statuts", "home.chipDeveloped": "Développée", "home.chipNational": "Taxonomie nationale", "home.chipRegional": "Cadre régional", "home.altApproach": "Approche alternative",
+    "home.tagUnverified": "Source officielle non vérifiée",
+    "home.tagUnverifiedNote": "Aucun document officiel du gouvernement ou du régulateur de ce pays n'est joint à cette fiche. Considérez son statut comme non encore vérifié auprès d'une source primaire, et non comme un constat confirmé.",
     "home.chipUnderDevelopment": "En développement", "home.chipNoTaxonomy": "Aucune taxonomie",
     "home.globalStats": "Statistiques globales", "home.totalCountriesTracked": "Total des pays suivis",
     "home.recentlyUpdated": "Récemment mis à jour", "home.askAi": "Demander à l'IA",
@@ -13431,6 +13450,8 @@ const GST_I18N = {
     "home.chipAllRegions": "Alle Regionen", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Asien-Pazifik",
     "home.chipAmericas": "Amerika", "home.chipAfrica": "Afrika", "home.chipMiddleEast": "Naher Osten",
     "home.chipAllStatuses": "Alle Status", "home.chipDeveloped": "Etabliert", "home.chipNational": "Nationale Taxonomie", "home.chipRegional": "Regionaler Rahmen", "home.altApproach": "Alternativer Ansatz",
+    "home.tagUnverified": "Amtliche Quelle nicht bestätigt",
+    "home.tagUnverifiedNote": "Diesem Eintrag ist kein amtliches Dokument der Regierung oder Aufsichtsbehörde dieses Landes beigefügt. Der Status ist daher als noch nicht anhand einer Primärquelle bestätigt zu verstehen, nicht als gesichertes Ergebnis.",
     "home.chipUnderDevelopment": "In Entwicklung", "home.chipNoTaxonomy": "Keine Taxonomie",
     "home.globalStats": "Globale Statistiken", "home.totalCountriesTracked": "Erfasste Länder insgesamt",
     "home.recentlyUpdated": "Kürzlich aktualisiert", "home.askAi": "KI fragen",
@@ -13586,6 +13607,8 @@ const GST_I18N = {
     "home.chipAllRegions": "すべての地域", "home.chipEurope": "ヨーロッパ", "home.chipAsiaPacific": "アジア太平洋",
     "home.chipAmericas": "南北アメリカ", "home.chipAfrica": "アフリカ", "home.chipMiddleEast": "中東",
     "home.chipAllStatuses": "すべてのステータス", "home.chipDeveloped": "整備済み", "home.chipNational": "自国の制度", "home.chipRegional": "地域枠組みの適用", "home.altApproach": "代替手段を運用",
+    "home.tagUnverified": "公式出典 未確認",
+    "home.tagUnverifiedNote": "この国の政府・規制機関が公表した公式文書は、まだ添付されていません。したがって、この状態は一次資料で確認された結果ではなく、未確認としてご理解ください。",
     "home.chipUnderDevelopment": "開発中", "home.chipNoTaxonomy": "タクソノミーなし",
     "home.globalStats": "グローバル統計", "home.totalCountriesTracked": "追跡対象の総国数",
     "home.recentlyUpdated": "最近の更新", "home.askAi": "AIに質問",
@@ -13741,6 +13764,8 @@ const GST_I18N = {
     "home.chipAllRegions": "所有地区", "home.chipEurope": "欧洲", "home.chipAsiaPacific": "亚太地区",
     "home.chipAmericas": "美洲", "home.chipAfrica": "非洲", "home.chipMiddleEast": "中东",
     "home.chipAllStatuses": "所有状态", "home.chipDeveloped": "已建立", "home.chipNational": "本国制度", "home.chipRegional": "适用区域框架", "home.altApproach": "采用替代方案",
+    "home.tagUnverified": "官方出处未经核实",
+    "home.tagUnverifiedNote": "本条目尚未附上该国政府或监管机构发布的官方文件。因此，此状态应理解为尚未依据一手资料核实，而非已确认的结论。",
     "home.chipUnderDevelopment": "开发中", "home.chipNoTaxonomy": "无分类标准",
     "home.globalStats": "全球统计", "home.totalCountriesTracked": "追踪国家总数",
     "home.recentlyUpdated": "最近更新", "home.askAi": "咨询 AI",
@@ -13896,6 +13921,8 @@ const GST_I18N = {
     "home.chipAllRegions": "جميع المناطق", "home.chipEurope": "أوروبا", "home.chipAsiaPacific": "آسيا والمحيط الهادئ",
     "home.chipAmericas": "الأمريكتان", "home.chipAfrica": "أفريقيا", "home.chipMiddleEast": "الشرق الأوسط",
     "home.chipAllStatuses": "جميع الحالات", "home.chipDeveloped": "مكتمل", "home.chipNational": "تصنيف وطني", "home.chipRegional": "إطار إقليمي", "home.altApproach": "نهج بديل",
+    "home.tagUnverified": "مصدر رسمي غير مؤكَّد",
+    "home.tagUnverifiedNote": "لا توجد في هذه البطاقة أي وثيقة رسمية صادرة عن حكومة هذا البلد أو جهته التنظيمية. لذا يُفهم هذا الوضع على أنه غير مؤكَّد بمصدر أولي، لا على أنه نتيجة مثبتة.",
     "home.chipUnderDevelopment": "قيد التطوير", "home.chipNoTaxonomy": "لا يوجد تصنيف",
     "home.globalStats": "إحصاءات عالمية", "home.totalCountriesTracked": "إجمالي عدد البلدان المتابَعة",
     "home.recentlyUpdated": "آخر التحديثات", "home.askAi": "اسأل الذكاء الاصطناعي",
@@ -14051,6 +14078,8 @@ const GST_I18N = {
     "home.chipAllRegions": "Todas as Regiões", "home.chipEurope": "Europa", "home.chipAsiaPacific": "Ásia-Pacífico",
     "home.chipAmericas": "Américas", "home.chipAfrica": "África", "home.chipMiddleEast": "Oriente Médio",
     "home.chipAllStatuses": "Todos os Status", "home.chipDeveloped": "Desenvolvida", "home.chipNational": "Taxonomia nacional", "home.chipRegional": "Quadro regional", "home.altApproach": "Abordagem alternativa",
+    "home.tagUnverified": "Fonte oficial não verificada",
+    "home.tagUnverifiedNote": "Não está anexado a este registo qualquer documento oficial do governo ou do regulador deste país. Considere o seu estado como ainda não verificado face a uma fonte primária, e não como um resultado confirmado.",
     "home.chipUnderDevelopment": "Em Desenvolvimento", "home.chipNoTaxonomy": "Sem Taxonomia",
     "home.globalStats": "Estatísticas Globais", "home.totalCountriesTracked": "Total de Países Monitorados",
     "home.recentlyUpdated": "Atualizado Recentemente", "home.askAi": "Perguntar à IA",
