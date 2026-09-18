@@ -128,10 +128,12 @@
 <script src="theme.js"></script>
 <script src="data.js"></script>
 <script src="global.js"></script>
-<!-- Activity-level drill-down (South Korea). Deliberately NOT inlined by
-     build.py: it fetches its own ~420KB dataset only when a KOR page is
-     opened, so leaving it as a separate file keeps country.html small. -->
+<!-- Activity-level drill-downs (South Korea; EU-27 + EEA). Deliberately NOT
+     inlined by build.py: each fetches its own dataset (K-Taxonomy ~420KB,
+     EU ~1.3MB / ~170KB compressed) only when one of those country pages is
+     opened, so leaving them as separate files keeps country.html small. -->
 <script src="kr-taxonomy.js"></script>
+<script src="eu-taxonomy.js"></script>
 <script src="country.js"></script>
 </body>
 </html>

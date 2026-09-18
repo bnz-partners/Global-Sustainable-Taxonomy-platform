@@ -111,23 +111,55 @@ function overviewTable(entry, name, label) {
   return html;
 }
 
-/* Countries that ship an activity-level drill-down (kr-taxonomy.js and its
-   companion JSON). For these, the "Environmental Objectives" card becomes
-   interactive: clicking an objective opens that objective's economic
-   activities and their full determining criteria. */
-const DRILLDOWN_COUNTRIES = { KOR: true };
+/* Countries that ship an activity-level drill-down (kr-taxonomy.js /
+   eu-taxonomy.js and their companion JSON files). For these, the
+   "Environmental Objectives" card becomes interactive: clicking an objective
+   opens that objective's economic activities and their full screening
+   criteria. The value is the name of the global the renderer publishes, so a
+   third jurisdiction is one line here plus its own renderer file.
+
+   EU_TAXONOMY covers the EU-27 plus the three EEA EFTA states, which apply the
+   Taxonomy Regulation through the EEA Agreement — the same criteria text, so
+   the same dataset. */
+const DRILLDOWN_COUNTRIES = (() => {
+  const map = { KOR: "KR_TAXONOMY" };
+  [
+    /* EU-27 */
+    "AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA",
+    "DEU", "GRC", "HUN", "IRL", "ITA", "LVA", "LTU", "LUX", "MLT", "NLD",
+    "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE",
+    /* EEA EFTA */
+    "NOR", "ISL", "LIE"
+  ].forEach(iso => { map[iso] = "EU_TAXONOMY"; });
+  return map;
+})();
+
+function drilldownRenderer(iso) {
+  const key = DRILLDOWN_COUNTRIES[iso];
+  return (key && window[key]) ? window[key] : null;
+}
 
 function hasDrilldown(iso) {
-  return !!DRILLDOWN_COUNTRIES[iso] && typeof window.KR_TAXONOMY !== "undefined";
+  return !!drilldownRenderer(iso);
 }
 
 function objectivesSection(entry, iso) {
   const t = (typeof gstT === "function") ? gstT : (k => k);
 
   /* Interactive drill-down replaces the static pill list where available.
-     The container is filled asynchronously by KR_TAXONOMY.render(). */
+     The container is filled asynchronously by the jurisdiction's renderer.
+     The id keeps its original "kr" name on purpose: the build workflow's
+     safety check greps country.html for it to prove the drill-down survived
+     the last edit, so renaming it here would stop the site from deploying. */
   if (hasDrilldown(iso)) {
-    return `<div id="krTaxonomyDrilldown" class="kr-drill"></div>`;
+    /* For the 30 EU-Taxonomy countries the criteria below are not this
+       country's own — they are the EU's, word for word, in all 30. Saying so
+       here, with a way through to the framework page, is the difference
+       between a reader thinking Germany wrote these and knowing it did not. */
+    const euLink = DRILLDOWN_COUNTRIES[iso] === "EU_TAXONOMY"
+      ? `<a class="eu-page-link" href="eu.html">${t("country.euFullPage")}</a>`
+      : "";
+    return `${euLink}<div id="krTaxonomyDrilldown" class="kr-drill"></div>`;
   }
 
   const objs = (entry && entry.objectives && entry.objectives.length) ? entry.objectives : null;
@@ -693,10 +725,12 @@ function renderCountry(entryOverride) {
   setupCountryChat(name, entry && entry.taxonomy, iso);
   setupCompare(iso, name);
 
-  /* Activity-level drill-down (currently South Korea only). Loads its own
-     dataset lazily, so it costs nothing on other country pages. */
-  if (hasDrilldown(iso)) {
-    window.KR_TAXONOMY.render(document.getElementById("krTaxonomyDrilldown"));
+  /* Activity-level drill-down (South Korea, and the EU-27 + EEA states). Each
+     renderer loads its own dataset lazily, so it costs nothing on the other
+     country pages. */
+  const drill = drilldownRenderer(iso);
+  if (drill) {
+    drill.render(document.getElementById("krTaxonomyDrilldown"));
   }
 }
 

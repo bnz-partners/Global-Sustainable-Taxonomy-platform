@@ -1857,6 +1857,118 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 
 .kr-drill-source { font-size: 0.74rem; color: var(--text-muted); line-height: 1.6; margin: 16px 0 0; }
 
+/* EU drill-down extras — the EU Taxonomy marks activities as enabling or
+   transitional, lists NACE codes, and points at Appendices A–E for the common
+   DNSH criteria. Everything else reuses the .kr-* drill-down styles. */
+.eu-type, .eu-obj-chip {
+  display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 10px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.01em; vertical-align: middle;
+  white-space: nowrap;
+}
+.eu-type-enabling { background: rgba(59, 130, 246, 0.14); color: var(--regional-text); }
+.eu-type-transitional { background: rgba(217, 119, 6, 0.14); color: var(--amber); }
+.eu-obj-chip { background: var(--bg-soft); color: var(--text-muted); border: 1px solid var(--border); }
+
+.eu-appx { margin: 10px 0 0; border: 1px dashed var(--border); border-radius: var(--radius-sm); }
+.eu-appx > summary {
+  cursor: pointer; padding: 7px 10px; font-size: 0.78rem; font-weight: 600;
+  color: var(--text-muted);
+}
+.eu-appx > summary:hover { color: var(--text); }
+.eu-appx[open] > summary { border-bottom: 1px solid var(--border); }
+.eu-appx .kr-crit-text { padding: 0 10px; font-size: 0.78rem; }
+.eu-appx .kr-crit-text:last-child { padding-bottom: 10px; }
+
+/* ---------------------------------------------------------------------------
+   EU Taxonomy framework page (eu.html)
+
+   The EU is not a country, so it has no entry in the country dataset and no
+   country page. This is its own page, laid out with the same card blocks the
+   country pages use.
+   --------------------------------------------------------------------------- */
+
+.eu-page { max-width: 980px; margin: 0 auto; padding: 28px 20px 48px; }
+.eu-page .card-block { margin-bottom: 20px; }
+.eu-page h3 { font-size: 0.95rem; margin: 20px 0 8px; }
+.eu-page p { font-size: 0.88rem; line-height: 1.75; color: var(--text); }
+
+.eu-status { border-left: 3px solid var(--green); }
+.eu-status-pending { color: var(--text-muted); }
+.eu-status-date {
+  font-size: 0.76rem !important; color: var(--text-muted);
+  margin-top: 10px; font-variant-numeric: tabular-nums;
+}
+
+.eu-conditions, .eu-types { margin: 0; padding-left: 0; list-style: none; counter-reset: eucond; }
+.eu-conditions > li, .eu-types > li {
+  position: relative; padding: 10px 0 10px 34px;
+  border-top: 1px solid var(--border);
+}
+.eu-conditions > li:first-child, .eu-types > li:first-child { border-top: none; }
+.eu-conditions > li::before {
+  counter-increment: eucond; content: counter(eucond);
+  position: absolute; left: 0; top: 11px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg-soft); color: var(--green);
+  font-size: 0.72rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.eu-types > li::before {
+  content: ""; position: absolute; left: 8px; top: 19px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+}
+.eu-conditions strong, .eu-types strong { display: block; font-size: 0.88rem; margin-bottom: 3px; }
+.eu-conditions span, .eu-types span { font-size: 0.85rem; line-height: 1.7; color: var(--text-muted); }
+
+.eu-note { font-size: 0.8rem !important; color: var(--text-muted); margin-top: 10px; }
+
+.eu-law-table td { vertical-align: top; font-size: 0.82rem; line-height: 1.6; }
+.eu-law-alias { display: block; margin-top: 3px; font-size: 0.76rem; color: var(--text-muted); }
+
+.eu-verify {
+  font-size: 0.83rem !important; line-height: 1.7;
+  background: var(--bg-soft); border-left: 3px solid var(--amber);
+  border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 12px;
+}
+
+.eu-country-group { font-size: 0.85rem !important; color: var(--text-muted); font-weight: 600; }
+.eu-country-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+.eu-country-chip {
+  display: inline-block; padding: 4px 10px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--card-bg);
+  font-size: 0.8rem; color: var(--text); text-decoration: none;
+}
+.eu-country-chip:hover { border-color: var(--green); background: var(--bg-soft); }
+
+.eu-disclaimer { font-size: 0.78rem !important; color: var(--text-muted); line-height: 1.7; margin-top: 4px; }
+
+/* Shown above the drill-down on the 30 country pages that share the EU's
+   criteria, so a reader knows whose criteria they are reading. */
+.eu-page-link {
+  display: block; margin: 0 0 12px; padding: 9px 12px;
+  border: 1px dashed var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-soft); color: var(--regional-text);
+  font-size: 0.8rem; line-height: 1.6; text-decoration: none; font-weight: 600;
+}
+.eu-page-link:hover { border-color: var(--regional); }
+
+@media (max-width: 560px) {
+  .eu-page { padding: 20px 16px 40px; }
+}
+
+.eu-lang-note {
+  font-size: 0.78rem; line-height: 1.6; color: var(--text-muted);
+  background: var(--bg-soft); border-left: 3px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 10px; margin: 0 0 12px;
+}
+
+.eu-dnsh-cell span { display: block; }
+.eu-dnsh-cell span + span { margin-top: 6px; }
+
+.eu-meta p {
+  font-size: 0.76rem; color: var(--text-muted); line-height: 1.6; margin: 4px 0 0;
+}
+
 @media (max-width: 560px) {
   .kr-obj-grid { grid-template-columns: 1fr; }
   .kr-crit-table th { width: 40%; }
