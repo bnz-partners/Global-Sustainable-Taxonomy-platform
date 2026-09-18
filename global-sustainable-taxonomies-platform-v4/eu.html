@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Subscriber Preferences — Global Sustainable Taxonomies</title>
+<title>EU Taxonomy — Global Sustainable Taxonomies</title>
+<meta name="description" content="The EU Taxonomy in one place: how Regulation (EU) 2020/852 works, which delegated acts are in force, and the full technical screening criteria for all 241 objective-activity records." />
 <script>
   (function () {
     var saved = localStorage.getItem("gst-theme");
@@ -12,10 +13,6 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<!-- Noto Sans KR / Noto Serif KR: Inter and Playfair Display carry no Korean
-     glyphs, so Korean headings fell back to whatever serif the OS had
-     (Windows: 바탕/궁서). Google Fonts subsets these by unicode-range, so a
-     page with no Korean on it downloads none of it. -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet" />
 <style>
 :root {
@@ -2143,39 +2140,121 @@ h1, h2, h3 { font-family: "Plain Ampersand", "Playfair Display", "Noto Serif KR"
   </div>
 </div>
 
-<main class="page subscribe-page">
-  <a class="back-link" href="subscribe.html">&larr; <span data-i18n="prefs.backToSubscribe">Back to Subscribe</span></a>
-  <h1 style="margin-top:20px;" data-i18n="prefs.heading">Subscriber Preferences</h1>
-  <p class="lede" data-i18n="prefs.lede">Manage your digest topics, language and communication settings.</p>
-
-  <div class="sample-banner" data-i18n="prefs.sampleBanner">Demo preference centre — for illustration only. There is no real subscriber account behind this page, so nothing here is saved, and the fields are shown pre-filled with sample data. In the live product, existing subscribers would land here after clicking a link in their digest email.</div>
-
-  <section class="advisor-panel subscribe-form-panel" style="max-width:520px;">
-    <label class="field-label" for="prefEmail" data-i18n="subscribe.emailLabel">Email Address</label>
-    <input type="email" id="prefEmail" value="you@example.com" disabled />
-
-    <label class="field-label" for="prefName" data-i18n="subscribe.nameLabel">Name</label>
-    <input type="text" id="prefName" value="Sample Subscriber" disabled />
-
-    <label class="field-label" data-i18n="subscribe.interestLabel">Area of Interest</label>
-    <div class="interest-list">
-      <label class="interest-check checked"><input type="checkbox" checked disabled /> <span data-i18n="subscribe.interestEu">EU Taxonomy Updates</span></label>
-      <label class="interest-check"><input type="checkbox" disabled /> <span data-i18n="subscribe.interestApac">Asia-Pacific Taxonomies</span></label>
-      <label class="interest-check checked"><input type="checkbox" checked disabled /> <span data-i18n="subscribe.interestGreenBonds">Green Bonds &amp; Finance</span></label>
-      <label class="interest-check"><input type="checkbox" disabled /> <span data-i18n="subscribe.interestCompliance">Compliance &amp; Assurance</span></label>
+<section class="country-header-dark">
+  <div class="country-header-inner">
+    <div class="country-header-row">
+      <div class="country-header-titles">
+        <span class="badge badge-regional" data-i18n="home.chipRegional">Regional Framework</span>
+        <h1>EU Taxonomy</h1>
+        <p class="country-header-sub">Regulation (EU) 2020/852 · <span data-i18n="eu.headerSub">applies in 30 countries — the 27 EU Member States and, through the EEA Agreement, Norway, Iceland and Liechtenstein</span></p>
+      </div>
     </div>
+  </div>
+</section>
 
-    <label class="field-label" for="prefLang" data-i18n="subscribe.langLabel">Language Preference</label>
-    <select id="prefLang" disabled>
-      <option selected>English</option>
-    </select>
+<main class="page eu-page">
 
-    <button class="btn-subscribe-large" id="prefSaveBtn" type="button" disabled data-i18n="prefs.saveBtn">Save Preferences (demo — disabled)</button>
-
-    <p class="privacy-note" data-i18n="prefs.privacyNote">This screen is a non-functional placeholder. To actually change your interests or language in the future, you'd use a page like this one, but it isn't wired up to a real subscriber database yet.</p>
-
-    <a class="manage-prefs-link" id="prefUnsubscribeLink" href="#" data-i18n="prefs.unsubscribeLink">Unsubscribe (demo — disabled)</a>
+  <!-- What version of the criteria this page is showing. Dated on purpose: the
+       technical screening criteria are under revision and this line is what
+       tells a reader whether the page is still current. -->
+  <section class="eu-status card-block">
+    <h2 data-i18n="eu.statusTitle">Version shown on this page</h2>
+    <p data-i18n="eu.statusBody">The criteria below are taken from the official English consolidated texts on EUR-Lex as at 1 January 2026. Those consolidated texts already incorporate Delegated Regulation (EU) 2026/73 of 4 July 2025 (OJ L 73, 8 January 2026), which simplified the disclosure templates and some of the "do no significant harm" criteria — so what you see here is the version in force, not the pre-simplification text.</p>
+    <p class="eu-status-pending" data-i18n="eu.statusPending">A further revision is under way: the Commission consulted on draft amendments to the Climate and Environmental Delegated Acts between 17 March and 14 April 2026, expected to apply from 1 January 2027. This page does not yet reflect those drafts, and their adoption should be re-checked against the Commission's own page before relying on the dates.</p>
+    <p class="eu-status-date"><span data-i18n="eu.statusChecked">Last checked against the source</span>: 2026-09-18</p>
   </section>
+
+  <section class="card-block">
+    <h2 data-i18n="eu.overviewTitle">How the EU Taxonomy works</h2>
+    <p data-i18n="eu.overviewIntro">The EU Taxonomy is a classification system that decides whether a given economic activity counts as environmentally sustainable. It is not a rating and not a score: an activity either meets the conditions or it does not.</p>
+
+    <h3 data-i18n="eu.fourTitle">Four conditions, all of which must be met (Article 3)</h3>
+    <ol class="eu-conditions">
+      <li><strong data-i18n="eu.four1Head">Substantial contribution</strong><span data-i18n="eu.four1Body">The activity contributes substantially to at least one of the six environmental objectives (Article 9).</span></li>
+      <li><strong data-i18n="eu.four2Head">Do no significant harm (DNSH)</strong><span data-i18n="eu.four2Body">It does not significantly harm any of the other five objectives (Article 17).</span></li>
+      <li><strong data-i18n="eu.four3Head">Minimum safeguards</strong><span data-i18n="eu.four3Body">It is carried out in line with the OECD Guidelines for Multinational Enterprises and the UN Guiding Principles on Business and Human Rights, including the ILO core conventions (Article 18). These are social, not environmental, conditions, and they are not part of the criteria listed further down this page.</span></li>
+      <li><strong data-i18n="eu.four4Head">Technical screening criteria</strong><span data-i18n="eu.four4Body">It meets the activity-specific criteria the Commission sets in the delegated acts — the text reproduced in full further down this page.</span></li>
+    </ol>
+
+    <h3 data-i18n="eu.typeTitle">Three kinds of activity</h3>
+    <ul class="eu-types">
+      <li><strong data-i18n="eu.type1Head">Own performance</strong><span data-i18n="eu.type1Body">The activity is low-impact in itself. Most activities are of this kind.</span></li>
+      <li><strong data-i18n="eu.type2Head">Enabling (Article 16)</strong><span data-i18n="eu.type2Body">The activity directly enables another activity to make a substantial contribution — manufacturing wind turbines, for instance, rather than generating the power.</span></li>
+      <li><strong data-i18n="eu.type3Head">Transitional (Article 10(2))</strong><span data-i18n="eu.type3Body">There is no technologically and economically feasible low-carbon alternative yet, so the activity is recognised on stricter, time-limited terms.</span></li>
+    </ul>
+    <p class="eu-note" data-i18n="eu.typeNote">Each activity in the list further down is tagged where the Regulation itself calls it an enabling or a transitional activity.</p>
+  </section>
+
+  <section class="card-block">
+    <h2 data-i18n="eu.lawTitle">The legal texts</h2>
+    <p data-i18n="eu.lawIntro">The Taxonomy Regulation sets the framework; the criteria themselves live in delegated acts adopted by the Commission. Titles and numbers are left in the original English, as they are on every country page.</p>
+    <div class="table-scroll">
+      <table class="criteria-table eu-law-table">
+        <thead>
+          <tr>
+            <th data-i18n="eu.lawColAct">Act</th>
+            <th data-i18n="eu.lawColDate">Dates</th>
+            <th data-i18n="eu.lawColRole">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://eur-lex.europa.eu/eli/reg/2020/852/oj/eng" target="_blank" rel="noopener">Regulation (EU) 2020/852 ↗</a><br /><span class="eu-law-alias" data-i18n="eu.lawAliasFramework">Taxonomy Regulation</span></td>
+            <td>18 Jun 2020</td>
+            <td data-i18n="eu.lawRoleFramework">The framework: the six objectives, the four conditions, and the disclosure duty in Article 8.</td>
+          </tr>
+          <tr>
+            <td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02021R2139-20260101" target="_blank" rel="noopener">Delegated Regulation (EU) 2021/2139 ↗</a><br /><span class="eu-law-alias" data-i18n="eu.lawAliasClimate">Climate Delegated Act</span></td>
+            <td data-i18n="eu.lawDateClimate">Adopted 4 Jun 2021 · applies from 1 Jan 2022</td>
+            <td data-i18n="eu.lawRoleClimate">Criteria for climate change mitigation (Annex I) and adaptation (Annex II).</td>
+          </tr>
+          <tr>
+            <td><a href="https://eur-lex.europa.eu/eli/reg_del/2022/1214/oj/eng" target="_blank" rel="noopener">Delegated Regulation (EU) 2022/1214 ↗</a><br /><span class="eu-law-alias" data-i18n="eu.lawAliasComplementary">Complementary Climate Delegated Act</span></td>
+            <td data-i18n="eu.lawDateComplementary">Adopted 9 Mar 2022 · applies from Jan 2023</td>
+            <td data-i18n="eu.lawRoleComplementary">Added nuclear and certain fossil gas activities on strict conditions (activities 4.26–4.31).</td>
+          </tr>
+          <tr>
+            <td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02023R2486-20260101" target="_blank" rel="noopener">Delegated Regulation (EU) 2023/2486 ↗</a><br /><span class="eu-law-alias" data-i18n="eu.lawAliasEnv">Environmental Delegated Act</span></td>
+            <td data-i18n="eu.lawDateEnv">Adopted 27 Jun 2023 · applies from Jan 2024</td>
+            <td data-i18n="eu.lawRoleEnv">Criteria for the remaining four objectives: water, circular economy, pollution, biodiversity.</td>
+          </tr>
+          <tr>
+            <td><a href="https://eur-lex.europa.eu/eli/reg_del/2021/2178/oj/eng" target="_blank" rel="noopener">Delegated Regulation (EU) 2021/2178 ↗</a><br /><span class="eu-law-alias" data-i18n="eu.lawAliasDisclosure">Disclosures Delegated Act</span></td>
+            <td data-i18n="eu.lawDateDisclosure">Adopted 6 Jul 2021 · applies from 1 Jan 2022</td>
+            <td data-i18n="eu.lawRoleDisclosure">What companies must publish, and in which templates.</td>
+          </tr>
+          <tr>
+            <td><a href="https://eur-lex.europa.eu/eli/reg_del/2026/73/oj/eng" target="_blank" rel="noopener">Delegated Regulation (EU) 2026/73 ↗</a><br /><span class="eu-law-alias" data-i18n="eu.lawAliasSimpl">Simplification act</span></td>
+            <td data-i18n="eu.lawDateSimpl">Adopted 4 Jul 2025 · OJ 8 Jan 2026 · applies from 1 Jan 2026</td>
+            <td data-i18n="eu.lawRoleSimpl">Cut the disclosure templates sharply and simplified some DNSH criteria, chemicals in particular. Already incorporated in the criteria shown on this page.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card-block">
+    <h2 data-i18n="eu.discTitle">Who has to report, and what</h2>
+    <p data-i18n="eu.discBody">Article 8 of the Taxonomy Regulation is the reporting duty; Delegated Regulation (EU) 2021/2178 sets out the content and the templates. Which companies fall under it is decided by the Corporate Sustainability Reporting Directive (CSRD), and for financial products the Sustainable Finance Disclosure Regulation (SFDR, Regulation (EU) 2019/2088) applies alongside.</p>
+    <p data-i18n="eu.discSimpl">Delegated Regulation (EU) 2026/73 cut the templates by roughly 64% of data points for non-financial undertakings and roughly 89% for financial undertakings, and introduced a 10% materiality threshold below which activities or assets need not be assessed. For the 2025 financial year, companies may apply either the old or the new rules, provided they state which.</p>
+    <p class="eu-verify" data-i18n="eu.discVerify">Worth verifying before you rely on it: the Council signed off the Omnibus I Directive on 24 February 2026, narrowing CSRD scope to undertakings with more than 1,000 employees and net turnover above €450 million. What that means specifically for the Taxonomy reporting duty — whether it stays mandatory at that threshold, or becomes voluntary for part of the range — is not something this page can confirm from the sources it has. Check the Commission's Taxonomy page and the final Omnibus I text before advising a client on it.</p>
+  </section>
+
+  <section class="card-block">
+    <h2 data-i18n="eu.countriesTitle">Where it applies</h2>
+    <p data-i18n="eu.countriesIntro">The criteria are identical in all of these jurisdictions — there is no national variation in the criteria themselves. Open any country page for that country's own overview and sources.</p>
+    <h3 class="eu-country-group" data-i18n="eu.countriesEu27">EU Member States (27)</h3>
+    <div class="eu-country-chips" id="euCountriesEu"></div>
+    <h3 class="eu-country-group" data-i18n="eu.countriesEea">EEA EFTA States (3) — applying the Regulation through the EEA Agreement</h3>
+    <div class="eu-country-chips" id="euCountriesEea"></div>
+  </section>
+
+  <section class="card-block" id="criteria">
+    <h2 data-i18n="eu.criteriaTitle">Technical screening criteria, by economic activity</h2>
+    <div id="krTaxonomyDrilldown" class="kr-drill"></div>
+  </section>
+
+  <p class="eu-disclaimer" data-i18n="eu.disclaimer">This page is a reference tool, not legal advice and not a compliance determination. For an actual alignment assessment, work from the Regulations themselves together with their Appendices and the minimum safeguards.</p>
 </main>
 
 <footer class="site-footer">
@@ -15581,22 +15660,109 @@ function gstInit() {
 document.addEventListener("DOMContentLoaded", gstInit);
 
 </script>
+<!-- Shares the drill-down renderer with the 30 country pages; fetches its own
+     dataset lazily, exactly as it does there. -->
+<script src="eu-taxonomy.js"></script>
 <script>
-/* Global Sustainable Taxonomies — Subscriber Preferences (placeholder)
-   NOTE: This entire page is a non-functional demo. All fields are disabled
-   and pre-filled with sample data; there is no real subscriber backend. */
+/* eu.js — the EU Taxonomy framework page (eu.html)
+ *
+ * The EU Taxonomy is not a country, so it deliberately has no entry in
+ * TAXONOMY_DATA: the map, the filter list, the country dropdown and the
+ * comparison tool all iterate over that object, and a pseudo-country would
+ * quietly distort every country count on the site. This page is its own thing
+ * instead, and reads the country list out of TAXONOMY_DATA rather than adding
+ * to it.
+ *
+ * What this file does is small: draw the two country-chip rows, hand the
+ * drill-down container to EU_TAXONOMY, and tell the site-wide chat widget that
+ * questions asked here are about the EU.
+ */
 
-function init() {
-  const unsubLink = document.getElementById("prefUnsubscribeLink");
-  if (unsubLink) {
-    unsubLink.addEventListener("click", e => {
-      e.preventDefault();
-      alert("This is a demo — there is no real subscription to cancel yet.");
-    });
+(function () {
+  "use strict";
+
+  /* The 27 EU Member States and the three EEA EFTA states, in the same order
+     country.js uses. Kept here rather than derived from TAXONOMY_DATA by
+     matching on the taxonomy name, so a wording change in the dataset can
+     never silently drop a country off this page. */
+  var EU27 = ["AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA",
+              "DEU", "GRC", "HUN", "IRL", "ITA", "LVA", "LTU", "LUX", "MLT", "NLD",
+              "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE"];
+  var EEA = ["NOR", "ISL", "LIE"];
+
+  /* The drill-down calls a global icon() for the objective cards. On a country
+     page that comes from country.js, which this page does not load, so the six
+     objective icons are repeated here. */
+  var ICONS = {
+    climate: '<path d="M12 3v6m0 6v6M4.2 4.2l4.2 4.2m7.2 7.2l4.2 4.2M3 12h6m6 0h6M4.2 19.8l4.2-4.2m7.2-7.2l4.2-4.2"/>',
+    "climate-adapt": '<path d="M12 2l3 6-3 2-3-2 3-6z"/><path d="M5 22c1.5-4 4-6 7-6s5.5 2 7 6"/>',
+    water: '<path d="M12 2s7 8 7 13a7 7 0 0 1-14 0c0-5 7-13 7-13z"/>',
+    circular: '<path d="M4 9a8 8 0 0 1 14-4M20 15a8 8 0 0 1-14 4"/><path d="M17 2v4h-4M7 22v-4h4"/>',
+    pollution: '<path d="M4 15a4 4 0 0 1 4-4h.3A5 5 0 0 1 18 9a4 4 0 0 1-.5 8H8a4 4 0 0 1-4-2z"/>',
+    biodiversity: '<path d="M12 2c-3 3-4 6-4 9a4 4 0 0 0 8 0c0-3-1-6-4-9z"/><path d="M8 20c1-2 2-3 4-3s3 1 4 3"/>'
+  };
+  if (typeof window.icon !== "function") {
+    window.icon = function (name) {
+      return '<svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" ' +
+             'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+             (ICONS[name] || "") + "</svg>";
+    };
   }
-}
 
-document.addEventListener("DOMContentLoaded", init);
+  /* The site-wide chat widget posts this alongside the question, so "is
+     offshore wind covered?" typed on this page reaches the model with the EU
+     activity data attached — the same courtesy a country page gets. EUU is not
+     an ISO country code and is not in TAXONOMY_DATA; /api/ask knows it means
+     this page. */
+  window.GST_PAGE_COUNTRY = "EUU";
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  function displayName(iso) {
+    if (typeof gstCountryDisplayName === "function") {
+      var e = (window.TAXONOMY_DATA || {})[iso];
+      return gstCountryDisplayName(iso, (e && e.name) || iso);
+    }
+    var entry = (window.TAXONOMY_DATA || {})[iso];
+    return (entry && entry.name) || iso;
+  }
+
+  function chips(isos) {
+    return isos.map(function (iso) {
+      return '<a class="eu-country-chip" href="country.html?iso=' + esc(iso) + '">' +
+               esc(displayName(iso)) +
+             "</a>";
+    }).join("");
+  }
+
+  function renderCountries() {
+    var a = document.getElementById("euCountriesEu");
+    var b = document.getElementById("euCountriesEea");
+    if (a) a.innerHTML = chips(EU27);
+    if (b) b.innerHTML = chips(EEA);
+  }
+
+  function renderDrilldown() {
+    if (typeof window.EU_TAXONOMY === "undefined") return;
+    window.EU_TAXONOMY.render(document.getElementById("krTaxonomyDrilldown"));
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    renderCountries();
+    renderDrilldown();
+  });
+
+  /* Country names and the drill-down's own labels both follow the language
+     selector, so both are redrawn on a language change. */
+  document.addEventListener("gst-lang-changed", function () {
+    renderCountries();
+    renderDrilldown();
+  });
+})();
 
 </script>
 </body>
