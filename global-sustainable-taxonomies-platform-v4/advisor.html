@@ -828,6 +828,18 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 }
 .card-block h2 { font-size: 1.15rem; margin: 0 0 14px; }
 .sample-note { font-size: 0.78rem; color: var(--text-muted); font-style: italic; margin: -4px 0 12px; }
+/* Sits above the country write-up in non-English mode: informational, not a
+   warning, so it borrows the soft green rather than the amber alert styling. */
+.translation-scope-note {
+  font-size: 0.8rem; line-height: 1.6; color: var(--text-muted);
+  background: rgba(21, 128, 61, 0.07);
+  border: 1px solid rgba(21, 128, 61, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px; margin: 0 0 4px;
+}
+[data-theme="dark"] .translation-scope-note {
+  background: rgba(34, 197, 94, 0.09); border-color: rgba(34, 197, 94, 0.26);
+}
 
 .sources-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); line-height: 1.5; }
 .sources-note .sources-reviewed { display: block; margin-top: 2px; opacity: 0.85; }
@@ -1355,6 +1367,12 @@ button.chip.active { background: var(--green); border-color: var(--green); color
 .chart-block .sample-note { margin: 0 0 12px; }
 .hub-chart { width: 100%; height: 200px; }
 .timeline-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+/* How the chart is counted — smaller and quieter than the chart's own caption,
+   but present, because the count is not what a reader would assume. */
+.chart-basis-note {
+  font-size: 0.72rem; line-height: 1.6; color: var(--text-muted);
+  margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--border);
+}
 
 .thematic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .thematic-label { width: 150px; font-size: 0.82rem; font-weight: 600; flex-shrink: 0; }
@@ -7283,7 +7301,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Malaysia Climate Change and Principle-based Taxonomy (CCPT)",
-    "year": null,
+    "year": 2021,
     "note": "National taxonomy for the financial sector.",
     "source": "https://repoemc.ukm.my/server/api/core/bitstreams/91f1c401-3ccd-4134-90e0-32b9c4979e01/content",
     "officialDocuments": [
@@ -7521,7 +7539,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Singapore-Asia Taxonomy for Sustainable Finance",
-    "year": null,
+    "year": 2023,
     "note": "National taxonomy developed by the Monetary Authority of Singapore (MAS).",
     "source": "https://www.mas.gov.sg/development/sustainable-finance/taxonomy",
     "officialDocuments": [
@@ -7919,7 +7937,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Australian Sustainable Finance Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": "Voluntary classification (Green/Transition) focused on climate change mitigation and transition finance.",
     "source": "https://www.asfi.org.au/australian-taxonomy",
     "officialDocuments": [
@@ -8138,7 +8156,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Sostenible de México",
-    "year": null,
+    "year": 2023,
     "note": null,
     "source": "https://www.gob.mx/shcp/documentos/taxonomia-sostenible-de-mexico?state=published",
     "officialDocuments": [
@@ -8187,7 +8205,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Verde de El Salvador",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://ssf.gob.sv/taxonomiaverdeelsalvador/",
     "officialDocuments": [
@@ -8271,7 +8289,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Verde RD",
-    "year": null,
+    "year": 2024,
     "note": null,
     "source": "https://ambiente.gob.do/app/uploads/2024/06/Taxonomia-Verde_RD_V2-OK.pdf",
     "officialDocuments": [
@@ -8321,7 +8339,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía Verde de Colombia",
-    "year": null,
+    "year": 2022,
     "note": null,
     "source": "https://www.taxonomiaverde.gov.co/",
     "officialDocuments": [
@@ -8422,7 +8440,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía de Finanzas Sostenibles de Costa Rica",
-    "year": null,
+    "year": 2024,
     "note": null,
     "source": "https://www.unepfi.org/wordpress/wp-content/uploads/2024/08/Taxonomia-de-Finanzas-Sostenibles-de-Costa-Rica.pdf",
     "officialDocuments": [
@@ -8470,7 +8488,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía de Finanzas Sostenibles de Panamá",
-    "year": null,
+    "year": 2024,
     "note": null,
     "source": "https://www.unepfi.org/publications/la-taxonomia-de-finanzas-sostenibles-de-panama/",
     "officialDocuments": [
@@ -8559,7 +8577,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Taxonomía para Actividades Económicas Medioambientalmente Sostenibles",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://www.hacienda.cl/areas-de-trabajo/finanzas-internacionales/finanzas-sostenibles/taxonomia-para-actividades-economicas-medioambientalmente-sostenibles",
     "officialDocuments": [
@@ -8657,7 +8675,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Mongolia Green Taxonomy",
-    "year": null,
+    "year": 2019,
     "note": null,
     "source": "https://www.toc.mn/en/publication/mongol-ulsyn-nogoon-taksonomi",
     "officialDocuments": [
@@ -8698,7 +8716,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Africa",
     "taxonomy": "Rwanda Green Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://www.minecofin.gov.rw/rwandagreentaxonomy-1",
     "officialDocuments": [
@@ -8739,7 +8757,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Sri Lanka Green Finance Taxonomy",
-    "year": null,
+    "year": 2022,
     "note": null,
     "source": "https://www.cbsl.gov.lk/en/sl-green-finance-taxonomy",
     "officialDocuments": [
@@ -9031,7 +9049,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Uzbekistan Green Taxonomy",
-    "year": null,
+    "year": 2023,
     "note": null,
     "source": "https://lex.uz/ru/docs/6644013",
     "officialDocuments": [
@@ -9065,7 +9083,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Asia-Pacific",
     "taxonomy": "Kyrgyz Republic Green Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": null,
     "source": "https://mineconom.gov.kg/froala/uploads/file/8f3849028e81dcb2de6c72dd29527eed9ee97e43.pdf",
     "officialDocuments": [
@@ -10147,7 +10165,7 @@ window.TAXONOMY_DATA = {
     "status": "established",
     "region": "Americas",
     "taxonomy": "Honduras Green Taxonomy",
-    "year": null,
+    "year": 2025,
     "note": "Launched by the National Banking and Insurance Commission (CNBS) with technical assistance from IFC, establishing sustainability criteria, do-no-significant-harm (DNSH) requirements, social safeguards and verifiable indicators for renewable energy, agroindustry, efficient manufacturing and green infrastructure. Honduras is also part of a regional Central American green taxonomy presented via CCSBSO.",
     "source": "https://www.cnbs.gob.hn/taxonomia-verde/",
     "officialDocuments": [
@@ -12605,7 +12623,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Technical Screening Criteria",
     "country.headingAlsoApplies": "Also Applies",
     "country.headingRelatedMedia": "Related Media & Updates",
-    "country.headingAiChat": "Ask AI about this Taxonomy", "home.popupScreening": "Activity Criteria Screening",
+    "country.headingAiChat": "Ask AI about this Taxonomy",
+    "country.translationScope": "Note: the country text below is machine-translated into your selected language. Country, taxonomy and regulator names, official document titles, citations and links are deliberately left in the original English so they can be checked against the source. Translation can take a moment, and if it fails the English original is shown instead. Please verify anything important against the official documents.", "home.popupScreening": "Activity Criteria Screening",
     "country.headingCompare": "Compare With Another Taxonomy",
     "country.compareAllCountriesBtn": "Compare All Countries",
     "country.noCountrySelected": "No country selected",
@@ -12691,7 +12710,8 @@ const GST_I18N = {
     "media.filterPapers": "Papers",
     "media.searchPlaceholder": "Search media…", "media.trendLabel": "AI Trend Insights",
     "media.timelineHeading": "Taxonomy Development Timeline",
-    "media.timelineNote": "Real data — number of taxonomies published per year, from the compiled dataset.",
+    "media.timelineNote": "Real data — the number of countries whose current framework had its first edition published in that year.",
+    "media.timelineBasis": "How this is counted: countries, not taxonomies, and only those with a taxonomy in force. The {eu} EU member states that apply the single EU Taxonomy are each counted, which is why 2020 stands out. {excluded} countries are excluded — those with no taxonomy yet, those still developing one (including {draft} draft or roadmap frameworks), and any with no confirmed adoption year.",
     "media.thematicHeading": "Thematic Policy Trends",
     "media.thematicNote": "AI-estimated weighting based on live analysis of recent headlines — refreshed periodically.",
     "media.ctaHeading": "Get the Weekly Taxonomy Digest",
@@ -12758,7 +12778,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Tekniska granskningskriterier",
     "country.headingAlsoApplies": "Gäller även",
     "country.headingRelatedMedia": "Relaterad media och uppdateringar",
-    "country.headingAiChat": "Fråga AI om denna taxonomi", "home.popupScreening": "Granska aktivitetskriterier",
+    "country.headingAiChat": "Fråga AI om denna taxonomi",
+    "country.translationScope": "Obs: landtexten nedan maskinöversätts till det språk du valt. Namn på länder, taxonomier och tillsynsmyndigheter, titlar på officiella dokument, källhänvisningar och länkar lämnas avsiktligt kvar på engelska så att de kan stämmas av mot källan. Översättningen kan ta ett ögonblick, och om den misslyckas visas det engelska originalet. Verifiera allt viktigt mot de officiella dokumenten.", "home.popupScreening": "Granska aktivitetskriterier",
     "country.headingCompare": "Jämför med en annan taxonomi",
     "country.compareAllCountriesBtn": "Jämför alla länder",
     "country.noCountrySelected": "Inget land valt",
@@ -12844,7 +12865,8 @@ const GST_I18N = {
     "media.filterPapers": "Papper",
     "media.searchPlaceholder": "Sök medier…", "media.trendLabel": "AI-trendinsikter",
     "media.timelineHeading": "Tidslinje för taxonomiutveckling",
-    "media.timelineNote": "Riktig data — antal publicerade taxonomier per år, från det sammanställda datasetet.",
+    "media.timelineNote": "Riktig data — antalet länder vars nuvarande ramverk fick sin första utgåva publicerad det året.",
+    "media.timelineBasis": "Så räknas det: länder, inte taxonomier, och endast de med en taxonomi i kraft. De {eu} EU-medlemsstater som tillämpar den gemensamma EU-taxonomin räknas var för sig, vilket är varför 2020 sticker ut. {excluded} länder är uteslutna — de utan taxonomi, de som fortfarande utvecklar en (inklusive {draft} utkast eller färdplaner) och de utan bekräftat antagandeår.",
     "media.thematicHeading": "Tematiska policytrender",
     "media.thematicNote": "AI-uppskattad viktning baserad på live-analys av senaste rubrikerna — uppdateras regelbundet.",
     "media.ctaHeading": "Få veckans taxonomibrev",
@@ -12911,7 +12933,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "기술 심사 기준",
     "country.headingAlsoApplies": "추가 적용 사항",
     "country.headingRelatedMedia": "관련 미디어 및 업데이트",
-    "country.headingAiChat": "이 택소노미에 AI 질문하기", "home.popupScreening": "활동 기준 판별",
+    "country.headingAiChat": "이 택소노미에 AI 질문하기",
+    "country.translationScope": "안내: 아래 국가별 상세 본문은 선택하신 언어로 자동 번역되어 표시됩니다. 다만 국가명·제도명·소관기관명·공식문서 제목·각주·링크는 원문 대조가 가능하도록 영문 원문 그대로 둡니다. 번역에는 잠시 시간이 걸릴 수 있고, 실패하면 영문 원문이 그대로 표시됩니다. 중요한 내용은 반드시 공식 원문으로 확인하시기 바랍니다.", "home.popupScreening": "활동 기준 판별",
     "country.headingCompare": "다른 택소노미와 비교",
     "country.compareAllCountriesBtn": "모든 국가 비교",
     "country.noCountrySelected": "선택된 국가 없음",
@@ -12997,7 +13020,8 @@ const GST_I18N = {
     "media.filterPapers": "논문",
     "media.searchPlaceholder": "미디어 검색…", "media.trendLabel": "AI 트렌드 인사이트",
     "media.timelineHeading": "택소노미 발전 타임라인",
-    "media.timelineNote": "실제 데이터 — 편집된 데이터셋 기준 연도별 발표된 택소노미 수.",
+    "media.timelineNote": "실제 데이터 — 해당 연도에 현행 제도의 최초판이 발표된 국가 수입니다.",
+    "media.timelineBasis": "집계 기준: 택소노미가 아니라 국가를 세며, 제도를 시행 중인 국가만 셉니다. EU 택소노미 하나를 적용하는 회원국 {eu}개국이 각각 계상되므로 2020년이 높게 나타납니다. 제외되는 국가는 {excluded}개국으로, 제도 미보유국과 개발 중인 국가(초안·로드맵 {draft}건 포함), 제정연도가 확인되지 않은 국가입니다.",
     "media.thematicHeading": "주제별 정책 트렌드",
     "media.thematicNote": "최근 헤드라인의 실시간 분석을 기반으로 AI가 추정한 가중치입니다 — 주기적으로 업데이트됩니다.",
     "media.ctaHeading": "주간 택소노미 다이제스트 받기",
@@ -13064,7 +13088,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Criterios técnicos de evaluación",
     "country.headingAlsoApplies": "También aplica",
     "country.headingRelatedMedia": "Medios y actualizaciones relacionadas",
-    "country.headingAiChat": "Pregunte a la IA sobre esta taxonomía", "home.popupScreening": "Evaluar criterios de actividad",
+    "country.headingAiChat": "Pregunte a la IA sobre esta taxonomía",
+    "country.translationScope": "Nota: el texto del país que figura a continuación se traduce automáticamente al idioma que ha elegido. Los nombres de países, taxonomías y reguladores, los títulos de documentos oficiales, las citas y los enlaces se mantienen deliberadamente en el inglés original para poder cotejarlos con la fuente. La traducción puede tardar un momento y, si falla, se muestra el original en inglés. Verifique lo importante en los documentos oficiales.", "home.popupScreening": "Evaluar criterios de actividad",
     "country.headingCompare": "Comparar con otra taxonomía",
     "country.compareAllCountriesBtn": "Comparar todos los países",
     "country.noCountrySelected": "Ningún país seleccionado",
@@ -13150,7 +13175,8 @@ const GST_I18N = {
     "media.filterPapers": "Documentos",
     "media.searchPlaceholder": "Buscar medios…", "media.trendLabel": "Perspectivas de tendencias de IA",
     "media.timelineHeading": "Cronología del desarrollo de taxonomías",
-    "media.timelineNote": "Datos reales — número de taxonomías publicadas por año, del conjunto de datos compilado.",
+    "media.timelineNote": "Datos reales — número de países cuyo marco vigente publicó su primera edición ese año.",
+    "media.timelineBasis": "Cómo se cuenta: países, no taxonomías, y solo aquellos con una taxonomía en vigor. Los {eu} Estados miembros de la UE que aplican la única Taxonomía de la UE se cuentan cada uno, por lo que 2020 destaca. Se excluyen {excluded} países: los que aún no tienen taxonomía, los que la están desarrollando (incluidos {draft} borradores u hojas de ruta) y los que carecen de año de adopción confirmado.",
     "media.thematicHeading": "Tendencias temáticas de políticas",
     "media.thematicNote": "Ponderación estimada por IA basada en el análisis en vivo de titulares recientes — se actualiza periódicamente.",
     "media.ctaHeading": "Reciba el boletín semanal de taxonomías",
@@ -13217,7 +13243,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Critères techniques d'évaluation",
     "country.headingAlsoApplies": "S'applique également",
     "country.headingRelatedMedia": "Médias et mises à jour associés",
-    "country.headingAiChat": "Interroger l'IA sur cette taxonomie", "home.popupScreening": "Évaluer les critères d'activité",
+    "country.headingAiChat": "Interroger l'IA sur cette taxonomie",
+    "country.translationScope": "Remarque : le texte du pays ci-dessous est traduit automatiquement dans la langue que vous avez choisie. Les noms de pays, de taxonomies et de régulateurs, les titres des documents officiels, les références et les liens restent volontairement en anglais afin de pouvoir être vérifiés par rapport à la source. La traduction peut prendre un instant ; en cas d'échec, l'original anglais s'affiche. Vérifiez tout élément important dans les documents officiels.", "home.popupScreening": "Évaluer les critères d'activité",
     "country.headingCompare": "Comparer avec une autre taxonomie",
     "country.compareAllCountriesBtn": "Comparer tous les pays",
     "country.noCountrySelected": "Aucun pays sélectionné",
@@ -13303,7 +13330,8 @@ const GST_I18N = {
     "media.filterPapers": "Articles",
     "media.searchPlaceholder": "Rechercher des médias…", "media.trendLabel": "Analyses de tendances IA",
     "media.timelineHeading": "Chronologie du développement des taxonomies",
-    "media.timelineNote": "Données réelles — nombre de taxonomies publiées par an, à partir du jeu de données compilé.",
+    "media.timelineNote": "Données réelles — nombre de pays dont le cadre en vigueur a publié sa première édition cette année-là.",
+    "media.timelineBasis": "Mode de comptage : des pays, non des taxonomies, et uniquement ceux dotés d'une taxonomie en vigueur. Les {eu} États membres de l'UE qui appliquent l'unique taxonomie européenne sont comptés chacun, d'où le pic de 2020. {excluded} pays sont exclus : ceux sans taxonomie, ceux qui en élaborent une (dont {draft} projets ou feuilles de route) et ceux sans année d'adoption confirmée.",
     "media.thematicHeading": "Tendances politiques thématiques",
     "media.thematicNote": "Pondération estimée par IA basée sur l'analyse en direct des titres récents — mise à jour périodiquement.",
     "media.ctaHeading": "Recevez la newsletter hebdomadaire sur les taxonomies",
@@ -13370,7 +13398,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Technische Prüfkriterien",
     "country.headingAlsoApplies": "Gilt auch für",
     "country.headingRelatedMedia": "Zugehörige Medien & Updates",
-    "country.headingAiChat": "KI zu dieser Taxonomie fragen", "home.popupScreening": "Aktivitätskriterien prüfen",
+    "country.headingAiChat": "KI zu dieser Taxonomie fragen",
+    "country.translationScope": "Hinweis: Der Ländertext unten wird maschinell in die von Ihnen gewählte Sprache übersetzt. Namen von Ländern, Taxonomien und Aufsichtsbehörden, Titel amtlicher Dokumente, Quellenangaben und Links bleiben bewusst im englischen Original, damit sie mit der Quelle abgeglichen werden können. Die Übersetzung kann einen Moment dauern; schlägt sie fehl, erscheint das englische Original. Bitte prüfen Sie Wesentliches anhand der amtlichen Dokumente.", "home.popupScreening": "Aktivitätskriterien prüfen",
     "country.headingCompare": "Mit einer anderen Taxonomie vergleichen",
     "country.compareAllCountriesBtn": "Alle Länder vergleichen",
     "country.noCountrySelected": "Kein Land ausgewählt",
@@ -13456,7 +13485,8 @@ const GST_I18N = {
     "media.filterPapers": "Fachartikel",
     "media.searchPlaceholder": "Medien durchsuchen…", "media.trendLabel": "KI-Trendeinblicke",
     "media.timelineHeading": "Zeitachse der Taxonomieentwicklung",
-    "media.timelineNote": "Echte Daten — Anzahl der pro Jahr veröffentlichten Taxonomien, aus dem zusammengestellten Datensatz.",
+    "media.timelineNote": "Echte Daten — Anzahl der Länder, deren aktuelles Rahmenwerk in diesem Jahr in erster Fassung veröffentlicht wurde.",
+    "media.timelineBasis": "Zählweise: Länder, nicht Taxonomien, und nur solche mit einer geltenden Taxonomie. Die {eu} EU-Mitgliedstaaten, die die eine EU-Taxonomie anwenden, werden jeweils einzeln gezählt — daher der Ausschlag 2020. {excluded} Länder sind ausgenommen: solche ohne Taxonomie, solche in der Entwicklung (darunter {draft} Entwürfe bzw. Fahrpläne) und solche ohne bestätigtes Einführungsjahr.",
     "media.thematicHeading": "Thematische Politiktrends",
     "media.thematicNote": "KI-geschätzte Gewichtung basierend auf Live-Analyse aktueller Schlagzeilen — wird regelmäßig aktualisiert.",
     "media.ctaHeading": "Den wöchentlichen Taxonomie-Newsletter erhalten",
@@ -13523,7 +13553,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "技術的審査基準",
     "country.headingAlsoApplies": "その他適用事項",
     "country.headingRelatedMedia": "関連メディア・アップデート",
-    "country.headingAiChat": "このタクソノミーについてAIに質問", "home.popupScreening": "活動基準の判別",
+    "country.headingAiChat": "このタクソノミーについてAIに質問",
+    "country.translationScope": "ご注意:以下の国別詳細本文は、選択された言語に自動翻訳されて表示されます。ただし国名・制度名・所管機関名・公式文書の題名・出典・リンクは、原典と照合できるよう英語の原文のままとしています。翻訳には少し時間がかかることがあり、失敗した場合は英語の原文がそのまま表示されます。重要な内容は必ず公式原文でご確認ください。", "home.popupScreening": "活動基準の判別",
     "country.headingCompare": "他のタクソノミーと比較",
     "country.compareAllCountriesBtn": "すべての国を比較",
     "country.noCountrySelected": "国が選択されていません",
@@ -13609,7 +13640,8 @@ const GST_I18N = {
     "media.filterPapers": "論文",
     "media.searchPlaceholder": "メディアを検索…", "media.trendLabel": "AIトレンドインサイト",
     "media.timelineHeading": "タクソノミー発展のタイムライン",
-    "media.timelineNote": "実データ — 編集されたデータセットに基づく年間発表タクソノミー数。",
+    "media.timelineNote": "実データ — 現行制度の初版がその年に公表された国の数です。",
+    "media.timelineBasis": "集計基準:タクソノミーではなく国を数え、制度を施行中の国のみを対象とします。単一のEUタクソノミーを適用する加盟{eu}か国がそれぞれ計上されるため、2020年が突出します。除外は{excluded}か国で、制度を持たない国、策定中の国(草案・ロードマップ{draft}件を含む)、制定年が確認できない国です。",
     "media.thematicHeading": "テーマ別政策トレンド",
     "media.thematicNote": "最近の見出しのライブ分析に基づくAI推定の重み付けです—定期的に更新されます。",
     "media.ctaHeading": "週刊タクソノミーダイジェストを受け取る",
@@ -13676,7 +13708,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "技术筛选标准",
     "country.headingAlsoApplies": "同时适用",
     "country.headingRelatedMedia": "相关媒体与更新",
-    "country.headingAiChat": "就该分类标准询问 AI", "home.popupScreening": "活动标准判别",
+    "country.headingAiChat": "就该分类标准询问 AI",
+    "country.translationScope": "提示：下方的国家详情正文会自动翻译为您选择的语言。但国家名称、制度名称、监管机构名称、官方文件标题、引注和链接均刻意保留英文原文，以便与原始来源核对。翻译可能需要片刻；若翻译失败，则直接显示英文原文。重要内容请务必以官方原文为准。", "home.popupScreening": "活动标准判别",
     "country.headingCompare": "与其他分类标准比较",
     "country.compareAllCountriesBtn": "比较所有国家",
     "country.noCountrySelected": "未选择国家",
@@ -13762,7 +13795,8 @@ const GST_I18N = {
     "media.filterPapers": "论文",
     "media.searchPlaceholder": "搜索媒体…", "media.trendLabel": "AI 趋势洞察",
     "media.timelineHeading": "分类标准发展时间线",
-    "media.timelineNote": "真实数据——根据汇编数据集，按年份统计已发布的分类标准数量。",
+    "media.timelineNote": "真实数据——当年发布现行制度首版的国家数量。",
+    "media.timelineBasis": "统计口径：计的是国家而非分类标准，且仅计已施行制度的国家。适用同一部欧盟分类标准的 {eu} 个成员国各计一次，因此 2020 年格外突出。共有 {excluded} 个国家不计入：尚无制度的国家、仍在制定中的国家（含 {draft} 份草案或路线图），以及无法确认制定年份的国家。",
     "media.thematicHeading": "主题政策趋势",
     "media.thematicNote": "基于对近期标题的实时分析得出的AI估算权重——定期更新。",
     "media.ctaHeading": "获取每周分类标准简报",
@@ -13829,7 +13863,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "معايير الفحص الفني",
     "country.headingAlsoApplies": "ينطبق أيضًا",
     "country.headingRelatedMedia": "الوسائط والتحديثات ذات الصلة",
-    "country.headingAiChat": "اسأل الذكاء الاصطناعي عن هذا التصنيف", "home.popupScreening": "فحص معايير النشاط",
+    "country.headingAiChat": "اسأل الذكاء الاصطناعي عن هذا التصنيف",
+    "country.translationScope": "ملاحظة: يُترجَم نص تفاصيل الدولة أدناه آلياً إلى اللغة التي اخترتها. أما أسماء البلدان والتصنيفات والجهات التنظيمية، وعناوين الوثائق الرسمية، والمراجع، والروابط فتُترك عمداً بالإنجليزية الأصلية لإتاحة مطابقتها بالمصدر. وقد تستغرق الترجمة لحظة، وإذا تعذّرت يُعرض الأصل الإنجليزي. يُرجى التحقق من كل أمر مهم في الوثائق الرسمية.", "home.popupScreening": "فحص معايير النشاط",
     "country.headingCompare": "مقارنة مع تصنيف آخر",
     "country.compareAllCountriesBtn": "مقارنة جميع الدول",
     "country.noCountrySelected": "لم يتم اختيار دولة",
@@ -13915,7 +13950,8 @@ const GST_I18N = {
     "media.filterPapers": "أوراق بحثية",
     "media.searchPlaceholder": "ابحث في الوسائط…", "media.trendLabel": "رؤى اتجاهات الذكاء الاصطناعي",
     "media.timelineHeading": "الجدول الزمني لتطور التصنيفات",
-    "media.timelineNote": "بيانات حقيقية — عدد التصنيفات المنشورة سنويًا، من مجموعة البيانات المجمَّعة.",
+    "media.timelineNote": "بيانات حقيقية — عدد البلدان التي نُشرت الطبعة الأولى من إطارها الحالي في تلك السنة.",
+    "media.timelineBasis": "طريقة الاحتساب: تُحتسب البلدان لا التصنيفات، وتقتصر على البلدان التي لديها تصنيف نافذ. فالدول الأعضاء في الاتحاد الأوروبي البالغ عددها {eu} والتي تطبّق تصنيف الاتحاد الأوروبي الواحد تُحتسب كلٌّ على حدة، ولهذا يبرز عام 2020. ويُستبعد {excluded} بلداً: البلدان التي لا تصنيف لديها، والبلدان قيد الإعداد (ومنها {draft} مسودات أو خرائط طريق)، والبلدان بلا سنة اعتماد مؤكدة.",
     "media.thematicHeading": "الاتجاهات السياساتية الموضوعية",
     "media.thematicNote": "ترجيح مقدَّر بواسطة الذكاء الاصطناعي استنادًا إلى تحليل مباشر للعناوين الأخيرة — يُحدَّث بشكل دوري.",
     "media.ctaHeading": "احصل على النشرة الأسبوعية للتصنيفات",
@@ -13982,7 +14018,8 @@ const GST_I18N = {
     "country.headingTechnicalCriteria": "Critérios Técnicos de Triagem",
     "country.headingAlsoApplies": "Também se Aplica",
     "country.headingRelatedMedia": "Mídia e Atualizações Relacionadas",
-    "country.headingAiChat": "Pergunte à IA sobre esta taxonomia", "home.popupScreening": "Avaliar critérios de atividade",
+    "country.headingAiChat": "Pergunte à IA sobre esta taxonomia",
+    "country.translationScope": "Nota: o texto do país abaixo é traduzido automaticamente para o idioma que escolheu. Os nomes de países, taxonomias e reguladores, os títulos de documentos oficiais, as citações e as ligações são deliberadamente mantidos no inglês original, para que possam ser confrontados com a fonte. A tradução pode demorar um instante e, se falhar, é apresentado o original em inglês. Verifique o que for importante nos documentos oficiais.", "home.popupScreening": "Avaliar critérios de atividade",
     "country.headingCompare": "Comparar com Outra Taxonomia",
     "country.compareAllCountriesBtn": "Comparar Todos os Países",
     "country.noCountrySelected": "Nenhum país selecionado",
@@ -14068,7 +14105,8 @@ const GST_I18N = {
     "media.filterPapers": "Artigos",
     "media.searchPlaceholder": "Pesquisar mídia…", "media.trendLabel": "Insights de Tendências de IA",
     "media.timelineHeading": "Linha do Tempo de Desenvolvimento de Taxonomias",
-    "media.timelineNote": "Dados reais — número de taxonomias publicadas por ano, do conjunto de dados compilado.",
+    "media.timelineNote": "Dados reais — número de países cujo enquadramento vigente teve a sua primeira edição publicada nesse ano.",
+    "media.timelineBasis": "Como se conta: países, não taxonomias, e apenas os que têm uma taxonomia em vigor. Os {eu} Estados-Membros da UE que aplicam a única Taxonomia da UE são contados individualmente, razão pela qual 2020 se destaca. Excluem-se {excluded} países: os que ainda não têm taxonomia, os que estão a desenvolvê-la (incluindo {draft} projetos ou roteiros) e os sem ano de adoção confirmado.",
     "media.thematicHeading": "Tendências Políticas Temáticas",
     "media.thematicNote": "Ponderação estimada por IA com base em análise ao vivo de manchetes recentes — atualizada periodicamente.",
     "media.ctaHeading": "Receba o Resumo Semanal de Taxonomias",
@@ -14103,6 +14141,14 @@ function gstApplyI18n() {
     const val = gstT(el.dataset.i18nTitle);
     el.title = val;
     if (el.hasAttribute("aria-label")) el.setAttribute("aria-label", val);
+  });
+  /* Notices that only make sense to a reader who has switched away from
+     English — e.g. "the country text below stays in the original English".
+     Shown for every other language, hidden in English, where they would just
+     state the obvious. */
+  document.querySelectorAll("[data-i18n-nonenglish]").forEach(el => {
+    el.textContent = gstT(el.dataset.i18nNonenglish);
+    el.hidden = (gstCurrentLang === "en");
   });
 }
 
