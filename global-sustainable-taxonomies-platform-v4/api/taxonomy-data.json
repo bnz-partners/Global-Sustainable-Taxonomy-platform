@@ -5171,7 +5171,7 @@
   ],
   "overlays": [],
   "features": [
-   "Established by the Ministry of Environment in December 2021 to support Korea's 2050 carbon-neutrality goal; the ministry was reorganised as the Ministry of Climate, Energy and Environment (MCEE) in October 2025. [1][4]",
+   "Established by the Ministry of Environment in December 2021 to support Korea's 2050 carbon-neutrality goal; the ministry was reorganised as the Ministry of Climate, Energy and Environment (MCEE) in October 2025. [1]",
    "An activity qualifies only by passing all four steps in order: Activity Criteria (활동기준) → Recognition Criteria (인정기준, the technical thresholds) → Exclusion Criteria (배제기준, Korea's DNSH test) → Protection Criteria (보호기준, minimum safeguards on human rights, labour, safety, anti-corruption and cultural heritage). Failing any one step means the activity is not aligned. [1]",
    "Six environmental objectives: greenhouse gas reduction, climate change adaptation, sustainable water preservation, transition to circular economy, pollution prevention and control, and biodiversity preservation. [1]",
    "The 31 December 2025 guideline sets out 100 economic activities: 93 in the Green Area (4 common activities plus 48 GHG reduction, 11 climate adaptation, 8 water, 13 circular economy, 5 pollution and 4 biodiversity) and 7 in the Transitional Area. [1]",
@@ -5277,7 +5277,7 @@
    "The Korean Green Taxonomy (K-Taxonomy, 한국형 녹색분류체계) is the classification system that defines which economic activities count as green in Korea. It was established by the Ministry of Environment in December 2021 under the Framework Act on Carbon Neutrality and Green Growth, and has been revised repeatedly since — most recently on 31 December 2025. [1][2][3]",
    "Alignment is assessed in four sequential steps, and an activity must pass every one of them. The Activity Criteria (활동기준) place the project inside one of the listed economic activities. The Recognition Criteria (인정기준) are the technical thresholds for contributing to at least one of the six environmental objectives — for heavy industry these are quantitative benchmarks drawn from the Korea Emissions Trading Scheme, such as 0.15709 tCO2eq per tonne for crude steel semi-finished products made in a basic oxygen furnace. The Exclusion Criteria (배제기준) are Korea's do-no-significant-harm test, applied objective by objective. The Protection Criteria (보호기준) require that the activity involve no breach of law on human rights, labour, safety, anti-corruption or cultural heritage. [1]",
    "The current guideline covers 100 economic activities. The Green Area holds 93 of them — four common activities (innovative-item manufacturing, materials and components for those items, RD&D, and ICT solutions) plus 48 under greenhouse gas reduction, 11 under climate change adaptation, 8 under sustainable water preservation, 13 under transition to circular economy, 5 under pollution prevention and control, and 4 under biodiversity preservation. The Transitional Area holds the remaining 7, covering LNG and blended-gas power, new-build and continued-operation nuclear power, blue hydrogen, SME emission reduction and environment-friendly vessels; each carries an explicit sunset condition rather than open-ended recognition. [1]",
-   "In practice the K-Taxonomy underpins Korea's green bond and green loan market. K-Green Bonds have accounted for roughly 70–80% of the domestic won-denominated green bond market, with about KRW 4.7 trillion issued in 2023 and KRW 5.2 trillion in each of 2024 and 2025, alongside Green ABS aimed at smaller companies. Since December 2024 the taxonomy also underpins the Green Credit Management Guidelines applied to bank lending. [1][6]"
+   "In practice the K-Taxonomy underpins Korea's green bond and green loan market. K-Green Bonds have accounted for roughly 70–80% of the domestic won-denominated green bond market, with about KRW 4.7 trillion issued in 2023 and KRW 5.2 trillion in each of 2024 and 2025, alongside Green ABS aimed at smaller companies. Since December 2024 the taxonomy also underpins the Green Credit Management Guidelines applied to bank lending. [1][4]"
   ],
   "citations": [
    {
@@ -5297,16 +5297,6 @@
    },
    {
     "id": 4,
-    "label": "Lexology, \"The new Ministry of Climate, Energy and Environment of Korea\"",
-    "url": "https://www.lexology.com/library/detail.aspx?g=83c7592e-f02b-4276-bd3e-223a537eeb15"
-   },
-   {
-    "id": 5,
-    "label": "Lexology, \"The Korean Green Taxonomy (K-Taxonomy) Guideline and Its Implications\"",
-    "url": "https://www.lexology.com/library/detail.aspx?g=861eba8d-0fdd-44d8-af20-2dc26ce55fbc"
-   },
-   {
-    "id": 6,
     "label": "Kim & Chang, \"Amendment to K-Taxonomy and Establishment of Green Credit Management Guidelines\" (2024)",
     "url": "https://www.kimchang.com/en/insights/detail.kc?sch_section=4&idx=31914"
    }
