@@ -345,6 +345,101 @@ function loadEuActivities() {
   return EU_ACTIVITIES;
 }
 
+/* ---------------------------------------------------------------------------
+   Ontology layer (taxonomy-ontology.json)
+
+   Korea and the EU each have their own activity file because the site renders
+   their criteria on screen. Everything else the assistant needs in order to
+   answer ACROSS countries lives here:
+
+     profiles   one compact record per framework — issuer, legal basis, which
+                objectives it covers, and, most importantly, what SHAPE it has.
+                Four shapes appear so far: threshold-based (EU, Korea), an
+                eligible-project list (UMOA), a principles-based classification
+                (Philippines), and a product list carrying customs codes
+                (Kyrgyzstan). Two frameworks of different shape cannot be
+                ranked by strictness, and saying so is usually the real answer
+                to "which country is stricter?".
+     crosswalk  which activity in one framework is the same activity in
+                another. Only links a human checked (curated) or that scored
+                high (confident) are shipped; anything weaker would quietly
+                put the wrong two activities side by side.
+     metrics    the same activity across frameworks with every number each one
+                attaches to it — and, just as useful, which frameworks attach
+                no number at all.
+     frameworks full activity records for the frameworks that have no page of
+                their own yet (UMOA, Kyrgyzstan, Philippines).
+
+   The file is produced by the ontology build in scratchpad/onto and copied
+   into api/ by build.py, the same way the Korea and EU files are.
+   --------------------------------------------------------------------------- */
+
+let ONTOLOGY = null;
+function loadOntology() {
+  if (ONTOLOGY === null) {
+    try {
+      const raw = fs.readFileSync(path.join(__dirname, "taxonomy-ontology.json"), "utf8");
+      ONTOLOGY = JSON.parse(raw);
+    } catch (e) {
+      console.warn("Ontology data unavailable:", e.message);
+      ONTOLOGY = { profiles: [], metrics: [], crosswalk: { links: [] },
+                   jurisdiction_frameworks: {}, frameworks: {}, meta: {} };
+    }
+  }
+  return ONTOLOGY;
+}
+
+const STRUCTURE_PLAIN = {
+  "threshold-based":
+    "numeric thresholds written into the rules, activity by activity",
+  "activity-list":
+    "a list of eligible projects; most entries carry no number",
+  "principles-based":
+    "no activity list and no thresholds — a classification rule plus guiding questions",
+  "product-and-activity list with customs codes":
+    "goods and equipment down to customs-code level, tied to tax relief"
+};
+
+/* The always-on part: five short paragraphs, identical on every question, so
+   it sits inside the cached half of the prompt and costs almost nothing. */
+function ontologyBrief() {
+  const o = loadOntology();
+  if (!o.profiles || !o.profiles.length) return "";
+  const lines = o.profiles.map(p => {
+    const bits = [
+      `${p.name}${p.name_ko ? " / " + p.name_ko : ""} [${p.id}]`,
+      `issuer: ${p.issuer}`,
+      `shape: ${p.structure} — ${STRUCTURE_PLAIN[p.structure] || ""}`,
+      `objectives: ${(p.objectives_local || []).join(", ") || "n/a"}`,
+      `scale: ${p.scale.activities} activities, ${p.scale.thresholds} numeric thresholds`,
+      `applies in ${p.jurisdiction_count} jurisdiction(s): ` +
+        (p.jurisdictions.length > 10
+          ? p.jurisdictions.slice(0, 10).join(", ") + ` +${p.jurisdictions.length - 10} more`
+          : p.jurisdictions.join(", ")),
+      `decimal separator: "${p.decimal_separator}"`,
+      p.version ? `version: ${p.version}` : null
+    ].filter(Boolean);
+    return "- " + bits.join(" | ");
+  });
+
+  const rules = [
+    "Compare SHAPE before comparing strictness. If one framework states thresholds and the other only lists eligible projects, there is no 'stricter' to report — say that plainly and compare what can be compared (which activities each one recognises, which objectives each one covers).",
+    "Decimal separators differ between frameworks. The EU and the francophone documents use a comma as the decimal point (1,331 means 1.331); English-language documents use it as a thousands separator. Each framework's separator is given above — read it before quoting a number.",
+    "Never cite an activity by its bare number. The same number means different activities in different annexes and different frameworks. Use the full id (CCM-4.5, kr:1-B-8, umoa:1.5).",
+    "When a framework has no number for an activity, say so explicitly. 'Korea states no numeric threshold for this activity' is an answer; silently leaving Korea out of the comparison is not.",
+    "Only equivalences marked curated or confident are stated as 'the same activity'. If the crosswalk is unsure, say the two look comparable but have not been verified."
+  ];
+
+  return [
+    "",
+    "TAXONOMY FRAMEWORKS THE ASSISTANT HOLDS IN DEPTH (beyond the one-line-per-country data above):",
+    lines.join("\n"),
+    "",
+    "RULES FOR CROSS-FRAMEWORK ANSWERS:",
+    rules.map((r, i) => `${i + 1}. ${r}`).join("\n")
+  ].join("\n");
+}
+
 const EU_ISOS = new Set([
   "AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA",
   "DEU", "GRC", "HUN", "IRL", "ITA", "LVA", "LTU", "LUX", "MLT", "NLD",
@@ -653,6 +748,271 @@ const LANGUAGE_NAMES = {
   zh: "Chinese (中文)"
 };
 
+/* Which embedded framework, if any, a jurisdiction follows. EU and Korea are
+   excluded because they have their own blocks above. */
+function ontoFrameworksFor(iso) {
+  const o = loadOntology();
+  const ids = (o.jurisdiction_frameworks || {})[iso] || [];
+  return ids.filter(id => o.frameworks && o.frameworks[id]);
+}
+
+const ONTO_TRIGGERS = {
+  "umoa-taxonomy": ["umoa", "uemoa", "waemu", "amf-umoa", "서아프리카", "benin", "bénin",
+                    "burkina", "ivory coast", "côte d'ivoire", "cote d'ivoire", "guinea-bissau",
+                    "mali", "niger", "senegal", "sénégal", "togo", "세네갈", "말리", "토고",
+                    "projets bleus", "taxonomie"],
+  "kgz-green-taxonomy": ["kyrgyz", "kirghiz", "키르기스", "кыргыз", "зеленая таксономия",
+                         "тн вэд", "customs code"],
+  "phl-sftg": ["philippine", "philippines", "필리핀", "sftg", "bangko sentral", "bsp",
+               "circular 1187", "circular no. 1187"],
+  "asean-taxonomy": ["asean", "아세안", "atb", "asean taxonomy", "plus standard",
+                     "foundation framework", "brunei", "브루나이", "myanmar", "미얀마"],
+  "khm-sftcb": ["cambodia", "cambodian", "캄보디아", "national bank of cambodia", "nbc"],
+  "sgp-asia-taxonomy": ["singapore", "싱가포르", "singapore-asia", "gfit", "mas taxonomy"],
+  "tha-taxonomy": ["thailand", "thai ", "태국", "bank of thailand", "tsic"],
+  "zaf-gft": ["south africa", "남아공", "남아프리카", "national treasury", "green finance taxonomy"],
+  "aus-asft": ["australia", "australian", "호주", "asfi"],
+  "gha-gft": ["ghana", "가나", "mofep"],
+  "rwa-green-taxonomy": ["rwanda", "르완다", "minecofin"],
+  "aze-green-taxonomy": ["azerbaijan", "아제르바이잔", "yaşıl taksonomiya"],
+  "npl-gft": ["nepal", "네팔", "nepal rastra bank"],
+  "fji-gft": ["fiji", "피지", "reserve bank of fiji"],
+  "uga-ngt": ["uganda", "우간다", "mofped", "national green taxonomy"],
+  "lka-gft": ["sri lanka", "스리랑카", "central bank of sri lanka"],
+  "mex-taxonomia": ["mexico", "méxico", "멕시코", "shcp", "taxonomía sostenible de méxico"],
+  "dom-taxonomia": ["dominican", "도미니카", "taxonomía verde"],
+  "pan-taxonomia": ["panama", "panamá", "파나마", "supervalores"],
+  "chl-taxonomia": ["chile", "칠레", "ministerio de hacienda"],
+  "isr-taxonomy": ["israel", "이스라엘", "israeli taxonomy"],
+  "mys-ccpt": ["malaysia", "말레이시아", "ccpt", "bank negara", "sri taxonomy"]
+};
+
+function mentionsOnto(question) {
+  const q = String(question || "").toLowerCase();
+  const hits = [];
+  for (const [fid, words] of Object.entries(ONTO_TRIGGERS)) {
+    if (words.some(w => q.includes(w))) hits.push(fid);
+  }
+  return hits;
+}
+
+/* Comparison questions are the ones the metric table exists for. A question
+   that names two jurisdictions, or uses comparison vocabulary in any of the
+   site's languages, gets the table. */
+const COMPARE_WORDS = ["compare", "comparison", "versus", " vs ", "difference", "differ",
+                       "stricter", "strict", "비교", "차이", "대비", "vergleich", "comparer",
+                       "comparación", "比較", "对比", "jämför", "compare com"];
+/* 단위가 들어간 질문은 "이 숫자를 쓰는 나라는?" 이라는 뜻이므로, '비교'라는
+   말이 없어도 비교 질문으로 다룬다. */
+const UNIT_WORDS = /gco2|g\s?co2|kwh|tco2|w\/m|mw\b|kwh\/m/i;
+function looksComparative(question) {
+  const q = " " + String(question || "").toLowerCase() + " ";
+  if (COMPARE_WORDS.some(w => q.includes(w))) return true;
+  return UNIT_WORDS.test(q) && /\d/.test(q);
+}
+
+/* A Korean question never contains the English word the records are written
+   in. EU_KO_ALIAS above already maps Korean taxonomy vocabulary to the exact
+   English wording, so the cheapest fix is to run the question through it and
+   append what it yields before tokenising. Longest key first, so 수력발전 wins
+   over 수력 and 전기자동차 over 전기. */
+function ontoExpand(question) {
+  const q = String(question || "");
+  const low = q.toLowerCase();
+  const extra = [];
+  const keys = Object.keys(EU_KO_ALIAS).sort((a, b) => b.length - a.length);
+  const used = [];
+  for (const k of keys) {
+    if (!q.includes(k)) continue;
+    if (used.some(u => u.includes(k))) continue;   // 이미 더 긴 표현으로 잡힌 것
+    used.push(k);
+    extra.push(EU_KO_ALIAS[k]);
+  }
+  for (const k of Object.keys(CROSS_LANG)) {
+    if (low.includes(k) && !extra.includes(CROSS_LANG[k])) extra.push(CROSS_LANG[k]);
+  }
+  return extra.length ? q + " " + extra.join(" ") : q;
+}
+
+const ONTO_MAX_DETAIL = 4;
+const ONTO_DETAIL_CHARS = 4000;
+
+function ontoScore(act, words) {
+  const hay = [act.name, act.sector_local, act.category_local || "",
+               (act.criteria || []).map(c => c.text).join(" ")].join(" ").toLowerCase();
+  let n = 0;
+  for (const w of words) if (hay.includes(w)) n++;
+  return n;
+}
+
+function ontoIndexLines(fid) {
+  const o = loadOntology();
+  const f = o.frameworks[fid];
+  if (!f) return "";
+  const bySector = {};
+  for (const a of f.activities) {
+    (bySector[a.sector_local] = bySector[a.sector_local] || []).push(a);
+  }
+  return Object.entries(bySector).map(([sec, list]) =>
+    `  ${sec}\n` + list.map(a =>
+      `    ${a.uid} — ${a.name}${a.objective ? ` [${a.objective}]` : ""}`
+    ).join("\n")
+  ).join("\n");
+}
+
+function ontoActivityDetail(a) {
+  const parts = [`${a.uid} — ${a.name}`];
+  if (a.sector_local) parts.push(`sector: ${a.sector_local}`);
+  if (a.category_local) parts.push(`category: ${a.category_local}`);
+  if (a.objective) parts.push(`objective: ${a.objective}${a.objective_local ? " (" + a.objective_local + ")" : ""}`);
+  if (a.isic_group && a.isic_group.length) parts.push(`ISIC group: ${a.isic_group.join(", ")}`);
+  if (a.nace && a.nace.length) parts.push(`${a.nace_edition || "NACE"}: ${a.nace.join(", ")}`);
+  if (a.hs_codes_tnved && a.hs_codes_tnved.length) parts.push(`customs (ТН ВЭД): ${a.hs_codes_tnved.join(", ")}`);
+  if (a.eu_cn_codes && a.eu_cn_codes.length) parts.push(`EU CN: ${a.eu_cn_codes.join(", ")}`);
+  if (a.legal_basis) parts.push(`legal basis: ${a.legal_basis}`);
+  for (const c of (a.criteria || [])) {
+    parts.push(`[${c.type}${c.objective ? " / " + c.objective : ""}]\n${String(c.text).slice(0, ONTO_DETAIL_CHARS)}`);
+  }
+  for (const t of (a.thresholds || [])) {
+    parts.push(`threshold: ${t.metric} ${t.comparator || "(comparator not stated)"} ${t.value} ${t.unit} — verbatim: "${t.verbatim}"`);
+  }
+  if (a.component_count) {
+    parts.push(`components listed: ${a.component_count}` +
+      (a.function_groups && a.function_groups.length ? ` across ${a.function_groups.join(", ")}` : "") +
+      (a.component_examples && a.component_examples.length ? `\n  e.g. ${a.component_examples.join("; ")}` : ""));
+  }
+  return parts.join("\n");
+}
+
+function ontoMetricBlock(question) {
+  const o = loadOntology();
+  if (!o.metrics || !o.metrics.length) return "";
+  const words = ontoExpand(question).toLowerCase().split(/[^a-z0-9가-힣а-яё]+/).filter(w => w.length > 2);
+  /* Whole-word matching, not substring: "electric" (what 전기차 expands to)
+     otherwise matches "electricity" and drags every generation activity in. */
+  const scored = o.metrics.map(c => {
+    const hay = " " + (c.anchor_name + " " + c.members.map(m => m.name + " " + (m.name_ko || "")).join(" "))
+      .toLowerCase().replace(/[^a-z0-9가-힣а-яё]+/g, " ") + " ";
+    return { c, n: words.filter(w => hay.includes(" " + w + " ")).length };
+  }).filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 4);
+  const use = scored.length ? scored.map(x => x.c)
+                            : o.metrics.filter(c => c.comparable).slice(0, 4);
+  if (!use.length) return "";
+  const blocks = use.map(c => {
+    const mem = c.members.map(m => `    ${m.framework}: ${m.code} ${m.name}${m.name_ko ? " (" + m.name_ko + ")" : ""}`).join("\n");
+    const thr = Object.entries(c.thresholds_by_metric || {}).map(([metric, rows]) =>
+      `    ${metric}:\n` + rows.map(r =>
+        `      ${r.framework} ${r.comparator || "(no comparator stated)"} ${r.value} ${r.unit} [${r.criterion}] — verbatim: "${r.verbatim}"`
+      ).join("\n")
+    ).join("\n");
+    const none = (c.frameworks_with_no_numeric_threshold || []);
+    return [`  ${c.anchor} ${c.anchor_name}`, mem,
+            thr || "    (no numeric thresholds on any side)",
+            none.length ? `    states NO numeric threshold for this activity: ${none.join(", ")}` : ""
+           ].filter(Boolean).join("\n");
+  });
+  return ["SAME-ACTIVITY COMPARISON TABLE (thresholds each framework attaches to the same activity):",
+          blocks.join("\n\n"),
+          `CAVEAT: ${o.metrics_caveat}`].join("\n");
+}
+
+/* "100 gCO2e/kWh 를 쓰는 나라가 또 어디 있나" 류의 질문에 답하는 블록.
+   활동 목록이 없는 나라도 숫자로는 비교에 낄 수 있다. */
+function ontoSharedValueBlock(question) {
+  const o = loadOntology();
+  const mi = o.metric_index;
+  if (!mi || !mi.shared_values || !mi.shared_values.length) return "";
+  const q = ontoExpand(question).toLowerCase();
+  const nums = (question.match(/\d[\d.,]*/g) || []).map(n => n.replace(/[.,]$/, ""));
+  let use = mi.shared_values.filter(c =>
+    nums.some(n => c.value === n.replace(/,/g, "")) ||
+    q.includes(c.metric.replace(/_/g, " ")) ||
+    (c.metric.indexOf("electricity") >= 0 && /kwh|electric|전력|발전/.test(q)) ||
+    (c.metric === "power_density" && /hydro|수력|density/.test(q)));
+  if (!use.length) use = mi.shared_values.slice(0, 3);
+  use = use.slice(0, 4);
+  const blocks = use.map(c => {
+    const rows = c.entries.slice(0, 12).map(e =>
+      `      ${e.framework}${e.activity_name ? " — " + e.activity_name : ""}: "${(e.verbatim || "").slice(0, 200)}"`);
+    return `  ${c.metric} = ${c.value} ${c.unit} — used by ${c.framework_count} frameworks, `
+      + `covering ${c.jurisdictions.length} jurisdictions (${c.jurisdictions.join(", ")})\n`
+      + rows.join("\n") + (c.entries.length > 12 ? `\n      …and ${c.entries.length - 12} more entries` : "");
+  });
+  return ["THRESHOLD VALUES SHARED ACROSS FRAMEWORKS:", blocks.join("\n\n"),
+          "CAVEAT: " + (mi.caveats || []).join(" ")].join("\n");
+}
+
+function ontologyDetailBlock(question, countryIso) {
+  const o = loadOntology();
+  const wanted = new Set(mentionsOnto(question));
+  for (const fid of ontoFrameworksFor(countryIso)) wanted.add(fid);
+
+  const out = [];
+  for (const fid of wanted) {
+    const f = o.frameworks[fid];
+    if (!f) continue;
+    const m = f.framework;
+    out.push([
+      `${m.name}${m.name_ko ? " / " + m.name_ko : ""} — issuer ${m.issuer}, ${m.structure}, applies in ${(m.jurisdictions || []).join(", ")}.`,
+      (m.notes || []).map(n => "  note: " + n).join("\n")
+    ].filter(Boolean).join("\n"));
+
+    if (m.classification) {
+      out.push("  classification:\n" + m.classification.map(c => `    ${c.label}: ${c.rule}`).join("\n"));
+    }
+    if (m.assessment && m.assessment.essential_criteria) {
+      out.push("  essential criteria:\n" + m.assessment.essential_criteria
+        .map(c => `    ${c.id} (${c.name}): ${c.note}`).join("\n"));
+      if (m.assessment.method) out.push("  method: " + m.assessment.method);
+    }
+    /* 이 프레임워크들은 활동 목록을 아직 못 만들었다. 대신 원문에서 그대로
+       걷어 온 임계값 문장이 있으므로 그것을 내보낸다. 질문과 관계있는 것을
+       먼저 고르되, 하나도 안 걸리면 기준으로 분류된 것부터 보여 준다. */
+    if (!f.activities.length && (f.thresholds || []).length) {
+      const words = ontoExpand(question).toLowerCase()
+        .split(/[^a-z0-9가-힣а-яёà-ÿ]+/).filter(w => w.length > 2);
+      const crit = f.thresholds.filter(t => t.kind === "criterion");
+      const scored = crit.map(t => ({ t, n: words.filter(w => t.verbatim.toLowerCase().includes(w)).length }))
+        .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 8).map(x => x.t);
+      const use = scored.length ? scored : crit.slice(0, 8);
+      out.push(`  numeric thresholds quoted verbatim from the document (${crit.length} classified as criteria out of ${f.thresholds.length} numeric sentences found):\n` +
+        use.map(t => `    [${t.metric}] ${t.value_verbatim} ${t.unit}` +
+          (t.decimal_warning ? ` (${t.decimal_warning})` : "") +
+          `\n      "${String(t.verbatim).slice(0, 280)}"`).join("\n"));
+      out.push("  NOTE: this framework has no activity list in the dataset. Answer from the "
+        + "threshold sentences above and from the framework description, and say plainly that "
+        + "the per-activity table is not held here rather than inventing one.");
+    }
+    if (f.activities.length) {
+      out.push(`  activities in ${fid} (${f.activities.length}):\n` + ontoIndexLines(fid));
+      const words = ontoExpand(question).toLowerCase().split(/[^a-z0-9가-힣а-яёà-ÿ]+/).filter(w => w.length > 2);
+      const picked = f.activities
+        .map(a => ({ a, n: ontoScore(a, words) }))
+        .filter(x => x.n > 0)
+        .sort((x, y) => y.n - x.n)
+        .slice(0, ONTO_MAX_DETAIL)
+        .map(x => x.a);
+      if (picked.length) {
+        out.push("  full records for the activities closest to the question:\n\n" +
+          picked.map(ontoActivityDetail).join("\n\n"));
+      }
+    }
+  }
+
+  if (looksComparative(question) || wanted.size) {
+    /* 질문에 숫자와 단위가 같이 들어 있으면 "이 값을 쓰는 나라는?" 을 묻는 것이다.
+       그럴 때는 값 색인을 먼저 보여 준다 — 활동별 표를 앞에 두면 정작 물은
+       숫자가 한참 뒤로 밀린다. */
+    const valueFirst = UNIT_WORDS.test(question) && /\d/.test(question);
+    const mb = ontoMetricBlock(question);
+    const sv = ontoSharedValueBlock(question);
+    if (valueFirst) { if (sv) out.push(sv); if (mb) out.push(mb); }
+    else { if (mb) out.push(mb); if (sv) out.push(sv); }
+  }
+  if (!out.length) return "";
+  return "ONTOLOGY DETAIL FOR THIS QUESTION:\n" + out.join("\n\n");
+}
+
 function buildSystemPrompt(langCode, question, countryIso) {
   const data = loadData();
   const lines = Object.entries(data).map(([iso, e]) => {
@@ -708,7 +1068,8 @@ function buildSystemPrompt(langCode, question, countryIso) {
     "If a user asks 'where can I find X' or describes a goal that matches one of these sections, tell them which page and tab to use.",
     "",
     "REFERENCE DATA (one line per jurisdiction):",
-    lines.join("\n")
+    lines.join("\n"),
+    ontologyBrief()
   ].join("\n");
 
   /* Korea is the one jurisdiction where the site holds activity-level
@@ -734,7 +1095,12 @@ function buildSystemPrompt(langCode, question, countryIso) {
       ? "The user is reading the site's EU Taxonomy framework page. Assume questions are about the EU Taxonomy unless they name another jurisdiction. Do not describe the EU as a country."
       : countryIso ? `The user is reading the country page for ${countryIso}. Assume questions are about that jurisdiction unless they name another one.` : "",
     koreaContext ? krDetailBlock(question || "") : "",
-    euContext ? euDetailBlock(question || "") : ""
+    euContext ? euDetailBlock(question || "") : "",
+    /* UMOA, Kyrgyzstan and the Philippines have no page of their own yet, so
+       the ontology block is the only way a question about them reaches real
+       criteria rather than general knowledge. It also carries the
+       same-activity comparison table whenever the question is comparative. */
+    ontologyDetailBlock(question || "", countryIso)
   ].filter(Boolean).join("\n");
 
   /* The static half is byte-identical on every question, so it is marked as a
@@ -863,5 +1229,6 @@ module.exports = async function handler(req, res) {
    model. Not referenced by the HTTP handler. */
 module.exports.__test = {
   pickKrActivities, mentionsKorea, loadKrActivities,
-  pickEuActivities, mentionsEu, loadEuActivities, euDetailBlock, euIndexLines
+  pickEuActivities, mentionsEu, loadEuActivities, euDetailBlock, euIndexLines,
+  loadOntology, ontologyBrief, ontologyDetailBlock, mentionsOnto, looksComparative, ontoMetricBlock, ontoSharedValueBlock
 };
