@@ -784,7 +784,9 @@ const ONTO_TRIGGERS = {
   "pan-taxonomia": ["panama", "panamá", "파나마", "supervalores"],
   "chl-taxonomia": ["chile", "칠레", "ministerio de hacienda"],
   "isr-taxonomy": ["israel", "이스라엘", "israeli taxonomy"],
-  "mys-ccpt": ["malaysia", "말레이시아", "ccpt", "bank negara", "sri taxonomy"]
+  "mys-ccpt": ["malaysia", "말레이시아", "ccpt", "bank negara", "sri taxonomy"],
+  "chn-gfspc": ["china", "chinese", "중국", "pboc", "人民银行", "绿色金融支持项目目录",
+                "绿色债券支持项目目录", "green bond endorsed", "国民经济行业", "gb/t 4754"]
 };
 
 function mentionsOnto(question) {
@@ -845,19 +847,32 @@ function ontoScore(act, words) {
   return n;
 }
 
-function ontoIndexLines(fid) {
+function ontoIndexLines(fid, question, cap) {
   const o = loadOntology();
   const f = o.frameworks[fid];
   if (!f) return "";
-  const bySector = {};
-  for (const a of f.activities) {
-    (bySector[a.sector_local] = bySector[a.sector_local] || []).push(a);
+  let list = f.activities;
+  if (cap && list.length > cap) {
+    /* 질문에 걸리는 활동을 먼저, 남는 자리는 앞에서부터 채운다. 잘랐다는 사실을
+       마지막 줄에 적어 두어야 "목록에 없다"는 답이 잘못 나가지 않는다. */
+    const words = ontoExpand(question || "").toLowerCase()
+      .split(/[^a-z0-9가-힣а-яёà-ÿ\u4e00-\u9fa5]+/).filter(w => w.length > 1);
+    const hit = list.filter(a => words.some(w =>
+      (a.name + " " + (a.sector_local || "") + " " + (a.category_local || "")).toLowerCase().includes(w)));
+    const rest = list.filter(a => hit.indexOf(a) < 0);
+    list = hit.concat(rest).slice(0, cap);
   }
-  return Object.entries(bySector).map(([sec, list]) =>
-    `  ${sec}\n` + list.map(a =>
+  const bySector = {};
+  for (const a of list) (bySector[a.sector_local] = bySector[a.sector_local] || []).push(a);
+  const body = Object.entries(bySector).map(([sec, l]) =>
+    `  ${sec}\n` + l.map(a =>
       `    ${a.uid} — ${a.name}${a.objective ? ` [${a.objective}]` : ""}`
     ).join("\n")
   ).join("\n");
+  return body + (cap && f.activities.length > cap
+    ? `\n  (showing ${list.length} of ${f.activities.length}; the rest are not listed here — do `
+      + "not tell the user an activity is absent from the framework on the strength of this list)"
+    : "");
 }
 
 function ontoActivityDetail(a) {
@@ -983,8 +998,26 @@ function ontologyDetailBlock(question, countryIso) {
         + "threshold sentences above and from the framework description, and say plainly that "
         + "the per-activity table is not held here rather than inventing one.");
     }
+    /* 중국처럼 조건이 자국 표준을 가리키는 프레임워크는, 숫자 대신 '어떤 표준의
+       몇 급을 요구하는지' 가 답이다. 활동 레코드의 standards_referenced 를 모아
+       자주 인용되는 표준을 먼저 보여 준다. */
+    if (f.activities.length && f.activities.some(a => (a.standards_referenced || []).length)) {
+      const cnt = {};
+      for (const a of f.activities)
+        for (const st of (a.standards_referenced || [])) {
+          const k = (st.code ? st.code + " " : "") + st.standard;
+          cnt[k] = (cnt[k] || 0) + 1;
+        }
+      const top = Object.entries(cnt).sort((x, y) => y[1] - x[1]).slice(0, 12);
+      if (top.length) out.push("  criteria in this framework point at national standards rather "
+        + "than stating numbers. Most cited:\n"
+        + top.map(([k, n]) => `    ${n}x  ${k}`).join("\n"));
+    }
     if (f.activities.length) {
-      out.push(`  activities in ${fid} (${f.activities.length}):\n` + ontoIndexLines(fid));
+      /* 활동이 많은 프레임워크(중국 310건)는 목록을 통째로 넣으면 질문 하나에
+         1만 토큰이 넘는다. 질문과 관계있는 것부터 추려 싣고, 전체 건수는 밝힌다. */
+      out.push(`  activities in ${fid} (${f.activities.length} in total):\n`
+        + ontoIndexLines(fid, question, 90));
       const words = ontoExpand(question).toLowerCase().split(/[^a-z0-9가-힣а-яёà-ÿ]+/).filter(w => w.length > 2);
       const picked = f.activities
         .map(a => ({ a, n: ontoScore(a, words) }))
