@@ -811,7 +811,12 @@ const ONTO_TRIGGERS = {
   "cri-tfs": ["costa rica", "코스타리카"],
   "slv-tv": ["el salvador", "엘살바도르"],
   "png-igft": ["papua new guinea", "파푸아뉴기니", "bank of papua"],
-  "col-tv": ["colombia", "콜롬비아", "taxonomía verde de colombia"]
+  "col-tv": ["colombia", "콜롬비아", "taxonomía verde de colombia"],
+  "hkg-taxonomy": ["hong kong", "hongkong", "홍콩", "hkma", "phase 2a"],
+  "hnd-tv": ["honduras", "온두라스", "taxonomía verde de honduras", "cnbs"],
+  "vnm-gt": ["vietnam", "viet nam", "베트남", "21/2025", "qđ-ttg", "qd-ttg",
+             "danh mục phân loại xanh", "phân loại xanh"],
+  "bgd-sfp": ["bangladesh", "방글라데시", "bangladesh bank"]
 };
 
 function mentionsOnto(question) {
