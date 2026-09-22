@@ -405,7 +405,10 @@ const STRUCTURE_PLAIN = {
 function ontologyBrief() {
   const o = loadOntology();
   if (!o.profiles || !o.profiles.length) return "";
-  const lines = o.profiles.map(p => {
+  /* 기준을 확보하지 못한(2차 출처) 프레임워크는 한 줄씩 늘어놓을 가치가 없다.
+     제도가 있다는 사실만 한 문단으로 묶어 브리프를 가볍게 유지한다. */
+  const noCriteria = o.profiles.filter(p => p.source_type === "secondary");
+  const lines = o.profiles.filter(p => p.source_type !== "secondary").map(p => {
     const bits = [
       `${p.name}${p.name_ko ? " / " + p.name_ko : ""} [${p.id}]`,
       `issuer: ${p.issuer}`,
@@ -430,10 +433,18 @@ function ontologyBrief() {
     "Only equivalences marked curated or confident are stated as 'the same activity'. If the crosswalk is unsure, say the two look comparable but have not been verified."
   ];
 
+  const noCritLine = noCriteria.length
+    ? "\nJURISDICTIONS WHOSE TAXONOMY IS CONFIRMED TO EXIST BUT WHOSE CRITERIA THIS DATASET DOES "
+      + "NOT HOLD — name the issuer, say the criteria are not held here, and never substitute "
+      + "another country's: "
+      + noCriteria.map(p => `${p.jurisdictions.join("/")} ${p.name} (${p.issuer})`).join("; ")
+    : "";
+
   return [
     "",
     "TAXONOMY FRAMEWORKS THE ASSISTANT HOLDS IN DEPTH (beyond the one-line-per-country data above):",
     lines.join("\n"),
+    noCritLine,
     "",
     "RULES FOR CROSS-FRAMEWORK ANSWERS:",
     rules.map((r, i) => `${i + 1}. ${r}`).join("\n")
@@ -786,7 +797,21 @@ const ONTO_TRIGGERS = {
   "isr-taxonomy": ["israel", "이스라엘", "israeli taxonomy"],
   "mys-ccpt": ["malaysia", "말레이시아", "ccpt", "bank negara", "sri taxonomy"],
   "chn-gfspc": ["china", "chinese", "중국", "pboc", "人民银行", "绿色金融支持项目目录",
-                "绿色债券支持项目目录", "green bond endorsed", "国民经济行业", "gb/t 4754"]
+                "绿色债券支持项目目录", "green bond endorsed", "国民经济行业", "gb/t 4754"],
+  "geo-sft": ["georgia", "georgian", "조지아", "그루지야", "national bank of georgia", "eu4energy"],
+  "ken-gft": ["kenya", "kenyan", "케냐", "central bank of kenya", "cbk"],
+  "mng-gt": ["mongolia", "mongolian", "몽골", "financial stability commission of mongolia"],
+  "uzb-ngt": ["uzbekistan", "우즈베키스탄", "яшил иқтисодиёт", "resolution no. 561"],
+  "kaz-gt": ["kazakhstan", "카자흐스탄", "order no. 996"],
+  "bra-tsb": ["brazil", "brasil", "brazilian", "브라질", "taxonomia sustentável", "tsb"],
+  "idn-tkbi": ["indonesia", "indonesian", "인도네시아", "tkbi", "ojk", "taksonomi"],
+  "rus-gt": ["russia", "russian", "러시아", "российск"],
+  "mda-sft": ["moldova", "몰도바", "banca națională a moldovei"],
+  "zmb-zgft": ["zambia", "잠비아", "zgft"],
+  "cri-tfs": ["costa rica", "코스타리카"],
+  "slv-tv": ["el salvador", "엘살바도르"],
+  "png-igft": ["papua new guinea", "파푸아뉴기니", "bank of papua"],
+  "col-tv": ["colombia", "콜롬비아", "taxonomía verde de colombia"]
 };
 
 function mentionsOnto(question) {
@@ -967,6 +992,13 @@ function ontologyDetailBlock(question, countryIso) {
     const f = o.frameworks[fid];
     if (!f) continue;
     const m = f.framework;
+    if (m.source_type === "secondary") {
+      out.push(`!! ${m.name}${m.name_ko ? " / " + m.name_ko : ""} — THIS DATASET HOLDS NO CRITERIA `
+        + `for this jurisdiction. Issuer: ${m.issuer}. What was obtained: ${m.document_obtained}. `
+        + `What is still needed: ${m.document_needed}. Say the taxonomy exists and name its `
+        + `issuer, then say plainly that its criteria are not held here and name the document `
+        + `that would be needed. Do not substitute another country's criteria.`);
+    }
     out.push([
       `${m.name}${m.name_ko ? " / " + m.name_ko : ""} — issuer ${m.issuer}, ${m.structure}, applies in ${(m.jurisdictions || []).join(", ")}.`,
       (m.notes || []).map(n => "  note: " + n).join("\n")
